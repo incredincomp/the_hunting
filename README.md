@@ -1,5 +1,5 @@
 # the_hunting
-a vuln finding robot
+a *cheap* vuln finding robot
 
 # Requirements
 
