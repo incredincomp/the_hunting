@@ -17,7 +17,7 @@ Connect to your axiom droplet
 
 `axiom-ssh <instance> --tmux`
 
-## Set up `the_hunting`
+## Set up `the_hunting.sh`
 `git pull https://github.com/incredincomp/the_hunting`
 
 `cd ~/the_hunting`
