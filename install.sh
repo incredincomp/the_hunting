@@ -1,1 +1,1 @@
-
+apt install <package>
