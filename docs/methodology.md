@@ -1,51 +1,49 @@
-# Scanning
+# methodology
 
-## Initial Steps
+## Recon
 
-### Recon
+### Subdomains
 
-#### Subdomains
-
-##### Subdomain Enum
+#### Subdomain Enum
 Subfinder
 https://github.com/projectdiscovery/subfinder
 
 Amass
 https://github.com/OWASP/Amass
 
-##### Subdomain TakeOver
+#### Subdomain TakeOver
 Subjack
 https://github.com/haccer/subjack
 
-#### Target Validation
+### Target Validation
 
-##### Webserver Status Checks
+#### Webserver Status Checks
 Httprobe
 https://github.com/tomnomnom/httprobe
 
-##### Webpage Validation
+#### Webpage Validation
 aquatone
 https://github.com/michenriksen/aquatone
 
-### Scanning
+## Scanning
 
-#### Fuzzing
-##### Directory and file Fuzzing
+### Fuzzing
+#### Directory and file Fuzzing
 Dirb
 https://tools.kali.org/web-applications/dirb
 
 Gobuster
 https://github.com/OJ/gobuster
 
-#### Port Scanning
-##### nmap
+### Port Scanning
+#### nmap
 
-###### usage
+##### usage
 
-###### nse scripts
+##### nse scripts
 
-#### Webpage and Server Scanning
+### Webpage and Server Scanning
 
-##### nuclei
-###### Templates
-###### usage
+#### nuclei
+##### Templates
+##### usage
