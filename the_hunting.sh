@@ -117,11 +117,6 @@ echo "${red}the_hunting.sh${reset}"
 }
 
 main(){
-if [ -z "${target}" ]; then
-target=${subreport[1]}
-foldername=${subreport[2]}
-subd=${subreport[3]}
-fi
   clear
   logo
   if [ -d "./$target" ]
