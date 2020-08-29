@@ -149,7 +149,7 @@ fi
   touch ./"$target"/"$foldername"/cleantemp.txt
   touch ./"$target"/"$foldername"/master_report.html
 
-  recon $target
+  recon "$target"
   scanning
   echo "${green}Scan for $target finished successfully${reset}"
   duration=$SECONDS
