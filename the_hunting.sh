@@ -80,12 +80,15 @@ excludedomains(){
 }
 
 subdomain_enum(){
+true
 }
 
 sub_takeover(){
+true
 }
 
 run_nmap(){
+true
 }
 
 run_aqua(){
@@ -103,6 +106,7 @@ recon(){
 
 scanning(){
 #nuclei
+true
 }
 
 logo(){
