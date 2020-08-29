@@ -92,6 +92,8 @@ excludedomains(){
 }
 
 subdomain_enum(){
+#Subfinder https://github.com/projectdiscovery/subfinder
+#Amass https://github.com/OWASP/Amass
 true
 }
 
