@@ -27,7 +27,7 @@
 clear
 set -o nounset                              # Treat unset variables as an error
 set -e
-#set -xv                                    # Uncomment to print script in console for debug
+set -xv                                    # Uncomment to print script in console for debug
 
 red=$(tput setaf 1)
 green=$(tput setaf 2)
@@ -117,10 +117,6 @@ scanning(){
 true
 }
 
-logo(){
-echo "${red}the_hunting.sh${reset}"
-}
-
 main(){
   clear
   logo
@@ -157,6 +153,11 @@ main(){
   stty sane
   tput sgr0
 }
+
+logo(){
+echo "${red}the_hunting.sh${reset}"
+}
+
 todate=$(date +"%Y-%m-%d")
 path=$(pwd)
 foldername=recon-$todate
