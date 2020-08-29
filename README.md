@@ -35,8 +35,8 @@ need sudo for program installs with apt
 ### Subdomains
 
 #### Subdomain Enum
-Subfinder
-https://github.com/projectdiscovery/subfinder
+gobuster
+https://github.com/OJ/gobuster
 
 Amass
 https://github.com/OWASP/Amass
