@@ -27,7 +27,7 @@
 clear
 set -o nounset                              # Treat unset variables as an error
 set -e
-set -xv                                    # Uncomment to print script in console for debug
+#set -xv                                    # Uncomment to print script in console for debug
 
 red=$(tput setaf 1)
 green=$(tput setaf 2)
@@ -51,15 +51,15 @@ while getopts ":d:e:r:" o; do
             ;;
         e)
             set -f
-	    IFS=","
-	    excluded+=("$OPTARG")
-	    unset IFS
+	          IFS=","
+	          excluded+=("$OPTARG")
+            unset IFS
             ;;
-	r)
+        r)
             subreport+=("$OPTARG")
             ;;
         *)
-	    logo
+	          logo
             usage
             ;;
     esac
