@@ -1,4 +1,4 @@
-#!/bin/bash -
+#!/bin/bash
 #===============================================================================
 #
 #          FILE: the_hunting.sh
@@ -27,7 +27,7 @@
 clear
 set -o nounset                              # Treat unset variables as an error
 set -e
-#set -xv                                    # Uncomment to print script in console for debug
+set -xv                                    # Uncomment to print script in console for debug
 
 red=$(tput setaf 1)
 green=$(tput setaf 2)
@@ -38,23 +38,24 @@ reset=$(tput sgr0)
 auquatoneThreads=5
 subdomainThreads=10
 chromiumPath=/snap/bin/chromium
-target=
 
 logo(){
 echo "${red}the_hunting.sh${reset}"
 }
 
+target=""
+subreport=""
 usage() { logo; echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
 
-while getopts ":d:e:r:" o; do
+while getopts ":d:e:r" o; do
     case "${o}" in
         d)
-            target=${OPTARG}
+            target="$OPTARG"
             ;;
         e)
             set -f
-	          IFS=","
-	          excluded+=("$OPTARG")
+            IFS=","
+            excluded+=($OPTARG)
             unset IFS
             ;;
         r)
@@ -67,7 +68,7 @@ while getopts ":d:e:r:" o; do
 done
 shift $((OPTIND - 1))
 
-if [ -z "${target}" ] && [[ -z ${subreport[@]} ]]; then
+if [ -z "$target" ] && [ -z ${subreport[*]} ]; then
    usage; exit 1;
 fi
 
@@ -90,8 +91,9 @@ excludedomains(){
 }
 # parents
 run_amass(){
-  true
-  # amass enum
+  amass enum -norecursive --passive -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -json ./targets/"$target"/"$foldername"/subdomain_enum/amass_"$todate".json -d "$target"
+  rm -rf ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass.log
+  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass.txt >> ./targets/"$target"/"$foldername"/alldomains.txt
 }
 
 run_gobuster_vhost(){
@@ -116,7 +118,7 @@ run_nmap(){
 
 run_aqua(){
   echo "Starting aquatone scan..."
-#    cat ./"$target"/urilist.txt | aquatone -chrome-path $chromiumPath -out ./$target/aqua/aqua_out -threads $auquatoneThreads -silent
+#    cat ./targets/"$target"/"$foldername"/urilist.txt | aquatone -chrome-path $chromiumPath -out ./$target/aqua/aqua_out -threads $auquatoneThreads -silent
   true
 }
 
@@ -168,46 +170,54 @@ webapp_scan(){
 port_scan(){
   run_nmap
 }
+
 # main func's
 recon(){
   subdomain_enum
   sub_takeover
-  run_nmap
-  run_aqua
+  webapp_valid
 }
 
 scanning(){
-#nuclei
-true
+  port_scan
+  fuzz_em
+  webapp_scan
 }
 
 main(){
+  if [ -z "${target}" ]; then
+    domain=${subreport[1]}
+    foldername=${subreport[2]}
+    subd=${subreport[3]}
+    report $target $subdomain $foldername $subd; exit 1;
+  fi
   clear
   logo
-  if [ -d "./target/$target" ]
+  cd ./targets && if [ -d "./$target" ]
   then
     echo "This is a known target."
   else
-    mkdir ./target/$target
-  fi
+    mkdir ./$target
+  fi && cd ..
 
-  mkdir ./targets/"$target"/"$foldername"
-  mkdir ./targets/"$target"/"$foldername"/aqua_out
-  mkdir ./targets/"$target"/"$foldername"/aqua_out/parsedjson
-  mkdir ./targets/"$target"/"$foldername"/reports/
-  mkdir ./targets/"$target"/"$foldername"/subdomain_enum/
-  mkdir ./targets/"$target"/"$foldername"/screenshots/
-  touch ./targets/"$target"/"$foldername"/crtsh.txt
-  touch ./targets/"$target"/"$foldername"/mass.txt
-  touch ./targets/"$target"/"$foldername"/cnames.txt
-  touch ./targets/"$target"/"$foldername"/pos.txt
-  touch ./targets/"$target"/"$foldername"/alldomains.txt
-  touch ./targets/"$target"/"$foldername"/temp.txt
-  touch ./targets/"$target"/"$foldername"/tmp.txt
-  touch ./targets/"$target"/"$foldername"/domaintemp.txt
-  touch ./targets/"$target"/"$foldername"/ipaddress.txt
-  touch ./targets/"$target"/"$foldername"/cleantemp.txt
-  touch ./targets/"$target"/"$foldername"/master_report.html
+  mkdir ./targets/$target/"$foldername"
+  mkdir ./targets/$target/"$foldername"/aqua_out
+  mkdir ./targets/$target/"$foldername"/aqua_out/parsedjson
+  mkdir ./targets/$target/"$foldername"/reports/
+  mkdir ./targets/$target/"$foldername"/subdomain_enum/
+  mkdir ./targets/$target/"$foldername"/subdomain_enum/amass
+  mkdir ./targets/$target/"$foldername"/screenshots/
+  touch ./targets/$target/"$foldername"/crtsh.txt
+  touch ./targets/$target/"$foldername"/mass.txt
+  touch ./targets/$target/"$foldername"/cnames.txt
+  touch ./targets/$target/"$foldername"/pos.txt
+  touch ./targets/$target/"$foldername"/alldomains.txt
+  touch ./targets/$target/"$foldername"/temp.txt
+  touch ./targets/$target/"$foldername"/tmp.txt
+  touch ./targets/$target/"$foldername"/domaintemp.txt
+  touch ./targets/$target/"$foldername"/ipaddress.txt
+  touch ./targets/$target/"$foldername"/cleantemp.txt
+  touch ./targets/$target/"$foldername"/master_report.html
 
   recon "$target"
   scanning
@@ -220,5 +230,5 @@ main(){
 
 todate=$(date +"%Y-%m-%d")
 path=$(pwd)
-foldername=recon-$todate
+foldername="$todate"
 main "$target"
