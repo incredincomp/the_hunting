@@ -30,7 +30,7 @@ need sudo for program installs with apt
 
 # Methodology
 
-
+![](https://github.com/incredincomp/usage-videos/blob/master/the_hunting.png)
 
 ## Recon
 
