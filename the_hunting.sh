@@ -65,7 +65,7 @@ while getopts ":d:e:r:" o; do
 done
 shift $((OPTIND - 1))
 
-if [ -z "${domain}" ] && [[ -z ${subreport[@]} ]]; then
+if [ -z "${target}" ] && [[ -z ${subreport[@]} ]]; then
    usage; exit 1;
 fi
 
