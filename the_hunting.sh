@@ -59,6 +59,7 @@ while getopts ":d:e:r:" o; do
             subreport+=("$OPTARG")
             ;;
         *)
+	    logo
             usage
             ;;
     esac
