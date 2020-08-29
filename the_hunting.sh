@@ -6,7 +6,7 @@
 #         USAGE: ./the_hunting.sh
 #
 #   DESCRIPTION:
-#          borrowed some stuff and idea of automated platform from 
+#          borrowed some stuff and idea of automated platform from
 #          lazyrecon https://github.com/nahamsec/lazyrecon. Got idea to automate
 #          my workflow from countless bb folk, most notibly and recently from
 #          @hakluke on his "how to crush bug bounties in your first 12 months"
@@ -14,15 +14,15 @@
 #          thanks everyone
 #
 #       OPTIONS: ---
-#  REQUIREMENTS: 
+#  REQUIREMENTS:
 #
-#          BUGS: 
-#         NOTES: v0.0.0
+#          BUGS:
+#         NOTES: v0.0.1
 #        AUTHOR: @incredincomp
 #  ORGANIZATION:
 #       CREATED: 08/27/2020 16:55:54
-#      REVISION: 00/00/2020 00:00:00
-#     LICENSING: 
+#      REVISION: 08/29/2020 11:06:00
+#     LICENSING:
 #===============================================================================
 clear
 set -o nounset                              # Treat unset variables as an error
@@ -37,8 +37,6 @@ reset=$(tput sgr0)
 # borrowed some stuff and general idea of automated platform from lazyrecon https://github.com/nahamsec/lazyrecon
 auquatoneThreads=5
 subdomainThreads=10
-dirsearchThreads=50
-dirsearchWordlist=~/tools/dirsearch/db/dicc.txt
 chromiumPath=/snap/bin/chromium
 target=
 
@@ -90,32 +88,92 @@ excludedomains(){
     unset IFS
   fi
 }
-
-subdomain_enum(){
-#Subfinder https://github.com/projectdiscovery/subfinder
-#Amass https://github.com/OWASP/Amass
-true
+# parents
+run_amass(){
+  true
+  # amass enum
 }
 
-sub_takeover(){
-true
+run_gobuster_vhost(){
+  true
+}
+
+run_gobuster_dns(){
+  true
+}
+
+run_subjack(){
+  true
+}
+
+run_subjack(){
+  true
 }
 
 run_nmap(){
-true
+  true
 }
 
 run_aqua(){
-    echo "Starting aquatone scan..."
-    cat ./"$target"/urilist.txt | aquatone -chrome-path $chromiumPath -out ./$target/aqua/aqua_out -threads $auquatoneThreads -silent
+  echo "Starting aquatone scan..."
+#    cat ./"$target"/urilist.txt | aquatone -chrome-path $chromiumPath -out ./$target/aqua/aqua_out -threads $auquatoneThreads -silent
+  true
 }
 
+run_gobuster_dir(){
+  true
+}
+
+run_dirb(){
+  true
+}
+
+run_nuclei(){
+  true
+}
+
+run_nmap(){
+  true
+}
+
+# children
+subdomain_enum(){
+#Amass https://github.com/OWASP/Amass
+  run_amass
+#Gobuster
+  run_gobuster_vhost
+  run_gobuster_dns
+}
+
+sub_takeover(){
+  run_subjack
+}
+
+target_valid(){
+  run_httprobe
+}
+
+webapp_valid(){
+  run_aqua
+}
+fuzz_em(){
+  run_gobuster_dir
+  run_dirb
+}
+
+webapp_scan(){
+  run_nuclei
+}
+
+port_scan(){
+  run_nmap
+}
+# main func's
 recon(){
-    subdomain_enum
-    sub_takeover
-    run_nmap
-#    run_aqua
-    
+  subdomain_enum
+  sub_takeover
+  run_nmap
+  run_aqua
 }
 
 scanning(){
@@ -137,7 +195,7 @@ main(){
   mkdir ./targets/"$target"/"$foldername"/aqua_out
   mkdir ./targets/"$target"/"$foldername"/aqua_out/parsedjson
   mkdir ./targets/"$target"/"$foldername"/reports/
-  mkdir ./targets/"$target"/"$foldername"/wayback-data/
+  mkdir ./targets/"$target"/"$foldername"/subdomain_enum/
   mkdir ./targets/"$target"/"$foldername"/screenshots/
   touch ./targets/"$target"/"$foldername"/crtsh.txt
   touch ./targets/"$target"/"$foldername"/mass.txt
