@@ -103,7 +103,7 @@ recon(){
     subdomain_enum
     sub_takeover
     run_nmap
-    run_aqua
+#    run_aqua
     
 }
 
