@@ -131,27 +131,27 @@ fi
     mkdir ./$target
   fi
 
-  mkdir ./"$target"/$foldername
-  mkdir ./"$target"/$foldername/aqua_out
-  mkdir ./"$target"/$foldername/aqua_out/parsedjson
-  mkdir ./"$target"/$foldername/reports/
-  mkdir ./"$target"/$foldername/wayback-data/
-  mkdir ./"$target"/$foldername/screenshots/
-  touch ./"$target"/$foldername/crtsh.txt
-  touch ./"$target"/$foldername/mass.txt
-  touch ./"$target"/$foldername/cnames.txt
-  touch ./"$target"/$foldername/pos.txt
-  touch ./"$target"/$foldername/alldomains.txt
-  touch ./"$target"/$foldername/temp.txt
-  touch ./"$target"/$foldername/tmp.txt
-  touch ./"$target"/$foldername/domaintemp.txt
-  touch ./"$target"/$foldername/ipaddress.txt
-  touch ./"$target"/$foldername/cleantemp.txt
-  touch ./"$target"/$foldername/master_report.html
+  mkdir ./"$target"/"$foldername"
+  mkdir ./"$target"/"$foldername"/aqua_out
+  mkdir ./"$target"/"$foldername"/aqua_out/parsedjson
+  mkdir ./"$target"/"$foldername"/reports/
+  mkdir ./"$target"/"$foldername"/wayback-data/
+  mkdir ./"$target"/"$foldername"/screenshots/
+  touch ./"$target"/"$foldername"/crtsh.txt
+  touch ./"$target"/"$foldername"/mass.txt
+  touch ./"$target"/"$foldername"/cnames.txt
+  touch ./"$target"/"$foldername"/pos.txt
+  touch ./"$target"/"$foldername"/alldomains.txt
+  touch ./"$target"/"$foldername"/temp.txt
+  touch ./"$target"/"$foldername"/tmp.txt
+  touch ./"$target"/"$foldername"/domaintemp.txt
+  touch ./"$target"/"$foldername"/ipaddress.txt
+  touch ./"$target"/"$foldername"/cleantemp.txt
+  touch ./"$target"/"$foldername"/master_report.html
 
   recon $target
   scanning
-  echo "${green}Scan for $domain finished successfully${reset}"
+  echo "${green}Scan for $target finished successfully${reset}"
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
   stty sane
@@ -160,5 +160,4 @@ fi
 todate=$(date +"%Y-%m-%d")
 path=$(pwd)
 foldername=recon-$todate
-source ~/.bash_profile
 main "$target"
