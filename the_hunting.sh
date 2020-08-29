@@ -42,6 +42,10 @@ dirsearchWordlist=~/tools/dirsearch/db/dicc.txt
 chromiumPath=/snap/bin/chromium
 target=
 
+logo(){
+echo "${red}the_hunting.sh${reset}"
+}
+
 usage() { logo; echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
 
 while getopts ":d:e:r:" o; do
@@ -152,10 +156,6 @@ main(){
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
   stty sane
   tput sgr0
-}
-
-logo(){
-echo "${red}the_hunting.sh${reset}"
 }
 
 todate=$(date +"%Y-%m-%d")
