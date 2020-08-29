@@ -42,7 +42,7 @@ dirsearchWordlist=~/tools/dirsearch/db/dicc.txt
 chromiumPath=/snap/bin/chromium
 target=
 
-usage() { echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
+usage() { logo; echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
 
 while getopts ":d:e:r:" o; do
     case "${o}" in
@@ -59,7 +59,6 @@ while getopts ":d:e:r:" o; do
             subreport+=("$OPTARG")
             ;;
         *)
-	          logo
             usage
             ;;
     esac
