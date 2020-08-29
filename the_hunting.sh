@@ -63,6 +63,11 @@ while getopts ":d:e:r:" o; do
             ;;
     esac
 done
+shift $((OPTIND - 1))
+
+if [ -z "${domain}" ] && [[ -z ${subreport[@]} ]]; then
+   usage; exit 1;
+fi
 
 excludedomains(){
   if [ -z "$excluded" ]; then
