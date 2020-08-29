@@ -30,6 +30,8 @@ need sudo for program installs with apt
 
 # Methodology
 
+
+
 ## Recon
 
 ### Subdomains
