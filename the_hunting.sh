@@ -131,23 +131,23 @@ main(){
     mkdir ./target/$target
   fi
 
-  mkdir ./target/"$target"/"$foldername"
-  mkdir ./target/"$target"/"$foldername"/aqua_out
-  mkdir ./target/"$target"/"$foldername"/aqua_out/parsedjson
-  mkdir ./target/"$target"/"$foldername"/reports/
-  mkdir ./target/"$target"/"$foldername"/wayback-data/
-  mkdir ./target/"$target"/"$foldername"/screenshots/
-  touch ./target/"$target"/"$foldername"/crtsh.txt
-  touch ./target/"$target"/"$foldername"/mass.txt
-  touch ./target/"$target"/"$foldername"/cnames.txt
-  touch ./target/"$target"/"$foldername"/pos.txt
-  touch ./target/"$target"/"$foldername"/alldomains.txt
-  touch ./target/"$target"/"$foldername"/temp.txt
-  touch ./target/"$target"/"$foldername"/tmp.txt
-  touch ./target/"$target"/"$foldername"/domaintemp.txt
-  touch ./target/"$target"/"$foldername"/ipaddress.txt
-  touch ./target/"$target"/"$foldername"/cleantemp.txt
-  touch ./target/"$target"/"$foldername"/master_report.html
+  mkdir ./targets/"$target"/"$foldername"
+  mkdir ./targets/"$target"/"$foldername"/aqua_out
+  mkdir ./targets/"$target"/"$foldername"/aqua_out/parsedjson
+  mkdir ./targets/"$target"/"$foldername"/reports/
+  mkdir ./targets/"$target"/"$foldername"/wayback-data/
+  mkdir ./targets/"$target"/"$foldername"/screenshots/
+  touch ./targets/"$target"/"$foldername"/crtsh.txt
+  touch ./targets/"$target"/"$foldername"/mass.txt
+  touch ./targets/"$target"/"$foldername"/cnames.txt
+  touch ./targets/"$target"/"$foldername"/pos.txt
+  touch ./targets/"$target"/"$foldername"/alldomains.txt
+  touch ./targets/"$target"/"$foldername"/temp.txt
+  touch ./targets/"$target"/"$foldername"/tmp.txt
+  touch ./targets/"$target"/"$foldername"/domaintemp.txt
+  touch ./targets/"$target"/"$foldername"/ipaddress.txt
+  touch ./targets/"$target"/"$foldername"/cleantemp.txt
+  touch ./targets/"$target"/"$foldername"/master_report.html
 
   recon "$target"
   scanning
