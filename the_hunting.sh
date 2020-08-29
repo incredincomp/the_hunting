@@ -119,11 +119,11 @@ echo "${red}the_hunting.sh${reset}"
 main(){
   clear
   logo
-  if [ -d "./$target" ]
+  if [ -d "./target/$target" ]
   then
     echo "This is a known target."
   else
-    mkdir ./$target
+    mkdir ./target/$target
   fi
 
   mkdir ./target/"$target"/"$foldername"
