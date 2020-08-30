@@ -27,7 +27,7 @@
 clear
 set -o nounset                              # Treat unset variables as an error
 set -e
-set -xv                                    # Uncomment to print script in console for debug
+#set -xv                                    # Uncomment to print script in console for debug
 
 red=$(tput setaf 1)
 green=$(tput setaf 2)
@@ -36,7 +36,7 @@ reset=$(tput sgr0)
 
 # borrowed some stuff and general idea of automated platform from lazyrecon https://github.com/nahamsec/lazyrecon
 auquatoneThreads=5
-subdomainThreads=10
+subdomainThreads=15
 chromiumPath=/snap/bin/chromium
 
 logo(){
@@ -91,21 +91,23 @@ excludedomains(){
 }
 # parents
 run_amass(){
-  amass enum -norecursive --passive -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -json ./targets/"$target"/"$foldername"/subdomain_enum/amass_"$todate".json -d "$target"
-  rm -rf ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass.log
-  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass.txt >> ./targets/"$target"/"$foldername"/alldomains.txt
+  echo "${yellow}Running Amass enum...${reset}"
+  amass enum -norecursive --passive --silent -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d https://"$target"
+  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
+  echo "${green}Amass enum finished.${reset}"
 }
 
+#gobuster vhost broken
 run_gobuster_vhost(){
-  true
+  echo "${yellow}Running gobuster vhost...${reset}"
+  gobuster vhost -u "$target" -w wordlists/dns-Jhaddix.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -np
+  echo "${green}gobuster vhost finished.${reset}"
 }
 
 run_gobuster_dns(){
-  true
-}
-
-run_subjack(){
-  true
+  echo "${yellow}Running gobuster dns...${reset}"
+  gobuster dns -d "$target" -w wordlists/dns-Jhaddix.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
+  echo "${green}gobuster dns finished.${reset}"
 }
 
 run_subjack(){
@@ -141,9 +143,9 @@ run_nmap(){
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
-  run_amass
+  #run_amass
 #Gobuster
-  run_gobuster_vhost
+  #run_gobuster_vhost
   run_gobuster_dns
 }
 
@@ -206,6 +208,7 @@ main(){
   mkdir ./targets/$target/"$foldername"/reports/
   mkdir ./targets/$target/"$foldername"/subdomain_enum/
   mkdir ./targets/$target/"$foldername"/subdomain_enum/amass
+  mkdir ./targets/$target/"$foldername"/subdomain_enum/gobuster
   mkdir ./targets/$target/"$foldername"/screenshots/
   touch ./targets/$target/"$foldername"/crtsh.txt
   touch ./targets/$target/"$foldername"/mass.txt
