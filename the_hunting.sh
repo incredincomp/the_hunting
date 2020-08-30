@@ -17,7 +17,7 @@
 #  REQUIREMENTS:
 #
 #          BUGS:
-#         NOTES: v0.0.1
+#         NOTES: v0.1.0
 #        AUTHOR: @incredincomp
 #  ORGANIZATION:
 #       CREATED: 08/27/2020 16:55:54
@@ -52,7 +52,7 @@ target=""
 subreport=""
 usage() { logo; echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
 
-while getopts ":d:e:r" o; do
+while getopts ":d:e" o; do
     case "${o}" in
         d)
             target="$OPTARG"
@@ -62,9 +62,6 @@ while getopts ":d:e:r" o; do
             IFS=","
             excluded+=($OPTARG)
             unset IFS
-            ;;
-        r)
-            subreport+=("$OPTARG")
             ;;
         *)
             usage
@@ -105,13 +102,15 @@ run_amass(){
 #gobuster vhost broken
 run_gobuster_vhost(){
   echo "${yellow}Running gobuster vhost...${reset}"
-  gobuster vhost -u "$target" -w wordlists/dns-Jhaddix.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -np
+  gobuster vhost -u "$target" -w wordlists/dns-Jhaddix.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -np -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
+  cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}gobuster vhost finished.${reset}"
 }
 
 run_gobuster_dns(){
   echo "${yellow}Running gobuster dns...${reset}"
   gobuster dns -d "$target" -w wordlists/dns-Jhaddix.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
+  cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}gobuster dns finished.${reset}"
 }
 
@@ -157,10 +156,11 @@ notify(){
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
-  #run_amass
-#Gobuster
-  #run_gobuster_vhost
-  #run_gobuster_dns
+  run_amass &
+#Gobuster trying to make them run at same time
+  run_gobuster_vhost
+  wait
+  run_gobuster_dns
   true
 }
 
