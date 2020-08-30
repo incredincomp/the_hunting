@@ -27,7 +27,7 @@
 clear
 set -o nounset                              # Treat unset variables as an error
 set -e
-#set -xv                                    # Uncomment to print script in console for debug
+set -xv                                    # Uncomment to print script in console for debug
 
 red=$(tput setaf 1)
 green=$(tput setaf 2)
@@ -147,12 +147,10 @@ run_nmap(){
 
 notify(){
   if [ -z "$slack_url" ]; then
-    data1="'{\"text\":\"Your scan of "
-    data2=" is complete!\"}'"
-    all_data="$data1" + "$target" + "$data2"
-    curl -X POST -H 'Content-type: application/json' --data $all_data https://hooks.slack.com/services/$slack_url
+    echo "Notifications not set up. Add your slack url to ./slack_url.txt"
   else
-    true
+    data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\"}''
+    curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
   fi
 }
 
@@ -163,6 +161,7 @@ subdomain_enum(){
 #Gobuster
   #run_gobuster_vhost
   #run_gobuster_dns
+  true
 }
 
 sub_takeover(){
@@ -240,10 +239,11 @@ main(){
 
   recon "$target"
   scanning "$target"
-  notify "$target"
+  notify
   echo "${green}Scan for $target finished successfully${reset}"
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
+  rm -rf ./targets/incredincomp.com
   stty sane
   tput sgr0
 }
