@@ -27,7 +27,7 @@
 clear
 set -o nounset                              # Treat unset variables as an error
 set -e
-#set -xv                                    # Uncomment to print script in console for debug
+set -xv                                    # Uncomment to print script in console for debug
 
 red=$(tput setaf 1)
 green=$(tput setaf 2)
@@ -38,6 +38,11 @@ reset=$(tput sgr0)
 auquatoneThreads=5
 subdomainThreads=15
 chromiumPath=/snap/bin/chromium
+
+if [ -s ./slack_url.txt ]
+then
+  slack_url=$(<slack_url.txt)
+fi
 
 logo(){
 echo "${red}the_hunting.sh${reset}"
@@ -140,13 +145,23 @@ run_nmap(){
   true
 }
 
+notify(){
+  if [ -z "$slack_url" ]; then
+    echo "Notifications not set up. Add your slack url to ./slack_url.txt"
+  else
+    data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\"}''
+    curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+  fi
+}
+
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
   #run_amass
 #Gobuster
   #run_gobuster_vhost
-  run_gobuster_dns
+  #run_gobuster_dns
+  true
 }
 
 sub_takeover(){
@@ -223,10 +238,12 @@ main(){
   touch ./targets/$target/"$foldername"/master_report.html
 
   recon "$target"
-  scanning
+  scanning "$target"
+  notify
   echo "${green}Scan for $target finished successfully${reset}"
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
+  rm -rf ./targets/incredincomp.com
   stty sane
   tput sgr0
 }
