@@ -21,3 +21,7 @@ go get && go build
 make linux
 cd ./build/gobuster-linux-amd64
 sudo cp gobuster /usr/bin/gobuster
+
+cd ../../temp
+go get github.com/haccer/subjack
+alias subjack="~/go/bin/subjack"
