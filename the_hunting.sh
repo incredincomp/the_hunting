@@ -157,10 +157,10 @@ notify(){
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
-  #run_amass
+  run_amass
 #Gobuster
   #run_gobuster_vhost
-  #run_gobuster_dns
+  run_gobuster_dns
   true
 }
 
@@ -243,7 +243,7 @@ main(){
   echo "${green}Scan for $target finished successfully${reset}"
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
-  rm -rf ./targets/incredincomp.com
+#testing stuff  rm -rf ./targets/incredincomp.com
   stty sane
   tput sgr0
 }
