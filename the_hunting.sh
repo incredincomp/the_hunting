@@ -39,6 +39,11 @@ auquatoneThreads=5
 subdomainThreads=15
 chromiumPath=/snap/bin/chromium
 
+if [ -s ./slack_url.txt ]
+then
+  slack_url=$(<slack_url.txt)
+fi
+
 logo(){
 echo "${red}the_hunting.sh${reset}"
 }
@@ -140,13 +145,24 @@ run_nmap(){
   true
 }
 
+notify(){
+  if [ -z "$slack_url" ]; then
+    data1="'{\"text\":\"Your scan of "
+    data2=" is complete!\"}'"
+    all_data="$data1" + "$target" + "$data2"
+    curl -X POST -H 'Content-type: application/json' --data $all_data https://hooks.slack.com/services/$slack_url
+  else
+    true
+  fi
+}
+
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
   #run_amass
 #Gobuster
   #run_gobuster_vhost
-  run_gobuster_dns
+  #run_gobuster_dns
 }
 
 sub_takeover(){
@@ -223,7 +239,8 @@ main(){
   touch ./targets/$target/"$foldername"/master_report.html
 
   recon "$target"
-  scanning
+  scanning "$target"
+  notify "$target"
   echo "${green}Scan for $target finished successfully${reset}"
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
