@@ -22,6 +22,7 @@ Connect to your axiom droplet
 
 `cd ~/the_hunting`
 
+### need to run install.sh on fresh ubuntu 20.04 to install prereq tools that come with axiom
 `chmod +x install.sh the_hunting.sh`
 
 need sudo for program installs with apt
