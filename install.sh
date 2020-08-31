@@ -36,3 +36,9 @@ mv directory-list-lowercase-2.3-big.txt ../wordlists/directory-list.txt
 wget https://github.com/michenriksen/aquatone/releases/download/v1.7.0/aquatone_linux_amd64_1.7.0.zip
 unzip aquatone_linux_amd64_1.7.0.zip
 mv aquatone /usr/local/bin/aquatone
+
+git clone https://github.com/projectdiscovery/nuclei.git
+cd nuclei/cmd/nuclei/
+go build .
+mv nuclei /usr/local/bin/
+cd ../../../temp

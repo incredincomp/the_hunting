@@ -18,24 +18,30 @@
 #                nuclei, and parallel on ubuntu 20.04 or axiom droplet
 #
 #          BUGS:
-#         NOTES: v0.1.1
+#         NOTES: v0.2.0
 #        AUTHOR: @incredincomp
 #  ORGANIZATION:
 #       CREATED: 08/27/2020 16:55:54
-#      REVISION: 08/29/2020 11:06:00
-#     LICENSING:
+#      REVISION: 08/31/2020 00:29:00
+#     LICENSING: the_hunting Copyright (C) 2020  @incredincomp
+#                This program comes with ABSOLUTELY NO WARRANTY;
+#                for details, type `./the_hunting.sh -l'.
+#                This is free software, and you are welcome to redistribute
+#                it under certain conditions;
+#                for details, type `./the_hunting.sh -l'.
 #===============================================================================
 clear
-set -o nounset                              # Treat unset variables as an error
+set -o nounset                 # Treat unset variables as an error
 set -e
-#set -xv                                    # Uncomment to print script in console for debug
+#set -xv                       # Uncomment to print script in console for debug
 
 red=$(tput setaf 1)
 green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 reset=$(tput sgr0)
 
-# borrowed some stuff and general idea of automated platform from lazyrecon https://github.com/nahamsec/lazyrecon
+# borrowed some stuff and general idea of automated platform from lazyrecon
+# https://github.com/nahamsec/lazyrecon
 auquatoneThreads=8
 subdomainThreads=15
 subjackThreads=15
@@ -50,14 +56,32 @@ else
 fi
 
 logo(){
-echo "${red}the_hunting.sh${reset}"
+  base64 -d <<<"ZWNobyAiJHtyZWR94paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWXICDilojilojilZfilojilojilojilojilojilojilojilZcgICAgICAgIOKWiOKWiOKVlyAg4paI4paI4pWX4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWXIOKWiOKWiOKWiOKWiOKWiOKWiOKVlyAgICDilojilojilojilojilojilojilojilZfilojilojilZcgIOKWiOKWiOKVlyR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfeKVmuKVkOKVkOKWiOKWiOKVlOKVkOKVkOKVneKWiOKWiOKVkSAg4paI4paI4pWR4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWdICAgICAgICDilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKVlyAg4paI4paI4pWR4pWa4pWQ4pWQ4paI4paI4pWU4pWQ4pWQ4pWd4paI4paI4pWR4paI4paI4paI4paI4pWXICDilojilojilZHilojilojilZTilZDilZDilZDilZDilZ0gICAg4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWd4paI4paI4pWRICDilojilojilZEke3Jlc2V0fSI7DQplY2hvICIke3JlZH0gICDilojilojilZEgICDilojilojilojilojilojilojilojilZHilojilojilojilojilojilZcgICAgICAgICAg4paI4paI4paI4paI4paI4paI4paI4pWR4paI4paI4pWRICAg4paI4paI4pWR4paI4paI4pWU4paI4paI4pWXIOKWiOKWiOKVkSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKVlOKWiOKWiOKVlyDilojilojilZHilojilojilZEgIOKWiOKWiOKWiOKVlyAgIOKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKWiOKWiOKWiOKWiOKWiOKVkSR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVlOKVkOKVkOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVnSAgICAgICAgICDilojilojilZTilZDilZDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZHilojilojilZEgICDilojilojilZEgICDilZrilZDilZDilZDilZDilojilojilZHilojilojilZTilZDilZDilojilojilZEke3Jlc2V0fSI7DQplY2hvICIke3JlZH0gICDilojilojilZEgICDilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKVkSAg4paI4paI4pWR4pWa4paI4paI4paI4paI4paI4paI4pWU4pWd4paI4paI4pWRIOKVmuKWiOKWiOKWiOKWiOKVkSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKVkSDilZrilojilojilojilojilZHilZrilojilojilojilojilojilojilZTilZ3ilojilojilZfilojilojilojilojilojilojilojilZHilojilojilZEgIOKWiOKWiOKVkSR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfSAgIOKVmuKVkOKVnSAgIOKVmuKVkOKVnSAg4pWa4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZ0g4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWdIOKVmuKVkOKVnSAg4pWa4pWQ4pWQ4pWQ4pWdICAg4pWa4pWQ4pWdICAg4pWa4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZDilZDilZ0g4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWdIOKVmuKVkOKVneKVmuKVkOKVkOKVkOKVkOKVkOKVkOKVneKVmuKVkOKVnSAg4pWa4pWQ4pWdJHtyZXNldH0iOw"
 }
 
+credits(){
+  base64 -d <<<"ZWNobyAiCUNyZWRpdHM6IFRoYW5rcyB0byBodHRwczovL2dpdGh1Yi5jb20vT0ogaHR0cHM6Ly9naXRodWIuY29tL09XQVNQIGh0dHBzOi8vZ2l0aHViLmNvbS9oYWNjZXIiOwplY2hvICIJaHR0cHM6Ly9naXRodWIuY29tL3RvbW5vbW5vbSBodHRwczovL2dpdGh1Yi5jb20vbWljaGVucmlrc2VuICYgVGhlIERhcmsgUmF2ZXIgZm9yIHRoZWlyIjsKZWNobyAiCXdvcmsgb24gdGhlIHByb2dyYW1zIHRoYXQgd2VudCBpbnRvIHRoZSBtYWtpbmcgb2YgdGhlX2h1bnRpbmcuc2guIjs"
+}
+
+licensing_info(){
+  base64 -d <<<"ZWNobyAiCXRoZV9odW50aW5nIENvcHlyaWdodCAoQykgMjAyMCAgQGluY3JlZGluY29tcCI7CmVjaG8gIglUaGlzIHByb2dyYW0gY29tZXMgd2l0aCBBQlNPTFVURUxZIE5PIFdBUlJBTlRZOyBmb3IgZGV0YWlscyBjYWxsIGAuL3RoZV9odW50aW5nLnNoIC1saWNlbnNlJy4iOwplY2hvICIJVGhpcyBpcyBmcmVlIHNvZnR3YXJlLCBhbmQgeW91IGFyZSB3ZWxjb21lIHRvIHJlZGlzdHJpYnV0ZSBpdCI7CmVjaG8gIgl1bmRlciBjZXJ0YWluIGNvbmRpdGlvbnM7IHR5cGUgYC4vdGhlX2h1bnRpbmcuc2ggLWxpY2Vuc2UnIGZvciBkZXRhaWxzLiI7"
+}
+
+print_line () {
+  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+}
+
+open_program(){
+  logo
+  credits
+  licensing_info
+  print_line
+}
 target=""
 subreport=""
 usage() { logo; echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
 
-while getopts ":d:e" o; do
+while getopts ":d:e:l" o; do
     case "${o}" in
         d)
             target="$OPTARG"
@@ -67,6 +91,10 @@ while getopts ":d:e" o; do
             IFS=","
             excluded+=($OPTARG)
             unset IFS
+            ;;
+        l)
+            less ./LICENSE
+            exit 1
             ;;
         *)
             usage
@@ -106,17 +134,17 @@ run_amass(){
 
 #gobuster vhost broken
 run_gobuster_vhost(){
-  echo "${yellow}Running gobuster vhost...${reset}"
+  echo "${yellow}Running Gobuster vhost...${reset}"
   gobuster vhost -u "$target" -w wordlists/dns-Jhaddix.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -np -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
-  echo "${green}gobuster vhost finished.${reset}"
+  echo "${green}Gobuster vhost finished.${reset}"
 }
 
 run_gobuster_dns(){
-  echo "${yellow}Running gobuster dns...${reset}"
+  echo "${yellow}Running Gobuster dns...${reset}"
   gobuster dns -d "$target" -w wordlists/dns-Jhaddix.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
-  echo "${green}gobuster dns finished.${reset}"
+  echo "${green}Gobuster dns finished.${reset}"
 }
 
 run_subjack(){
@@ -127,20 +155,20 @@ run_subjack(){
 
 run_httprobe(){
   echo "${yellow}Running httprobe...${reset}"
-  cat ./targets/"$target"/"$foldername"/alldomains.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+  cat ./targets/"$target"/"$foldername"/uniq-subdomains.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   echo "${green}httprobe finished.${reset}"
 }
 
 run_aqua(){
-  echo "${yellow}Running aquatone...${reset}"
+  echo "${yellow}Running Aquatone...${reset}"
   cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | aquatone -chrome-path $chromiumPath -out ./targets/"$target"/aqua/aqua_out -threads $auquatoneThreads -silent -http-timeout 6000
-  echo "${green}aquatone finished...${reset}"
+  echo "${green}Aquatone finished...${reset}"
 }
 
 run_gobuster_dir(){
-  echo "${yellow}Running gobuster dir...${reset}"
+  echo "${yellow}Running Gobuster dir...${reset}"
   read_direct_wordlist | parallel --results ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/ gobuster dir -z -q -u {} -w ./wordlists/directory-list.txt -f -k -e -r -a "Mozilla/5.0 \(X11\; Ubuntu\; Linux x86_64\; rv\:80.0\) Gecko/20100101 Firefox/80.0"
-  echo "${green}gobuster dir finished...${reset}"
+  echo "${green}Gobuster dir finished...${reset}"
 }
 
 run_dirb(){
@@ -148,7 +176,9 @@ run_dirb(){
 }
 
 run_nuclei(){
-  true
+  echo "${yellow}Running Nuclei stock template scan...${reset}"
+  nuclei -v -pbar -silent -json -json-requests -l ./targets/"$target"/"$foldername"/uniq-subdomains.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-results.json
+  echo "${green}Nuclei finished...${reset}"
 }
 
 run_nmap(){
@@ -167,6 +197,11 @@ notify(){
 read_direct_wordlist(){
   cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
 }
+
+uniq_subdomains(){
+  uniq -u ./targets/"$target"/"$foldername"/alldomains.txt > ./targets/"$target"/"$foldername"/uniq-subdomains.txt
+}
+
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
@@ -175,7 +210,7 @@ subdomain_enum(){
   run_gobuster_vhost
   wait
   run_gobuster_dns
-  true
+  uniq_subdomains
 }
 
 sub_takeover(){
@@ -217,13 +252,17 @@ scanning(){
 
 main(){
   clear
-  logo
+  open_program
   cd ./targets && if [ -d "./"$target"" ]
   then
-    echo "This is a known target. Making a new directory with todays date."
+    echo "$target is a known target. Making a new directory with todays date."
   else
     mkdir ./"$target"
   fi && cd ..
+  if [ -z "$slack_url" ]; then
+    echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
+  fi
+  wait 1
 
   mkdir ./targets/"$target"/"$foldername"
   mkdir ./targets/"$target"/"$foldername"/aqua_out/
@@ -234,6 +273,8 @@ main(){
   mkdir ./targets/"$target"/"$foldername"/screenshots/
   mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/
   mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/
+  mkdir ./targets/"$target"/"$foldername"/scanning/
+  mkdir ./targets/"$target"/"$foldername"/scanning/nuclei/
   touch ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   touch ./targets/"$target"/"$foldername"/subdomain-takeover-results.json
   touch ./targets/"$target"/"$foldername"/alldomains.txt
