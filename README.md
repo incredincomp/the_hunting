@@ -33,6 +33,9 @@ need sudo for program installs with apt
 
 `sudo ./install.sh`
 
+## Usage
+`./the_hunting.sh -d <target domain>`
+
 # Methodology
 
 ![](https://github.com/incredincomp/usage-videos/blob/master/the_hunting1.PNG)
