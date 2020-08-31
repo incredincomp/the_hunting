@@ -82,8 +82,16 @@ https://github.com/OJ/gobuster
 
 ##### nse scripts
 
+https://nmap.org/book/nse.html
+
 ### Webpage and Server Scanning
 
 #### nuclei
+
 ##### Templates
+
+https://github.com/projectdiscovery/nuclei-templates
+
+https://nuclei.projectdiscovery.io/templating-guide/
+
 ##### usage
