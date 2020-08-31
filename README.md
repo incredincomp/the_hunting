@@ -1,6 +1,9 @@
 # the_hunting
 a *cheap* vuln finding robot
 
+Currently in Dev. Please be careful with it. Its a violent script if I've ever written one. Only does Recon branch fully right now, still pretty useful probably.
+Cheers!
+
 # Requirements
 
 * Axiom https://github.com/pry0cc/axiom
@@ -22,9 +25,10 @@ Connect to your axiom droplet
 
 `cd ~/the_hunting`
 
-### need to run install.sh on fresh ubuntu 20.04 to install prereq tools that come with axiom
+### need to run install.sh on fresh ubuntu 20.04 to install prereq tools that come with axiom *THIS IS UNTESTED AND DANGEROUS, GOOD LUCK
 `chmod +x install.sh the_hunting.sh`
 
+### *THE INSTALL.SH SCRIPT IS UNTESTED, UNFORMATTED, AND DANGEROUS.. GOOD LUCK*
 need sudo for program installs with apt
 
 `sudo ./install.sh`
