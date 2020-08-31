@@ -31,7 +31,7 @@ need sudo for program installs with apt
 
 # Methodology
 
-![](https://github.com/incredincomp/usage-videos/blob/master/the_hunting.PNG)
+![](https://github.com/incredincomp/usage-videos/blob/master/the_hunting1.PNG)
 
 ## Recon
 
