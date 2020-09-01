@@ -40,6 +40,7 @@ green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 reset=$(tput sgr0)
 
+alias httprobe="~/go/bin/httprobe"
 # borrowed some stuff and general idea of automated platform from lazyrecon
 # https://github.com/nahamsec/lazyrecon
 auquatoneThreads=8
@@ -113,15 +114,15 @@ run_amass(){
 #gobuster vhost broken
 run_gobuster_vhost(){
   echo "${yellow}Running Gobuster vhost...${reset}"
-  gobuster vhost -u "$target" -w wordlists\subdomains-top-110000.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -np -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
+  gobuster vhost -u "$target" -w ./wordlists/subdomains-top-110000.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster vhost finished.${reset}"
 }
 
 run_gobuster_dns(){
   echo "${yellow}Running Gobuster dns...${reset}"
-  gobuster dns -d "$target" -w wordlists\subdomains-top-110000.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
-  cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
+  gobuster dns -d "$target" -w ./wordlists/subdomains-top-110000.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
+  cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt | awk -F ' ' '{print $2}' >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster dns finished.${reset}"
 }
 
@@ -139,13 +140,14 @@ run_httprobe(){
 
 run_aqua(){
   echo "${yellow}Running Aquatone...${reset}"
-  cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | aquatone -chrome-path $chromiumPath -out ./targets/"$target"/aqua/aqua_out -threads $auquatoneThreads -silent -http-timeout 6000
+  cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | aquatone -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out -threads $auquatoneThreads -silent -http-timeout 6000
   echo "${green}Aquatone finished...${reset}"
 }
 
 run_gobuster_dir(){
   echo "${yellow}Running Gobuster dir...${reset}"
   read_direct_wordlist | parallel --results ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/ gobuster dir -z -q -u {} -w ./wordlists/directory-list.txt -f -k -e -r -a "Mozilla/5.0 \(X11\; Ubuntu\; Linux x86_64\; rv\:80.0\) Gecko/20100101 Firefox/80.0"
+  cat ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/1/"$target"/stdout | awk -F ' ' '{print $1}' >> ./targets/"$target"/"$foldername"/live_paths.txt
   echo "${green}Gobuster dir finished...${reset}"
 }
 
@@ -155,7 +157,7 @@ run_dirb(){
 
 run_nuclei(){
   echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
-  nuclei -v -pbar -silent -json -json-requests -l ./targets/"$target"/"$foldername"/uniq-subdomains.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/live_paths.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 
@@ -192,10 +194,9 @@ uniq_subdomains(){
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
-  run_amass &
+  run_amass
 #Gobuster trying to make them run at same time
-  run_gobuster_vhost
-  wait
+  #run_gobuster_vhost
   run_gobuster_dns
   uniq_subdomains
 }
@@ -228,34 +229,41 @@ port_scan(){
 recon(){
   subdomain_enum
   sub_takeover
-  excludedomains
+#  excludedomains
   webapp_valid
+  target_valid
 }
 
 scanning(){
   port_scan
-  webapp_scan
   fuzz_em
+  webapp_scan
 }
 # graphic opening stuff
 logo(){
-  base64 -d <<<"ZWNobyAiJHtyZWR94paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWXICDilojilojilZfilojilojilojilojilojilojilojilZcgICAgICAgIOKWiOKWiOKVlyAg4paI4paI4pWX4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWXIOKWiOKWiOKWiOKWiOKWiOKWiOKVlyAgICDilojilojilojilojilojilojilojilZfilojilojilZcgIOKWiOKWiOKVlyR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfeKVmuKVkOKVkOKWiOKWiOKVlOKVkOKVkOKVneKWiOKWiOKVkSAg4paI4paI4pWR4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWdICAgICAgICDilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKVlyAg4paI4paI4pWR4pWa4pWQ4pWQ4paI4paI4pWU4pWQ4pWQ4pWd4paI4paI4pWR4paI4paI4paI4paI4pWXICDilojilojilZHilojilojilZTilZDilZDilZDilZDilZ0gICAg4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWd4paI4paI4pWRICDilojilojilZEke3Jlc2V0fSI7DQplY2hvICIke3JlZH0gICDilojilojilZEgICDilojilojilojilojilojilojilojilZHilojilojilojilojilojilZcgICAgICAgICAg4paI4paI4paI4paI4paI4paI4paI4pWR4paI4paI4pWRICAg4paI4paI4pWR4paI4paI4pWU4paI4paI4pWXIOKWiOKWiOKVkSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKVlOKWiOKWiOKVlyDilojilojilZHilojilojilZEgIOKWiOKWiOKWiOKVlyAgIOKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKWiOKWiOKWiOKWiOKWiOKVkSR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVlOKVkOKVkOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVnSAgICAgICAgICDilojilojilZTilZDilZDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZHilojilojilZEgICDilojilojilZEgICDilZrilZDilZDilZDilZDilojilojilZHilojilojilZTilZDilZDilojilojilZEke3Jlc2V0fSI7DQplY2hvICIke3JlZH0gICDilojilojilZEgICDilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKVkSAg4paI4paI4pWR4pWa4paI4paI4paI4paI4paI4paI4pWU4pWd4paI4paI4pWRIOKVmuKWiOKWiOKWiOKWiOKVkSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKVkSDilZrilojilojilojilojilZHilZrilojilojilojilojilojilojilZTilZ3ilojilojilZfilojilojilojilojilojilojilojilZHilojilojilZEgIOKWiOKWiOKVkSR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfSAgIOKVmuKVkOKVnSAgIOKVmuKVkOKVnSAg4pWa4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZ0g4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWdIOKVmuKVkOKVnSAg4pWa4pWQ4pWQ4pWQ4pWdICAg4pWa4pWQ4pWdICAg4pWa4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZDilZDilZ0g4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWdIOKVmuKVkOKVneKVmuKVkOKVkOKVkOKVkOKVkOKVkOKVneKVmuKVkOKVnSAg4pWa4pWQ4pWdJHtyZXNldH0iOw"
+  base64 -d <<<"4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWXICDilojilojilZfilojilojilojilojilojilojilojilZcgICAgICAgIOKWiOKWiOKVlyAg4paI4paI4pWX4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWXIOKWiOKWiOKWiOKWiOKWiOKWiOKVlyAgICDilojilojilojilojilojilojilojilZfilojilojilZcgIOKWiOKWiOKVlwrilZrilZDilZDilojilojilZTilZDilZDilZ3ilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVkOKVkOKVnSAgICAgICAg4paI4paI4pWRICDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilojilojilZcgIOKWiOKWiOKVkeKVmuKVkOKVkOKWiOKWiOKVlOKVkOKVkOKVneKWiOKWiOKVkeKWiOKWiOKWiOKWiOKVlyAg4paI4paI4pWR4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWdICAgIOKWiOKWiOKVlOKVkOKVkOKVkOKVkOKVneKWiOKWiOKVkSAg4paI4paI4pWRCiAgIOKWiOKWiOKVkSAgIOKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKWiOKVlyAgICAgICAgICDilojilojilojilojilojilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZTilojilojilZcg4paI4paI4pWRICAg4paI4paI4pWRICAg4paI4paI4pWR4paI4paI4pWU4paI4paI4pWXIOKWiOKWiOKVkeKWiOKWiOKVkSAg4paI4paI4paI4pWXICAg4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4pWRCiAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVlOKVkOKVkOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVnSAgICAgICAgICDilojilojilZTilZDilZDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZHilojilojilZEgICDilojilojilZEgICDilZrilZDilZDilZDilZDilojilojilZHilojilojilZTilZDilZDilojilojilZEKICAg4paI4paI4pWRICAg4paI4paI4pWRICDilojilojilZHilojilojilojilojilojilojilojilZfilojilojilojilojilojilojilojilZfilojilojilZEgIOKWiOKWiOKVkeKVmuKWiOKWiOKWiOKWiOKWiOKWiOKVlOKVneKWiOKWiOKVkSDilZrilojilojilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZEg4pWa4paI4paI4paI4paI4pWR4pWa4paI4paI4paI4paI4paI4paI4pWU4pWd4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4pWR4paI4paI4pWRICDilojilojilZEKICAg4pWa4pWQ4pWdICAg4pWa4pWQ4pWdICDilZrilZDilZ3ilZrilZDilZDilZDilZDilZDilZDilZ3ilZrilZDilZDilZDilZDilZDilZDilZ3ilZrilZDilZ0gIOKVmuKVkOKVnSDilZrilZDilZDilZDilZDilZDilZ0g4pWa4pWQ4pWdICDilZrilZDilZDilZDilZ0gICDilZrilZDilZ0gICDilZrilZDilZ3ilZrilZDilZ0gIOKVmuKVkOKVkOKVkOKVnSDilZrilZDilZDilZDilZDilZDilZ0g4pWa4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZ0="
 }
 
 credits(){
-  base64 -d <<<"ZWNobyAiCUNyZWRpdHM6IFRoYW5rcyB0byBodHRwczovL2dpdGh1Yi5jb20vT0ogaHR0cHM6Ly9naXRodWIuY29tL09XQVNQIGh0dHBzOi8vZ2l0aHViLmNvbS9oYWNjZXIiOwplY2hvICIJaHR0cHM6Ly9naXRodWIuY29tL3RvbW5vbW5vbSBodHRwczovL2dpdGh1Yi5jb20vbWljaGVucmlrc2VuICYgVGhlIERhcmsgUmF2ZXIgZm9yIHRoZWlyIjsKZWNobyAiCXdvcmsgb24gdGhlIHByb2dyYW1zIHRoYXQgd2VudCBpbnRvIHRoZSBtYWtpbmcgb2YgdGhlX2h1bnRpbmcuc2guIjs"
+  print_line
+  base64 -d <<<"ICAgQ3JlZGl0czogVGhhbmtzIHRvIGh0dHBzOi8vZ2l0aHViLmNvbS9PSiBodHRwczovL2dpdGh1Yi5jb20vT1dBU1AgaHR0cHM6Ly9naXRodWIuY29tL2hhY2NlcgogICBodHRwczovL2dpdGh1Yi5jb20vdG9tbm9tbm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9taWNoZW5yaWtzZW4gJiBUaGUgRGFyayBSYXZlciBmb3IgdGhlaXIKICAgd29yayBvbiB0aGUgcHJvZ3JhbXMgdGhhdCB3ZW50IGludG8gdGhlIG1ha2luZyBvZiB0aGVfaHVudGluZy5zaC4="
+  echo " "
+  print_line
 }
 
 licensing_info(){
-  base64 -d <<<"ZWNobyAiCXRoZV9odW50aW5nIENvcHlyaWdodCAoQykgMjAyMCAgQGluY3JlZGluY29tcCI7CmVjaG8gIglUaGlzIHByb2dyYW0gY29tZXMgd2l0aCBBQlNPTFVURUxZIE5PIFdBUlJBTlRZOyBmb3IgZGV0YWlscyBjYWxsIGAuL3RoZV9odW50aW5nLnNoIC1saWNlbnNlJy4iOwplY2hvICIJVGhpcyBpcyBmcmVlIHNvZnR3YXJlLCBhbmQgeW91IGFyZSB3ZWxjb21lIHRvIHJlZGlzdHJpYnV0ZSBpdCI7CmVjaG8gIgl1bmRlciBjZXJ0YWluIGNvbmRpdGlvbnM7IHR5cGUgYC4vdGhlX2h1bnRpbmcuc2ggLWxpY2Vuc2UnIGZvciBkZXRhaWxzLiI7"
+  base64 -d <<<"CXRoZV9odW50aW5nIENvcHlyaWdodCAoQykgMjAyMCAgQGluY3JlZGluY29tcAoJVGhpcyBwcm9ncmFtIGNvbWVzIHdpdGggQUJTT0xVVEVMWSBOTyBXQVJSQU5UWTsgZm9yIGRldGFpbHMgY2FsbCBgLi90aGVfaHVudGluZy5zaCAtbGljZW5zZScuCglUaGlzIGlzIGZyZWUgc29mdHdhcmUsIGFuZCB5b3UgYXJlIHdlbGNvbWUgdG8gcmVkaXN0cmlidXRlIGl0LgoJdW5kZXIgY2VydGFpbiBjb25kaXRpb25zOyB0eXBlIGAuL3RoZV9odW50aW5nLnNoIC1saWNlbnNlJyBmb3IgZGV0YWlscy4="
+  echo " "
 }
 
 print_line () {
   printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+  echo " "
 }
 
 open_program(){
   logo
+  echo " "
   credits
   licensing_info
   print_line
@@ -274,8 +282,8 @@ main(){
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   fi
-  wait 1
 
+  mkdir ./targets/"$target"/
   mkdir ./targets/"$target"/"$foldername"
   mkdir ./targets/"$target"/"$foldername"/aqua_out/
   mkdir ./targets/"$target"/"$foldername"/aqua_out/parsedjson/
@@ -290,6 +298,7 @@ main(){
   mkdir ./targets/"$target"/"$foldername"/scanning/nuclei/
   touch ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   touch ./targets/"$target"/"$foldername"/subdomain-takeover-results.json
+  touch ./targets/"$target"/"$foldername"/live_paths.txt
   touch ./targets/"$target"/"$foldername"/alldomains.txt
   touch ./targets/"$target"/"$foldername"/temp.txt
   touch ./targets/"$target"/"$foldername"/temp-tmp.txt
@@ -308,6 +317,7 @@ main(){
   tput sgr0
 }
 todate=$(date +"%Y-%m-%d")
+totime=$(date +"%I")
 path=$(pwd)
-foldername="$todate"
+foldername=$todate"-"$totime
 main "$target"

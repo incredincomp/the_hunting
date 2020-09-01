@@ -89,7 +89,7 @@ install_nuclei(){
   cd nuclei/cmd/nuclei/
   go build .
   mv nuclei /usr/local/bin/
-  cd ../../../temp
+  cd ../../../
 }
 
 install_tools(){
