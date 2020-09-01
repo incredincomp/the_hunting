@@ -29,7 +29,7 @@ Connect to your axiom droplet
 ### *THE INSTALL.SH SCRIPT IS UNTESTED, UNFORMATTED, AND DANGEROUS.. GOOD LUCK*
 need sudo for program installs with apt
 
-`sudo ./install.sh`
+`sudo ./install.sh -i`
 
 ## Usage
 `./the_hunting.sh -d <target domain>`
