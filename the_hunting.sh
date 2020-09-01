@@ -55,28 +55,6 @@ else
   slack_url=""
 fi
 
-logo(){
-  base64 -d <<<"ZWNobyAiJHtyZWR94paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWXICDilojilojilZfilojilojilojilojilojilojilojilZcgICAgICAgIOKWiOKWiOKVlyAg4paI4paI4pWX4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWXIOKWiOKWiOKWiOKWiOKWiOKWiOKVlyAgICDilojilojilojilojilojilojilojilZfilojilojilZcgIOKWiOKWiOKVlyR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfeKVmuKVkOKVkOKWiOKWiOKVlOKVkOKVkOKVneKWiOKWiOKVkSAg4paI4paI4pWR4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWdICAgICAgICDilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKVlyAg4paI4paI4pWR4pWa4pWQ4pWQ4paI4paI4pWU4pWQ4pWQ4pWd4paI4paI4pWR4paI4paI4paI4paI4pWXICDilojilojilZHilojilojilZTilZDilZDilZDilZDilZ0gICAg4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWd4paI4paI4pWRICDilojilojilZEke3Jlc2V0fSI7DQplY2hvICIke3JlZH0gICDilojilojilZEgICDilojilojilojilojilojilojilojilZHilojilojilojilojilojilZcgICAgICAgICAg4paI4paI4paI4paI4paI4paI4paI4pWR4paI4paI4pWRICAg4paI4paI4pWR4paI4paI4pWU4paI4paI4pWXIOKWiOKWiOKVkSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKVlOKWiOKWiOKVlyDilojilojilZHilojilojilZEgIOKWiOKWiOKWiOKVlyAgIOKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKWiOKWiOKWiOKWiOKWiOKVkSR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVlOKVkOKVkOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVnSAgICAgICAgICDilojilojilZTilZDilZDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZHilojilojilZEgICDilojilojilZEgICDilZrilZDilZDilZDilZDilojilojilZHilojilojilZTilZDilZDilojilojilZEke3Jlc2V0fSI7DQplY2hvICIke3JlZH0gICDilojilojilZEgICDilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKVkSAg4paI4paI4pWR4pWa4paI4paI4paI4paI4paI4paI4pWU4pWd4paI4paI4pWRIOKVmuKWiOKWiOKWiOKWiOKVkSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKVkSDilZrilojilojilojilojilZHilZrilojilojilojilojilojilojilZTilZ3ilojilojilZfilojilojilojilojilojilojilojilZHilojilojilZEgIOKWiOKWiOKVkSR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfSAgIOKVmuKVkOKVnSAgIOKVmuKVkOKVnSAg4pWa4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZ0g4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWdIOKVmuKVkOKVnSAg4pWa4pWQ4pWQ4pWQ4pWdICAg4pWa4pWQ4pWdICAg4pWa4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZDilZDilZ0g4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWdIOKVmuKVkOKVneKVmuKVkOKVkOKVkOKVkOKVkOKVkOKVneKVmuKVkOKVnSAg4pWa4pWQ4pWdJHtyZXNldH0iOw"
-}
-
-credits(){
-  base64 -d <<<"ZWNobyAiCUNyZWRpdHM6IFRoYW5rcyB0byBodHRwczovL2dpdGh1Yi5jb20vT0ogaHR0cHM6Ly9naXRodWIuY29tL09XQVNQIGh0dHBzOi8vZ2l0aHViLmNvbS9oYWNjZXIiOwplY2hvICIJaHR0cHM6Ly9naXRodWIuY29tL3RvbW5vbW5vbSBodHRwczovL2dpdGh1Yi5jb20vbWljaGVucmlrc2VuICYgVGhlIERhcmsgUmF2ZXIgZm9yIHRoZWlyIjsKZWNobyAiCXdvcmsgb24gdGhlIHByb2dyYW1zIHRoYXQgd2VudCBpbnRvIHRoZSBtYWtpbmcgb2YgdGhlX2h1bnRpbmcuc2guIjs"
-}
-
-licensing_info(){
-  base64 -d <<<"ZWNobyAiCXRoZV9odW50aW5nIENvcHlyaWdodCAoQykgMjAyMCAgQGluY3JlZGluY29tcCI7CmVjaG8gIglUaGlzIHByb2dyYW0gY29tZXMgd2l0aCBBQlNPTFVURUxZIE5PIFdBUlJBTlRZOyBmb3IgZGV0YWlscyBjYWxsIGAuL3RoZV9odW50aW5nLnNoIC1saWNlbnNlJy4iOwplY2hvICIJVGhpcyBpcyBmcmVlIHNvZnR3YXJlLCBhbmQgeW91IGFyZSB3ZWxjb21lIHRvIHJlZGlzdHJpYnV0ZSBpdCI7CmVjaG8gIgl1bmRlciBjZXJ0YWluIGNvbmRpdGlvbnM7IHR5cGUgYC4vdGhlX2h1bnRpbmcuc2ggLWxpY2Vuc2UnIGZvciBkZXRhaWxzLiI7"
-}
-
-print_line () {
-  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
-}
-
-open_program(){
-  logo
-  credits
-  licensing_info
-  print_line
-}
 target=""
 subreport=""
 usage() { logo; echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
@@ -119,7 +97,7 @@ excludedomains(){
     grep -vFf ./"$target"/excluded.txt ./"$target"/alldomains.txt > ./"$target"/alldomains2.txt
     mv ./"$target"/alldomains2.txt ./"$target"/alldomains.txt
     #rm ./$domain/$foldername/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
-    echo "Subdomains that have been excluded from discovery:"
+    echo "${green}Subdomains that have been excluded from discovery:${reset}"
     printf "%s\n" "${excluded[@]}"
     unset IFS
   fi
@@ -135,14 +113,14 @@ run_amass(){
 #gobuster vhost broken
 run_gobuster_vhost(){
   echo "${yellow}Running Gobuster vhost...${reset}"
-  gobuster vhost -u "$target" -w wordlists/dns-Jhaddix.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -np -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
+  gobuster vhost -u "$target" -w wordlists\subdomains-top-110000.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -np -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster vhost finished.${reset}"
 }
 
 run_gobuster_dns(){
   echo "${yellow}Running Gobuster dns...${reset}"
-  gobuster dns -d "$target" -w wordlists/dns-Jhaddix.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
+  gobuster dns -d "$target" -w wordlists\subdomains-top-110000.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster dns finished.${reset}"
 }
@@ -176,9 +154,15 @@ run_dirb(){
 }
 
 run_nuclei(){
-  echo "${yellow}Running Nuclei stock template scan...${reset}"
-  nuclei -v -pbar -silent -json -json-requests -l ./targets/"$target"/"$foldername"/uniq-subdomains.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-results.json
-  echo "${green}Nuclei finished...${reset}"
+  echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
+  nuclei -v -pbar -silent -json -json-requests -l ./targets/"$target"/"$foldername"/uniq-subdomains.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
+  echo "${green}Nuclei stock cve templates scan finished...${reset}"
+}
+
+run_zap(){
+  echo "${yellow}Running zap scan...${reset}"
+  echo "${red} Just kidding! Working on it though.${reset}"
+  echo "${green}zap scan finished...${reset}"
 }
 
 run_nmap(){
@@ -189,8 +173,11 @@ notify(){
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
-    data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\"}''
+    echo "${yellow}Notification being generated and sent...${reset}"
+    num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
+    data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
     curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    echo "${green}Notification sent!${reset}"
   fi
 }
 
@@ -241,15 +228,40 @@ port_scan(){
 recon(){
   subdomain_enum
   sub_takeover
+  excludedomains
   webapp_valid
 }
 
 scanning(){
   port_scan
-  fuzz_em
   webapp_scan
+  fuzz_em
+}
+# graphic opening stuff
+logo(){
+  base64 -d <<<"ZWNobyAiJHtyZWR94paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWXICDilojilojilZfilojilojilojilojilojilojilojilZcgICAgICAgIOKWiOKWiOKVlyAg4paI4paI4pWX4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWXIOKWiOKWiOKWiOKWiOKWiOKWiOKVlyAgICDilojilojilojilojilojilojilojilZfilojilojilZcgIOKWiOKWiOKVlyR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfeKVmuKVkOKVkOKWiOKWiOKVlOKVkOKVkOKVneKWiOKWiOKVkSAg4paI4paI4pWR4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWdICAgICAgICDilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKVlyAg4paI4paI4pWR4pWa4pWQ4pWQ4paI4paI4pWU4pWQ4pWQ4pWd4paI4paI4pWR4paI4paI4paI4paI4pWXICDilojilojilZHilojilojilZTilZDilZDilZDilZDilZ0gICAg4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWd4paI4paI4pWRICDilojilojilZEke3Jlc2V0fSI7DQplY2hvICIke3JlZH0gICDilojilojilZEgICDilojilojilojilojilojilojilojilZHilojilojilojilojilojilZcgICAgICAgICAg4paI4paI4paI4paI4paI4paI4paI4pWR4paI4paI4pWRICAg4paI4paI4pWR4paI4paI4pWU4paI4paI4pWXIOKWiOKWiOKVkSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKVlOKWiOKWiOKVlyDilojilojilZHilojilojilZEgIOKWiOKWiOKWiOKVlyAgIOKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKWiOKWiOKWiOKWiOKWiOKVkSR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVlOKVkOKVkOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVnSAgICAgICAgICDilojilojilZTilZDilZDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZHilojilojilZEgICDilojilojilZEgICDilZrilZDilZDilZDilZDilojilojilZHilojilojilZTilZDilZDilojilojilZEke3Jlc2V0fSI7DQplY2hvICIke3JlZH0gICDilojilojilZEgICDilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKWiOKWiOKWiOKWiOKWiOKVl+KWiOKWiOKVkSAg4paI4paI4pWR4pWa4paI4paI4paI4paI4paI4paI4pWU4pWd4paI4paI4pWRIOKVmuKWiOKWiOKWiOKWiOKVkSAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVkeKWiOKWiOKVkSDilZrilojilojilojilojilZHilZrilojilojilojilojilojilojilZTilZ3ilojilojilZfilojilojilojilojilojilojilojilZHilojilojilZEgIOKWiOKWiOKVkSR7cmVzZXR9IjsNCmVjaG8gIiR7cmVkfSAgIOKVmuKVkOKVnSAgIOKVmuKVkOKVnSAg4pWa4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZ0g4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWdIOKVmuKVkOKVnSAg4pWa4pWQ4pWQ4pWQ4pWdICAg4pWa4pWQ4pWdICAg4pWa4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZDilZDilZ0g4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWdIOKVmuKVkOKVneKVmuKVkOKVkOKVkOKVkOKVkOKVkOKVneKVmuKVkOKVnSAg4pWa4pWQ4pWdJHtyZXNldH0iOw"
 }
 
+credits(){
+  base64 -d <<<"ZWNobyAiCUNyZWRpdHM6IFRoYW5rcyB0byBodHRwczovL2dpdGh1Yi5jb20vT0ogaHR0cHM6Ly9naXRodWIuY29tL09XQVNQIGh0dHBzOi8vZ2l0aHViLmNvbS9oYWNjZXIiOwplY2hvICIJaHR0cHM6Ly9naXRodWIuY29tL3RvbW5vbW5vbSBodHRwczovL2dpdGh1Yi5jb20vbWljaGVucmlrc2VuICYgVGhlIERhcmsgUmF2ZXIgZm9yIHRoZWlyIjsKZWNobyAiCXdvcmsgb24gdGhlIHByb2dyYW1zIHRoYXQgd2VudCBpbnRvIHRoZSBtYWtpbmcgb2YgdGhlX2h1bnRpbmcuc2guIjs"
+}
+
+licensing_info(){
+  base64 -d <<<"ZWNobyAiCXRoZV9odW50aW5nIENvcHlyaWdodCAoQykgMjAyMCAgQGluY3JlZGluY29tcCI7CmVjaG8gIglUaGlzIHByb2dyYW0gY29tZXMgd2l0aCBBQlNPTFVURUxZIE5PIFdBUlJBTlRZOyBmb3IgZGV0YWlscyBjYWxsIGAuL3RoZV9odW50aW5nLnNoIC1saWNlbnNlJy4iOwplY2hvICIJVGhpcyBpcyBmcmVlIHNvZnR3YXJlLCBhbmQgeW91IGFyZSB3ZWxjb21lIHRvIHJlZGlzdHJpYnV0ZSBpdCI7CmVjaG8gIgl1bmRlciBjZXJ0YWluIGNvbmRpdGlvbnM7IHR5cGUgYC4vdGhlX2h1bnRpbmcuc2ggLWxpY2Vuc2UnIGZvciBkZXRhaWxzLiI7"
+}
+
+print_line () {
+  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+}
+
+open_program(){
+  logo
+  credits
+  licensing_info
+  print_line
+}
+
+# main
 main(){
   clear
   open_program
@@ -274,6 +286,7 @@ main(){
   mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/
   mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/
   mkdir ./targets/"$target"/"$foldername"/scanning/
+  mkdir ./targets/"$target"/"$foldername"/scanning/nmap/
   mkdir ./targets/"$target"/"$foldername"/scanning/nuclei/
   touch ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   touch ./targets/"$target"/"$foldername"/subdomain-takeover-results.json
