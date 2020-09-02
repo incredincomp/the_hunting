@@ -15,10 +15,10 @@
 #
 #       OPTIONS: ---
 #  REQUIREMENTS: amass, gobuster, subjack, aquatone, httprobe, dirb, nmap,
-#                nuclei, and parallel on ubuntu 20.04 or axiom droplet
+#                nuclei, chromium, and parallel on ubuntu 20.04 or axiom droplet
 #
-#          BUGS:
-#         NOTES: v0.2.1
+#          BUGS: wont scan the same site twice, either in the same hour or period
+#         NOTES: v0.2.2
 #        AUTHOR: @incredincomp
 #  ORGANIZATION:
 #       CREATED: 08/27/2020 16:55:54
@@ -183,9 +183,9 @@ run_dirb(){
 
 run_nuclei(){
   echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
+  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
+#  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
+#  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 
@@ -244,7 +244,7 @@ uniq_subdomains(){
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
-  #run_amass
+  run_amass
 #Gobuster trying to make them run at same time
   #run_gobuster_vhost
   run_gobuster_dns
