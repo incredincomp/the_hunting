@@ -159,7 +159,7 @@ run_httprobe(){
 
 run_aqua(){
   echo "${yellow}Running Aquatone...${reset}"
-  cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | aquatone -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out -threads $auquatoneThreads -silent -http-timeout 6000
+  cat ./targets/"$target"/"$foldername"/alldomains.txt | aquatone -threads $auquatoneThreads -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
@@ -288,7 +288,9 @@ port_scan(){
 recon(){
   subdomain_enum
   sub_takeover
-#  excludedomains
+}
+
+validation(){
   target_valid
   webapp_valid
 }
@@ -362,6 +364,7 @@ main(){
   touch ./targets/"$target"/"$foldername"/temp-clean.txt
 
   recon "$target"
+  validation
   scanning "$target"
   notify_finished
   echo "${green}Scan for "$target" finished successfully${reset}"
