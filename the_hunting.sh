@@ -263,7 +263,7 @@ webapp_valid(){
   run_aqua
 }
 fuzz_em(){
-  run_gobuster_dir
+  #run_gobuster_dir
   run_dirb
 }
 
