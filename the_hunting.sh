@@ -184,17 +184,8 @@ run_dirb(){
 run_nuclei(){
   echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
   nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
-  if [[ $? -ne 0 ]] ; then
-    notify_error
-  fi
   nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
-  if [[ $? -ne 0 ]] ; then
-    notify_error
-  fi
   nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
-  if [[ $? -ne 0 ]] ; then
-    notify_error
-  fi
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 
