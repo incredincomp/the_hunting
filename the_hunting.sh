@@ -183,15 +183,15 @@ run_dirb(){
 
 run_nuclei(){
   echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/aqua_out/aquatone_urls.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/aqua_out/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/vulnerabilities -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/aqua_out/aquatone_urls.txt -t ./nuclei-templates/security-misconfigurations/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/security-misconfigurations/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
@@ -247,8 +247,7 @@ read_direct_wordlist(){
 }
 
 uniq_subdomains(){
-  uniq -u ./targets/"$target"/"$foldername"/alldomains.txt >> ./targets/"$target"/"$foldername"/alldomains2.txt
-  mv ./targets/"$target"/"$foldername"/alldomains2.txt ./targets/"$target"/"$foldername"/alldomains.txt
+  uniq -i ./targets/"$target"/"$foldername"/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
 
 # children
@@ -258,7 +257,6 @@ subdomain_enum(){
 #Gobuster trying to make them run at same time
   #run_gobuster_vhost
   run_gobuster_dns
-  uniq_subdomains
 }
 
 sub_takeover(){
@@ -294,6 +292,7 @@ recon(){
 validation(){
   target_valid
   webapp_valid
+  uniq_subdomains
 }
 
 scanning(){
