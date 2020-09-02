@@ -47,6 +47,8 @@ auquatoneThreads=8
 subdomainThreads=15
 subjackThreads=15
 httprobeThreads=50
+
+type -P chromium &>/dev/null && echo "Found" || sudo snap install chromium
 chromiumPath=/snap/bin/chromium
 
 if [ -s ./slack_url.txt ]
@@ -107,6 +109,9 @@ excludedomains(){
 run_amass(){
   echo "${yellow}Running Amass enum...${reset}"
   amass enum -norecursive --passive -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d https://"$target"
+  if [[ $? -ne 0 ]] ; then
+    notify_error
+  fi
   cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Amass enum finished.${reset}"
 }
@@ -115,6 +120,9 @@ run_amass(){
 run_gobuster_vhost(){
   echo "${yellow}Running Gobuster vhost...${reset}"
   gobuster vhost -u "$target" -w ./wordlists/subdomains-top-110000.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
+  if [[ $? -ne 0 ]] ; then
+    notify_error
+  fi
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster vhost finished.${reset}"
 }
@@ -122,6 +130,9 @@ run_gobuster_vhost(){
 run_gobuster_dns(){
   echo "${yellow}Running Gobuster dns...${reset}"
   gobuster dns -d "$target" -w ./wordlists/subdomains-top-110000.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
+  if [[ $? -ne 0 ]] ; then
+    notify_error
+  fi
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt | awk -F ' ' '{print $2}' >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster dns finished.${reset}"
 }
@@ -129,24 +140,36 @@ run_gobuster_dns(){
 run_subjack(){
   echo "${yellow}Running subjack...${reset}"
   $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/alldomains.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "$HOME/go/src/github.com/haccer/subjack/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
+  if [[ $? -ne 0 ]] ; then
+    notify_error
+  fi
   echo "${green}subjack finished.${reset}"
 }
 
 run_httprobe(){
   echo "${yellow}Running httprobe...${reset}"
   cat ./targets/"$target"/"$foldername"/uniq-subdomains.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+  if [[ $? -ne 0 ]] ; then
+    notify_error
+  fi
   echo "${green}httprobe finished.${reset}"
 }
 
 run_aqua(){
   echo "${yellow}Running Aquatone...${reset}"
   cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | aquatone -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out -threads $auquatoneThreads -silent -http-timeout 6000
+  if [[ $? -ne 0 ]] ; then
+    notify_error
+  fi
   echo "${green}Aquatone finished...${reset}"
 }
 
 run_gobuster_dir(){
   echo "${yellow}Running Gobuster dir...${reset}"
   read_direct_wordlist | parallel --results ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/ gobuster dir -z -q -u {} -w ./wordlists/directory-list.txt -f -k -e -r -a "Mozilla/5.0 \(X11\; Ubuntu\; Linux x86_64\; rv\:80.0\) Gecko/20100101 Firefox/80.0"
+  if [[ $? -ne 0 ]] ; then
+    notify_error
+  fi
   cat ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/1/"$target"/stdout | awk -F ' ' '{print $1}' >> ./targets/"$target"/"$foldername"/live_paths.txt
   echo "${green}Gobuster dir finished...${reset}"
 }
@@ -158,8 +181,17 @@ run_dirb(){
 run_nuclei(){
   echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
   nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
+  if [[ $? -ne 0 ]] ; then
+    notify_error
+  fi
   nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/vulnerabilties/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
+  if [[ $? -ne 0 ]] ; then
+    notify_error
+  fi
   nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/security-misconfigurations/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
+  if [[ $? -ne 0 ]] ; then
+    notify_error
+  fi
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 
@@ -173,13 +205,24 @@ run_nmap(){
   true
 }
 
-notify(){
+notify_success(){
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
     echo "${yellow}Notification being generated and sent...${reset}"
     num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
     data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
+    curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    echo "${green}Notification sent!${reset}"
+  fi
+}
+notify_error(){
+  if [ -z "$slack_url" ]; then
+    echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
+  else
+    echo "${yellow}Error notification being generated and sent...${reset}"
+    num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
+    data1=''{\"text\":\"There\ was\ an\ error\ on\ your\ scan\ of\ "'"$target"'"!\ Check\ your\ instance\ of\ \`the\_hunting.sh\`\.\ \`the\_hunting.sh\`\ still\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
     curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     echo "${green}Notification sent!${reset}"
   fi
@@ -309,7 +352,6 @@ main(){
   echo "${green}Scan for "$target" finished successfully${reset}"
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
-  rm -rf ./targets/incredincomp.com
   stty sane
   tput sgr0
 }
