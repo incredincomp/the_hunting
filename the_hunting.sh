@@ -164,6 +164,7 @@ run_aqua(){
     notify_error
   fi
   cp ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_report.html ./targets/"$target"/"$foldername"/aquatone_report.html
+  cp ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt ./targets/"$target"/"$foldername"/aquatone_urls.txt
   echo "${green}Aquatone finished...${reset}"
 }
 
@@ -234,7 +235,7 @@ notify_success(){
 }
 
 read_direct_wordlist(){
-  cat ./targets/"$target"/"$foldername"/aqua_out/aquatone_urls.txt
+  cat ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
 
 uniq_subdomains(){
@@ -336,8 +337,9 @@ main(){
   fi
 
   mkdir ./targets/"$target"/"$foldername"
-  mkdir ./targets/"$target"/"$foldername"/aqua_out/
-  mkdir ./targets/"$target"/"$foldername"/aqua_out/parsedjson/
+  mkdir ./targets/"$target"/"$foldername"/aqua/
+  mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/
+  mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/parsedjson/
   mkdir ./targets/"$target"/"$foldername"/subdomain_enum/
   mkdir ./targets/"$target"/"$foldername"/subdomain_enum/amass/
   mkdir ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/
