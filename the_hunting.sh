@@ -183,15 +183,15 @@ run_dirb(){
 
 run_nuclei(){
   echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/aqua_out/aquatone_urls.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/vulnerabilties/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/aqua_out/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/security-misconfigurations/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/aqua_out/aquatone_urls.txt -t ./nuclei-templates/security-misconfigurations/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
