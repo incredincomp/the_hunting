@@ -163,6 +163,7 @@ run_aqua(){
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
+  cp ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_report.html ./targets/"$target"/"$foldername"/aquatone_report.html
   echo "${green}Aquatone finished...${reset}"
 }
 
@@ -242,7 +243,7 @@ notify_success(){
 }
 
 read_direct_wordlist(){
-  cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+  cat ./targets/"$target"/"$foldername"/aqua_out/aquatone_urls.txt
 }
 
 uniq_subdomains(){
