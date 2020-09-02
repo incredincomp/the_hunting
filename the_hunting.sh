@@ -251,10 +251,10 @@ uniq_subdomains(){
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
-  run_amass
+  #run_amass
 #Gobuster trying to make them run at same time
   #run_gobuster_vhost
-  run_gobuster_dns
+  #run_gobuster_dns
   uniq_subdomains
 }
 
@@ -333,12 +333,13 @@ main(){
   if [ -d "./targets/"$target"" ]
   then
     echo "$target is a known target. Making a new directory inside ./targets/$target/ with todays date."
+  else
+    mkdir ./targets/"$target"/
   fi
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   fi
 
-  mkdir ./targets/"$target"/
   mkdir ./targets/"$target"/"$foldername"
   mkdir ./targets/"$target"/"$foldername"/aqua_out/
   mkdir ./targets/"$target"/"$foldername"/aqua_out/parsedjson/
