@@ -148,7 +148,7 @@ run_subjack(){
 
 run_httprobe(){
   echo "${yellow}Running httprobe...${reset}"
-  cat ./targets/"$target"/"$foldername"/uniq-subdomains.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+  cat ./targets/"$target"/"$foldername"/alldomains.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
@@ -205,7 +205,7 @@ run_nmap(){
   true
 }
 
-notify_success(){
+notify_finished(){
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
@@ -227,13 +227,25 @@ notify_error(){
     echo "${green}Notification sent!${reset}"
   fi
 }
+notify_success(){
+  if [ -z "$slack_url" ]; then
+    echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
+  else
+    echo "${yellow}Error notification being generated and sent...${reset}"
+    num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
+    data1=''{\"text\":\"There\ was\ an\ error\ on\ your\ scan\ of\ "'"$target"'"!\ Check\ your\ instance\ of\ \`the\_hunting.sh\`\.\ \`the\_hunting.sh\`\ still\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
+    curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    echo "${green}Notification sent!${reset}"
+  fi
+}
 
 read_direct_wordlist(){
   cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
 }
 
 uniq_subdomains(){
-  uniq -u ./targets/"$target"/"$foldername"/alldomains.txt > ./targets/"$target"/"$foldername"/uniq-subdomains.txt
+  uniq -u ./targets/"$target"/"$foldername"/alldomains.txt >> ./targets/"$target"/"$foldername"/alldomains2.txt
+  mv ./targets/"$target"/"$foldername"/alldomains2.txt ./targets/"$target"/"$foldername"/alldomains.txt
 }
 
 # children
@@ -272,11 +284,11 @@ port_scan(){
 
 # main func's
 recon(){
-  subdomain_enum
-  sub_takeover
+  #subdomain_enum
+  #sub_takeover
 #  excludedomains
-  webapp_valid
   target_valid
+  webapp_valid
 }
 
 scanning(){
@@ -348,7 +360,7 @@ main(){
 
   recon "$target"
   scanning "$target"
-  notify
+  notify_finished
   echo "${green}Scan for "$target" finished successfully${reset}"
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
