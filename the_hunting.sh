@@ -48,8 +48,10 @@ subdomainThreads=15
 subjackThreads=15
 httprobeThreads=50
 
-type -P chromium &>/dev/null && echo "Found" || sudo snap install chromium
+type -P chromium &>/dev/null || sudo snap install chromium
 chromiumPath=/snap/bin/chromium
+
+type -P parallel &>/dev/null || sudo apt install parallel -y
 
 if [ -s ./slack_url.txt ]
 then
@@ -332,7 +334,7 @@ main(){
   open_program
   if [ -d "./targets/"$target"" ]
   then
-    echo "$target is a known target. Making a new directory inside ./targets/$target/ with todays date."
+    echo "$target is a known target."
   else
     mkdir ./targets/"$target"/
   fi
