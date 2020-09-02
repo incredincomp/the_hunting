@@ -304,7 +304,8 @@ main(){
   touch ./targets/"$target"/"$foldername"/alldomains.txt
   touch ./targets/"$target"/"$foldername"/ipaddress.txt
   touch ./targets/"$target"/"$foldername"/temp-clean.txt
-
+  rm ./targets/empty.txt
+  
   recon "$target"
   scanning "$target"
   notify
