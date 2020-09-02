@@ -275,12 +275,10 @@ open_program(){
 main(){
   clear
   open_program
-  cd ./targets && if [ -d "./"$target"" ]
+  if [ -d "./targets/"$target"" ]
   then
-    echo "$target is a known target. Making a new directory with todays date."
-  else
-    mkdir ./"$target"
-  fi && cd ..
+    echo "$target is a known target. Making a new directory inside ./targets/$target/ with todays date."
+  fi
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   fi
@@ -304,8 +302,7 @@ main(){
   touch ./targets/"$target"/"$foldername"/alldomains.txt
   touch ./targets/"$target"/"$foldername"/ipaddress.txt
   touch ./targets/"$target"/"$foldername"/temp-clean.txt
-  rm ./targets/empty.txt
-  
+
   recon "$target"
   scanning "$target"
   notify
