@@ -247,7 +247,7 @@ read_direct_wordlist(){
 }
 
 uniq_subdomains(){
-  uniq -i ./targets/"$target"/"$foldername"/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
+  uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
 
 # children
