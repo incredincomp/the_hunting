@@ -106,7 +106,7 @@ excludedomains(){
 # parents
 run_amass(){
   echo "${yellow}Running Amass enum...${reset}"
-  amass enum -norecursive --passive --silent -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d https://"$target"
+  amass enum -norecursive --passive -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d https://"$target"
   cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Amass enum finished.${reset}"
 }
