@@ -254,7 +254,7 @@ subdomain_enum(){
   #run_amass
 #Gobuster trying to make them run at same time
   #run_gobuster_vhost
-  #run_gobuster_dns
+  run_gobuster_dns
   uniq_subdomains
 }
 
@@ -284,8 +284,8 @@ port_scan(){
 
 # main func's
 recon(){
-  #subdomain_enum
-  #sub_takeover
+  subdomain_enum
+  sub_takeover
 #  excludedomains
   target_valid
   webapp_valid
