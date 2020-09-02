@@ -187,11 +187,11 @@ run_nuclei(){
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/vulnerabilities -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/security-misconfigurations/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/uniqdomains1.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   if [[ $? -ne 0 ]] ; then
     notify_error
   fi
