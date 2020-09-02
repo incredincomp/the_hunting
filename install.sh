@@ -75,10 +75,6 @@ install_httprobe(){
   go get -u github.com/tomnomnom/httprobe
   alias httprobe="~/go/bin/httprobe"
 }
-install_wordlists(){
-  wget https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/directory-list-lowercase-2.3-big.txt
-  mv directory-list-lowercase-2.3-big.txt ../wordlists/directory-list.txt
-}
 install_aquatone(){
   wget https://github.com/michenriksen/aquatone/releases/download/v1.7.0/aquatone_linux_amd64_1.7.0.zip
   unzip aquatone_linux_amd64_1.7.0.zip
@@ -100,12 +96,7 @@ install_tools(){
   install_subjack
   install_aquatone
   install_httprobe
-  install_wordlists
   cd ..
-}
-
-update_wordlists(){
-  true
 }
 
 install(){

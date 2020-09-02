@@ -18,7 +18,7 @@
 #                nuclei, and parallel on ubuntu 20.04 or axiom droplet
 #
 #          BUGS:
-#         NOTES: v0.2.0
+#         NOTES: v0.2.1
 #        AUTHOR: @incredincomp
 #  ORGANIZATION:
 #       CREATED: 08/27/2020 16:55:54
@@ -157,7 +157,9 @@ run_dirb(){
 
 run_nuclei(){
   echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
-  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/live_paths.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/vulnerabilties/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
+  nuclei -v -pbar -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/security-misconfigurations/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 
@@ -300,9 +302,6 @@ main(){
   touch ./targets/"$target"/"$foldername"/subdomain-takeover-results.json
   touch ./targets/"$target"/"$foldername"/live_paths.txt
   touch ./targets/"$target"/"$foldername"/alldomains.txt
-  touch ./targets/"$target"/"$foldername"/temp.txt
-  touch ./targets/"$target"/"$foldername"/temp-tmp.txt
-  touch ./targets/"$target"/"$foldername"/temp-domain.txt
   touch ./targets/"$target"/"$foldername"/ipaddress.txt
   touch ./targets/"$target"/"$foldername"/temp-clean.txt
 
