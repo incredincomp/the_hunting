@@ -2,14 +2,21 @@ id: wp-debug-log
 
 info:
   name: WordPress debug log
+<<<<<<< HEAD
   author: geraldino2
+=======
+  author: geraldino2 & @dwisiswant0
+>>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
   severity: info
 
 requests:
   - method: GET
     path:
       - "{{BaseURL}}/wp-content/debug.log"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
     matchers-condition: and
     matchers:
       - type: word
@@ -18,7 +25,14 @@ requests:
           - text/plain
         part: header
         condition: or
+<<<<<<< HEAD
 
+=======
+      - type: regex
+        regex:
+          - "[[0-9]{2}-[a-zA-Z]{3}-[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} [A-Z]{3}] PHP"
+        part: body
+>>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
       - type: status
         status:
           - 200

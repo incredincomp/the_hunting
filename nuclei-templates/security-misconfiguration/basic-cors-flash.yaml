@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 id: basic-cors-misconfig-flash
 
 info:
@@ -14,3 +15,21 @@ requests:
         words:
           - 'allow-access-from domain="*"'
         part: body
+=======
+id: basic-cors-misconfig-flash
+
+info:
+  name: Basic CORS misconfiguration exploitable with Flash
+  author: nadino
+  severity: low
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/crossdomain.xml"
+    matchers:
+      - type: word
+        words:
+          - 'allow-access-from domain="*"'
+        part: body
+>>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf

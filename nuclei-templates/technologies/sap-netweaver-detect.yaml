@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 id: SAP-Netweaver-Detect
+=======
+id: sap-netweaver-detect
+>>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
 info:
   name: SAP NetWeaver Detect
   author: rakeshmane10

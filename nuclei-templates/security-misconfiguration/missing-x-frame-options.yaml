@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 id: missing-x-frame-options
 
 info:
@@ -18,4 +19,26 @@ requests:
     matchers:
       - type: dsl
         dsl:
+=======
+id: missing-x-frame-options
+
+info:
+  name: Clickjacking (Missing XFO header)
+  author: kurohost
+  severity: low
+
+  # This is an valid issue "only" when you able to frame authenticated page with poc to make state changing actions.
+  # Without working poc, do not report this.
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    redirects: true
+    max-redirects: 2
+    matchers:
+      - type: dsl
+        dsl:
+>>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
           - "!contains(tolower(all_headers), 'x-frame-options')"
