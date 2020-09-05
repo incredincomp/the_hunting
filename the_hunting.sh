@@ -155,7 +155,6 @@ run_amass(){
   cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Amass enum finished.${reset}"
 }
-
 #gobuster vhost broken
 run_gobuster_vhost(){
   echo "${yellow}Running Gobuster vhost...${reset}"
@@ -167,7 +166,6 @@ run_gobuster_vhost(){
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster vhost finished.${reset}"
 }
-
 run_gobuster_dns(){
   echo "${yellow}Running Gobuster dns...${reset}"
   gobuster dns -d "$target" -w ./wordlists/subdomains-top-110000.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
@@ -178,7 +176,6 @@ run_gobuster_dns(){
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt | awk -F ' ' '{print $2}' >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster dns finished.${reset}"
 }
-
 run_subjack(){
   echo "${yellow}Running subjack...${reset}"
   $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/alldomains.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "$HOME/go/src/github.com/haccer/subjack/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
@@ -188,7 +185,6 @@ run_subjack(){
   fi
   echo "${green}subjack finished.${reset}"
 }
-
 run_httprobe(){
   echo "${yellow}Running httprobe...${reset}"
   cat ./targets/"$target"/"$foldername"/alldomains.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
@@ -198,7 +194,6 @@ run_httprobe(){
   fi
   echo "${green}httprobe finished.${reset}"
 }
-
 run_aqua(){
   echo "${yellow}Running Aquatone...${reset}"
   cat ./targets/"$target"/"$foldername"/alldomains.txt | aquatone -threads $auquatoneThreads -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out
@@ -210,7 +205,6 @@ run_aqua(){
   cp ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt ./targets/"$target"/"$foldername"/aquatone_urls.txt
   echo "${green}Aquatone finished...${reset}"
 }
-
 run_gobuster_dir(){
   echo "${yellow}Running Gobuster dir...${reset}"
   read_direct_wordlist | parallel --results ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/ gobuster dir -z -q -u {} -w ./wordlists/directory-list.txt -f -k -e -r -a "Mozilla/5.0 \(X11\; Ubuntu\; Linux x86_64\; rv\:80.0\) Gecko/20100101 Firefox/80.0"
@@ -221,32 +215,27 @@ run_gobuster_dir(){
   cat ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/1/"$target"/stdout | awk -F ' ' '{print $1}' >> ./targets/"$target"/"$foldername"/live_paths.txt
   echo "${green}Gobuster dir finished...${reset}"
 }
-
 run_dirb(){
   true
 }
-
 run_nuclei(){
   echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
-
   nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
 #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
 #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 subdomain_scanning(){
-  nuclei -v -json -l ./deepdive/"$subdomain_scan_target"/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./deepdive/"$subdomain_scan_target"/nuclei-vulns.json                                                                                       
+  nuclei -v -json -l ./deepdive/"$subdomain_scan_target"/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./deepdive/"$subdomain_scan_target"/nuclei-vulns.json
 }
 run_zap(){
   echo "${yellow}Running zap scan...${reset}"
   echo "${red} Just kidding! Working on it though.${reset}"
   echo "${green}zap scan finished...${reset}"
 }
-
 run_nmap(){
   true
 }
-
 notify_finished(){
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
@@ -269,7 +258,6 @@ notify_subdomain_scan(){
     echo "${green}Notification sent!${reset}"
   fi
 }
-
 notify_error(){
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
@@ -292,15 +280,12 @@ notify_success(){
     echo "${green}Notification sent!${reset}"
   fi
 }
-
 read_direct_wordlist(){
   cat ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
-
 uniq_subdomains(){
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
-
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
@@ -309,15 +294,12 @@ subdomain_enum(){
   #run_gobuster_vhost
   run_gobuster_dns
 }
-
 sub_takeover(){
   run_subjack
 }
-
 target_valid(){
   run_httprobe
 }
-
 webapp_valid(){
   run_aqua
 }
@@ -325,59 +307,48 @@ fuzz_em(){
   #run_gobuster_dir
   run_dirb
 }
-
 webapp_scan(){
   run_nuclei
 }
-
 port_scan(){
   run_nmap
 }
-
 # main func's
 recon(){
   subdomain_enum
   sub_takeover
 }
-
 validation(){
   target_valid
   webapp_valid
   uniq_subdomains
 }
-
 scanning(){
   port_scan
   fuzz_em
   webapp_scan
 }
-
 subdomain_scanning(){
   nuclei -v -json -l ./deepdive/"$subdomain_scan_target"/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./deepdive/"$subdomain_scan_target"/nuclei-results.json
 }
-
 # graphic opening stuff
 logo(){
   base64 -d <<<"4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWXICDilojilojilZfilojilojilojilojilojilojilojilZcgICAgICAgIOKWiOKWiOKVlyAg4paI4paI4pWX4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWXIOKWiOKWiOKWiOKWiOKWiOKWiOKVlyAgICDilojilojilojilojilojilojilojilZfilojilojilZcgIOKWiOKWiOKVlwrilZrilZDilZDilojilojilZTilZDilZDilZ3ilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVkOKVkOKVnSAgICAgICAg4paI4paI4pWRICDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilojilojilZcgIOKWiOKWiOKVkeKVmuKVkOKVkOKWiOKWiOKVlOKVkOKVkOKVneKWiOKWiOKVkeKWiOKWiOKWiOKWiOKVlyAg4paI4paI4pWR4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWdICAgIOKWiOKWiOKVlOKVkOKVkOKVkOKVkOKVneKWiOKWiOKVkSAg4paI4paI4pWRCiAgIOKWiOKWiOKVkSAgIOKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKWiOKVlyAgICAgICAgICDilojilojilojilojilojilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZTilojilojilZcg4paI4paI4pWRICAg4paI4paI4pWRICAg4paI4paI4pWR4paI4paI4pWU4paI4paI4pWXIOKWiOKWiOKVkeKWiOKWiOKVkSAg4paI4paI4paI4pWXICAg4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4pWRCiAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVlOKVkOKVkOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVnSAgICAgICAgICDilojilojilZTilZDilZDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZHilojilojilZEgICDilojilojilZEgICDilZrilZDilZDilZDilZDilojilojilZHilojilojilZTilZDilZDilojilojilZEKICAg4paI4paI4pWRICAg4paI4paI4pWRICDilojilojilZHilojilojilojilojilojilojilojilZfilojilojilojilojilojilojilojilZfilojilojilZEgIOKWiOKWiOKVkeKVmuKWiOKWiOKWiOKWiOKWiOKWiOKVlOKVneKWiOKWiOKVkSDilZrilojilojilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZEg4pWa4paI4paI4paI4paI4pWR4pWa4paI4paI4paI4paI4paI4paI4pWU4pWd4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4pWR4paI4paI4pWRICDilojilojilZEKICAg4pWa4pWQ4pWdICAg4pWa4pWQ4pWdICDilZrilZDilZ3ilZrilZDilZDilZDilZDilZDilZDilZ3ilZrilZDilZDilZDilZDilZDilZDilZ3ilZrilZDilZ0gIOKVmuKVkOKVnSDilZrilZDilZDilZDilZDilZDilZ0g4pWa4pWQ4pWdICDilZrilZDilZDilZDilZ0gICDilZrilZDilZ0gICDilZrilZDilZ3ilZrilZDilZ0gIOKVmuKVkOKVkOKVkOKVnSDilZrilZDilZDilZDilZDilZDilZ0g4pWa4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZ0="
 }
-
 credits(){
   print_line
   base64 -d <<<"ICAgQ3JlZGl0czogVGhhbmtzIHRvIGh0dHBzOi8vZ2l0aHViLmNvbS9PSiBodHRwczovL2dpdGh1Yi5jb20vT1dBU1AgaHR0cHM6Ly9naXRodWIuY29tL2hhY2NlcgogICBodHRwczovL2dpdGh1Yi5jb20vdG9tbm9tbm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9taWNoZW5yaWtzZW4gJiBUaGUgRGFyayBSYXZlciBmb3IgdGhlaXIKICAgd29yayBvbiB0aGUgcHJvZ3JhbXMgdGhhdCB3ZW50IGludG8gdGhlIG1ha2luZyBvZiB0aGVfaHVudGluZy5zaC4="
   echo " "
   print_line
 }
-
 licensing_info(){
   base64 -d <<<"CXRoZV9odW50aW5nIENvcHlyaWdodCAoQykgMjAyMCAgQGluY3JlZGluY29tcAoJVGhpcyBwcm9ncmFtIGNvbWVzIHdpdGggQUJTT0xVVEVMWSBOTyBXQVJSQU5UWTsgZm9yIGRldGFpbHMgY2FsbCBgLi90aGVfaHVudGluZy5zaCAtbGljZW5zZScuCglUaGlzIGlzIGZyZWUgc29mdHdhcmUsIGFuZCB5b3UgYXJlIHdlbGNvbWUgdG8gcmVkaXN0cmlidXRlIGl0LgoJdW5kZXIgY2VydGFpbiBjb25kaXRpb25zOyB0eXBlIGAuL3RoZV9odW50aW5nLnNoIC1saWNlbnNlJyBmb3IgZGV0YWlscy4="
   echo " "
 }
-
 print_line () {
   printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
   echo " "
 }
-
 open_program(){
   logo
   echo " "
@@ -385,7 +356,6 @@ open_program(){
   licensing_info
   print_line
 }
-
 # main
 main(){
   clear
