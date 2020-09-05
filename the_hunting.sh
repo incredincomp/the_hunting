@@ -97,13 +97,13 @@ if [ ! -n "${subdomain_scan_target[@]}" ]; then
     mkdir ./deepdive
   fi
   if [ ! -d ./deepdive/"${subdomain_scan_target[@]}" ]; then
-    mkdir ./deepdive/"${subdomain_scan_target[@]}"
+    mkdir ./deepdive/"${subdomain_scan_target[*]}"
   fi
-    touch ./deepdive/"${subdomain_scan_target[@]}"/subdomain.txt
-    touch ./deepdive/"${subdomain_scan_target[@]}"/nuclei-vulns.json
+    touch ./deepdive/"${subdomain_scan_target[*]}"/subdomain.txt
+    touch ./deepdive/"${subdomain_scan_target[*]}"/nuclei-vulns.json
     IFS=$'\n'
     for u in "${subdomain_scan_target[@]}"; do
-      printf "%s\n" "https://"$u"" >> ./deepdive/"${subdomain_scan_target[@]}"/subdomain.txt
+      printf "%s\n" "https://"$u"" >> ./deepdive/"${subdomain_scan_target[*]}"/subdomain.txt
     done
     unset IFS
     nuclei -v -json -l ./deepdive/"${subdomain_scan_target[@]}"/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./deepdive/"$subdomain_scan_target"/nuclei-results.json
