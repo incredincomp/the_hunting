@@ -3,7 +3,11 @@ id: rabbitmq-default-admin
 info:
   name: RabbitMQ Default Credentials
   author: fyoorer & dwisiswant0
+<<<<<<< HEAD
   severity: high
+=======
+  severity: High
+>>>>>>> main
 
 requests:
   - method: GET

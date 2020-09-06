@@ -2688,6 +2688,7 @@ requests:
         words:
           - "/etc/clientlibs/"
           - "/content/dam/"
+<<<<<<< HEAD
         part: body
 
       - type: word
@@ -2715,3 +2716,6 @@ requests:
           - "__CSRF_TOKEN_PLACEHOLDER__"
         condition: and
         part: body
+=======
+        part: body
+>>>>>>> main

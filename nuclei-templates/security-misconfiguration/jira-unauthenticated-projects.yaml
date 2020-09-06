@@ -3,7 +3,11 @@ id: jira-unauthenticated-projects
 info:
   name: Jira Unauthenticated Projects
   author: TechbrunchFR
+<<<<<<< HEAD
   severity: info
+=======
+  severity: Info
+>>>>>>> main
 
 requests:
   - method: GET

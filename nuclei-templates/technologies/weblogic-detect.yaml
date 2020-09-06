@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 id: weblogic-detect
+=======
+id: WebLogic-Detect
+>>>>>>> main
 
 info:
   name: Detect Weblogic

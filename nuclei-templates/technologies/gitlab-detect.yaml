@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 id: gitlab-detect
+=======
+id: Gitlab-Detect
+>>>>>>> main
 
 info:
   name: Detect Gitlab

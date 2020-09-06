@@ -2,11 +2,16 @@ id: git-config
 
 info:
   name: Git Config Disclosure
+<<<<<<< HEAD
   author: Ice3man & pikpikcu
+=======
+  author: Ice3man
+>>>>>>> main
   severity: medium
   description: Searches for the pattern /.git/config on passed URLs.
 
 requests:
+<<<<<<< HEAD
   - raw:
       - |
         GET /.git/config HTTP/1.1
@@ -23,3 +28,12 @@ requests:
       - type: word
         words:
           - "[core]"
+=======
+  - method: GET
+    path:
+      - "{{BaseURL}}/.git/config"
+    matchers:
+      - type: word
+        words:
+          - "[core]"
+>>>>>>> main

@@ -6,6 +6,7 @@
 [![Follow on Twitter](https://img.shields.io/twitter/follow/pdnuclei.svg?logo=twitter)](https://twitter.com/pdnuclei)
 [![Chat on Discord](https://img.shields.io/discord/695645237418131507.svg?logo=discord)](https://discord.gg/KECAGdH)
 
+<<<<<<< HEAD
 Templates are the core of [nuclei scanner](https://github.com/projectdiscovery/nuclei) which power the actual scanning engine. This repository stores and houses various templates for the scanner provided by our team as well as contributed by the community. We hope that you also contribute by sending templates via **pull requests** or [Github issue](https://github.com/projectdiscovery/nuclei-templates/issues/new?assignees=&labels=&template=submit-template.md&title=%5Bnuclei-template%5D+) and grow the list.
 
 An overview of the nuclei template directory including number of templates and HTTP request associated with each directory. 
@@ -28,6 +29,9 @@ An overview of the nuclei template directory including number of templates and H
 | workflows                 |12              		   |12*                           |
 
 ### nuclei templates `v7.0.0` tree overview 
+=======
+Templates are the core of [nuclei scanner](https://github.com/projectdiscovery/nuclei) which power the actual scanning engine. This repository stores and houses various templates for the scanner provided by our team as well as contributed by the community. We hope that you also contribute by sending templates via **pull requests** and grow the list.
+>>>>>>> main
 
 <details>
 <summary>Template Directory</summary>
@@ -35,10 +39,15 @@ An overview of the nuclei template directory including number of templates and H
 ```
 ├── cves
 │   ├── CVE-2017-10075.yaml
+<<<<<<< HEAD
 │   ├── CVE-2017-14537.yaml
 │   ├── CVE-2017-14849.yaml
 │   ├── CVE-2017-5638.yaml
 │   ├── CVE-2017-7391.yaml
+=======
+│   ├── CVE-2017-14849.yaml
+│   ├── CVE-2017-5638.yaml
+>>>>>>> main
 │   ├── CVE-2017-7529.yaml
 │   ├── CVE-2017-9506.yaml
 │   ├── CVE-2017-9841.yaml
@@ -59,13 +68,18 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── CVE-2018-3760.yaml
 │   ├── CVE-2018-5230.yaml
 │   ├── CVE-2018-7490.yaml
+<<<<<<< HEAD
 │   ├── CVE-2019-1010287.yaml
 │   ├── CVE-2019-10475.yaml
 │   ├── CVE-2019-11043.yaml
+=======
+│   ├── CVE-2019-10475.yaml
+>>>>>>> main
 │   ├── CVE-2019-11248.yaml
 │   ├── CVE-2019-11510.yaml
 │   ├── CVE-2019-11580.yaml
 │   ├── CVE-2019-12314.yaml
+<<<<<<< HEAD
 │   ├── CVE-2019-12461.yaml
 │   ├── CVE-2019-12593.yaml
 │   ├── CVE-2019-14322.yaml
@@ -77,6 +91,14 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── CVE-2019-16759.yaml
 │   ├── CVE-2019-17382.yaml
 │   ├── CVE-2019-17558.yaml
+=======
+│   ├── CVE-2019-14322.yaml
+│   ├── CVE-2019-14974.yaml
+│   ├── CVE-2019-15043.yaml
+│   ├── CVE-2019-16759-1.yaml
+│   ├── CVE-2019-16759.yaml
+│   ├── CVE-2019-17382.yaml
+>>>>>>> main
 │   ├── CVE-2019-18394.yaml
 │   ├── CVE-2019-19368.yaml
 │   ├── CVE-2019-19781.yaml
@@ -96,25 +118,37 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── CVE-2019-9978.yaml
 │   ├── CVE-2020-10199.yaml
 │   ├── CVE-2020-10204.yaml
+<<<<<<< HEAD
 │   ├── CVE-2020-11034.yaml
+=======
+>>>>>>> main
 │   ├── CVE-2020-1147.yaml
 │   ├── CVE-2020-12720.yaml
 │   ├── CVE-2020-13167.yaml
 │   ├── CVE-2020-13379.yaml
+<<<<<<< HEAD
 │   ├── CVE-2020-15920.yaml
 │   ├── CVE-2020-17505.yaml
 │   ├── CVE-2020-17506.yaml
 │   ├── CVE-2020-2096.yaml
 │   ├── CVE-2020-2140.yaml
 │   ├── CVE-2020-24223.yaml
+=======
+│   ├── CVE-2020-17505.yaml
+│   ├── CVE-2020-17506.yaml
+│   ├── CVE-2020-2096.yaml
+>>>>>>> main
 │   ├── CVE-2020-3187.yaml
 │   ├── CVE-2020-3452.yaml
 │   ├── CVE-2020-5284.yaml
 │   ├── CVE-2020-5405.yaml
 │   ├── CVE-2020-5410.yaml
+<<<<<<< HEAD
 │   ├── CVE-2020-5412.yaml
 │   ├── CVE-2020-5776.yaml
 │   ├── CVE-2020-5777.yaml
+=======
+>>>>>>> main
 │   ├── CVE-2020-5902.yaml
 │   ├── CVE-2020-6287.yaml
 │   ├── CVE-2020-7209.yaml
@@ -148,7 +182,10 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── drupal-install.yaml
 │   ├── ds_store.yaml
 │   ├── elasticsearch.yaml
+<<<<<<< HEAD
 │   ├── error-logs.yaml
+=======
+>>>>>>> main
 │   ├── exposed-kibana.yaml
 │   ├── exposed-svn.yaml
 │   ├── filezilla.yaml
@@ -161,16 +198,24 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── lazy-file.yaml
 │   ├── phpinfo.yaml
 │   ├── public-tomcat-instance.yaml
+<<<<<<< HEAD
 │   ├── robots.txt.yaml
 │   ├── security.txt.yaml
 │   ├── server-status-localhost.yaml
 │   ├── sql-dump.yaml
+=======
+│   ├── security.txt.yaml
+│   ├── server-status-localhost.yaml
+>>>>>>> main
 │   ├── telerik-dialoghandler-detect.yaml
 │   ├── telerik-fileupload-detect.yaml
 │   ├── tomcat-scripts.yaml
 │   ├── wadl-files.yaml
 │   ├── web-config.yaml
+<<<<<<< HEAD
 │   ├── wordpress-debug-log.yaml
+=======
+>>>>>>> main
 │   ├── wordpress-directory-listing.yaml
 │   ├── wordpress-user-enumeration.yaml
 │   ├── wp-xmlrpc.yaml
@@ -189,7 +234,10 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── fortinet-fortigate-panel.yaml
 │   ├── globalprotect-panel.yaml
 │   ├── grafana-detect.yaml
+<<<<<<< HEAD
 │   ├── iomega-lenovo-emc-shared-nas-detect.yaml
+=======
+>>>>>>> main
 │   ├── jenkins-asyncpeople.yaml
 │   ├── jmx-console.yaml
 │   ├── kubernetes-pods.yaml
@@ -197,7 +245,10 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── parallels-html-client.yaml
 │   ├── pfsense-web-gui.yaml
 │   ├── phpmyadmin-panel.yaml
+<<<<<<< HEAD
 │   ├── polycom-admin-detect.yaml
+=======
+>>>>>>> main
 │   ├── pulse-secure-panel.yaml
 │   ├── rabbitmq-dashboard.yaml
 │   ├── sap-netweaver-detect.yaml
@@ -207,18 +258,27 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── swagger-panel.yaml
 │   ├── tikiwiki-cms.yaml
 │   ├── traefik-dashboard
+<<<<<<< HEAD
 │   ├── traefik-dashboard.yaml
+=======
+>>>>>>> main
 │   ├── weave-scope-dashboard-detect.yaml
 │   ├── webeditors.yaml
 │   └── workspaceone-uem-airWatch-dashboard-detect.yaml
 ├── payloads
+<<<<<<< HEAD
 │   ├── CVE-2020-5776.csv
+=======
+>>>>>>> main
 │   └── CVE-2020-6287.xml
 ├── security-misconfiguration
 │   ├── basic-cors-flash.yaml
 │   ├── basic-cors.yaml
+<<<<<<< HEAD
 │   ├── drupal-user-enum-ajax.yaml
 │   ├── drupal-user-enum-redirect.yaml
+=======
+>>>>>>> main
 │   ├── front-page-misconfig.yaml
 │   ├── jira-service-desk-signup.yaml
 │   ├── jira-unauthenticated-dashboards.yaml
@@ -250,7 +310,10 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── liferay-portal-detect.yaml
 │   ├── linkerd-badrule-detect.yaml
 │   ├── linkerd-ssrf-detect.yaml
+<<<<<<< HEAD
 │   ├── magmi-detect.yaml
+=======
+>>>>>>> main
 │   ├── netsweeper-webadmin-detect.yaml
 │   ├── prometheus-exposed-panel.yaml
 │   ├── s3-detect.yaml
@@ -302,7 +365,10 @@ An overview of the nuclei template directory including number of templates and H
     ├── grafana-workflow.yaml
     ├── jira-exploitaiton-workflow.yaml
     ├── liferay-rce-workflow.yaml
+<<<<<<< HEAD
     ├── magmi-workflow.yaml
+=======
+>>>>>>> main
     ├── netsweeper-preauth-rce-workflow.yaml
     ├── rabbitmq-workflow.yaml
     ├── sap-netweaver-workflow.yaml
@@ -313,7 +379,11 @@ An overview of the nuclei template directory including number of templates and H
 
 </details>
 
+<<<<<<< HEAD
 13 directories, **263 templates**. 
+=======
+13 directories, **235 templates**. 
+>>>>>>> main
 
 Please navigate to https://nuclei.projectdiscovery.io for detailed documentation to build new and your own custom templates and many example templates for easy understanding. 
 
@@ -323,4 +393,7 @@ Please navigate to https://nuclei.projectdiscovery.io for detailed documentation
 2. Use YAML Formatter (e.g. [jsonformatter](https://jsonformatter.org/yaml-formatter)) to format new templates when sending pull requests.
 
 Thanks again for your contribution and keeping the community vibrant. :heart:
+<<<<<<< HEAD
 
+=======
+>>>>>>> main

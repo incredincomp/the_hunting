@@ -2,7 +2,11 @@ id: jmx-console
 info:
   name: JMX Console
   author: Yash Anand @yashanand155
+<<<<<<< HEAD
   severity: low
+=======
+  severity: Low
+>>>>>>> main
 requests:
   - method: GET
     path:

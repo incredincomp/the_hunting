@@ -1,5 +1,6 @@
 # the_hunting
-a *cheap* vuln finding robot
+a *cheap* vuln finding robot. Currently in Dev. Please be careful with it. Its a violent script if I've ever written one. Only does Recon branch fully right now, still pretty useful probably. Nothing is rate limited so youll probably get IP blocked over it, specifically during gobuster dir if youre not already banned before getting there.
+Cheers!
 
 # Requirements
 
@@ -22,22 +23,27 @@ Connect to your axiom droplet
 
 `cd ~/the_hunting`
 
+### need to run install.sh on fresh ubuntu 20.04 to install pre-req tools that come with axiom *THIS IS UNTESTED AND DANGEROUS, GOOD LUCK
 `chmod +x install.sh the_hunting.sh`
 
+### *THE INSTALL.SH SCRIPT IS UNTESTED, UNFORMATTED, AND DANGEROUS.. GOOD LUCK*
 need sudo for program installs with apt
 
-`sudo ./install.sh`
+`sudo ./install.sh -i`
+
+## Usage
+`./the_hunting.sh -d <target domain>`
 
 # Methodology
 
-![](https://github.com/incredincomp/usage-videos/blob/master/the_hunting.PNG)
+![](https://github.com/incredincomp/usage-videos/blob/master/the_hunting1.PNG)
 
 ## Recon
 
 ### Subdomains
 
 #### Subdomain Enum
-gobuster
+gobuster - vhost & dns
 https://github.com/OJ/gobuster
 
 Amass
@@ -61,21 +67,29 @@ https://github.com/michenriksen/aquatone
 
 ### Fuzzing
 #### Directory and file Fuzzing
-Dirb
+to-do: Dirb
 https://tools.kali.org/web-applications/dirb
 
-Gobuster
+Gobuster - dir
 https://github.com/OJ/gobuster
 
 ### Port Scanning
-#### nmap
+#### To-do: nmap
 
 ##### usage
 
 ##### nse scripts
 
+https://nmap.org/book/nse.html
+
 ### Webpage and Server Scanning
 
 #### nuclei
+
 ##### Templates
+
+Community templates - https://github.com/projectdiscovery/nuclei-templates
+
+To-Do: User made templates - https://nuclei.projectdiscovery.io/templating-guide/
+
 ##### usage

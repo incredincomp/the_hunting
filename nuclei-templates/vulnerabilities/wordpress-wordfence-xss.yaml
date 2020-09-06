@@ -13,4 +13,8 @@ requests:
       - type: word
         words:
           - "<svg/onload=alert(1337)>"
+<<<<<<< HEAD
         part: body
+=======
+        part: body
+>>>>>>> main

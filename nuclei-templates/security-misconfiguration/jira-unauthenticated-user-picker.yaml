@@ -3,7 +3,11 @@ id: jira-unauthenticated-user-picker
 info:
   name: Jira Unauthenticated User Picker
   author: TechbrunchFR
+<<<<<<< HEAD
   severity: high
+=======
+  severity: High
+>>>>>>> main
 
 requests:
   - method: GET
@@ -12,4 +16,8 @@ requests:
     matchers:
       - type: word
         words:
+<<<<<<< HEAD
           - 'user-picker'
+=======
+          - 'user-picker'
+>>>>>>> main
