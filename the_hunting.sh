@@ -338,7 +338,6 @@ subdomain_option(){
   touch ./deepdive/subdomain.txt
   touch ./deepdive/nuclei-vulns.json
   subdomain_scanning
-  done
   touch ./deepdive/subdomains.txt
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
