@@ -1,4 +1,6 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
 id: jenkins-async-people
 
 info:
@@ -15,6 +17,25 @@ requests:
         words:
           - "<title>People -  [Jenkins]</title>"
         part: body
+=======
+>>>>>>> testing
+id: jenkins-async-people
+
+info:
+  name: Jenkins panel async-people
+  author: nadino
+  severity: info
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/asynchPeople/"
+    matchers:
+      - type: word
+        words:
+          - "<title>People -  [Jenkins]</title>"
+        part: body
+<<<<<<< HEAD
 =======
 id: jenkins-async-people
 
@@ -33,3 +54,6 @@ requests:
           - "<title>People -  [Jenkins]</title>"
         part: body
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+>>>>>>> main
+>>>>>>> testing

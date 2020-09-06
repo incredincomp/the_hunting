@@ -18,7 +18,11 @@
 #                nuclei, chromium, and parallel on ubuntu 20.04 or axiom droplet
 #
 #          BUGS: wont scan the same site twice, either in the same hour or period
+<<<<<<< HEAD
+#         NOTES: v0.3.0
+=======
 #         NOTES: v0.2.2
+>>>>>>> main
 #        AUTHOR: @incredincomp
 #  ORGANIZATION:
 #       CREATED: 08/27/2020 16:55:54
@@ -62,9 +66,14 @@ fi
 
 target=""
 subreport=""
-usage() { logo; echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
+subdomain_scan_target=""
+usage() { echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
 
+<<<<<<< HEAD
+while getopts "d:s:el" o; do
+=======
 while getopts ":d:e:l" o; do
+>>>>>>> main
     case "${o}" in
         d)
             target="$OPTARG"
@@ -75,6 +84,20 @@ while getopts ":d:e:l" o; do
             excluded+=($OPTARG)
             unset IFS
             ;;
+<<<<<<< HEAD
+        s)
+            set -f
+            IFS=","
+            subdomain_scan_target+=($OPTARG)
+            unset IFS
+            IFS=$'\n'
+            for u in "${subdomain_scan_target[@]}"; do
+              printf "%s\n" "https://"$u"" >> ./deepdive/subdomain.txt
+            done
+            unset IFS
+            ;;
+=======
+>>>>>>> main
         l)
             less ./LICENSE
             exit 1
@@ -86,7 +109,7 @@ while getopts ":d:e:l" o; do
 done
 shift $((OPTIND - 1))
 
-if [ -z "$target" ] && [ -z ${subreport[*]} ]; then
+if [ -z "$target" ] && [ -z ${subreport[*]} ] && [ -z ${subdomain_scan_target[*]}]; then
    usage; exit 1;
 fi
 
@@ -111,77 +134,108 @@ excludedomains(){
 run_amass(){
   echo "${yellow}Running Amass enum...${reset}"
   amass enum -norecursive --passive -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d https://"$target"
+<<<<<<< HEAD
+  ret=$?
+  if [[ $ret -ne 0 ]] ; then
+=======
   if [[ $? -ne 0 ]] ; then
+>>>>>>> main
     notify_error
   fi
   cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Amass enum finished.${reset}"
 }
-
 #gobuster vhost broken
 run_gobuster_vhost(){
   echo "${yellow}Running Gobuster vhost...${reset}"
   gobuster vhost -u "$target" -w ./wordlists/subdomains-top-110000.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
+<<<<<<< HEAD
+  ret=$?
+  if [[ $ret -ne 0 ]] ; then
+=======
   if [[ $? -ne 0 ]] ; then
+>>>>>>> main
     notify_error
   fi
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster vhost finished.${reset}"
 }
-
 run_gobuster_dns(){
   echo "${yellow}Running Gobuster dns...${reset}"
   gobuster dns -d "$target" -w ./wordlists/subdomains-top-110000.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
+<<<<<<< HEAD
+  ret=$?
+  if [[ $ret -ne 0 ]] ; then
+=======
   if [[ $? -ne 0 ]] ; then
+>>>>>>> main
     notify_error
   fi
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt | awk -F ' ' '{print $2}' >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster dns finished.${reset}"
 }
-
 run_subjack(){
   echo "${yellow}Running subjack...${reset}"
   $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/alldomains.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "$HOME/go/src/github.com/haccer/subjack/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
+<<<<<<< HEAD
+  ret=$?
+  if [[ $ret -ne 0 ]] ; then
+=======
   if [[ $? -ne 0 ]] ; then
+>>>>>>> main
     notify_error
   fi
   echo "${green}subjack finished.${reset}"
 }
+<<<<<<< HEAD
+run_httprobe(){
+  echo "${yellow}Running httprobe...${reset}"
+  cat ./targets/"$target"/"$foldername"/alldomains.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+  ret=$?
+  if [[ $ret -ne 0 ]] ; then
+=======
 
 run_httprobe(){
   echo "${yellow}Running httprobe...${reset}"
   cat ./targets/"$target"/"$foldername"/alldomains.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   if [[ $? -ne 0 ]] ; then
+>>>>>>> main
     notify_error
   fi
   echo "${green}httprobe finished.${reset}"
 }
-
 run_aqua(){
   echo "${yellow}Running Aquatone...${reset}"
   cat ./targets/"$target"/"$foldername"/alldomains.txt | aquatone -threads $auquatoneThreads -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out
+<<<<<<< HEAD
+  ret=$?
+  if [[ $ret -ne 0 ]] ; then
+=======
   if [[ $? -ne 0 ]] ; then
+>>>>>>> main
     notify_error
   fi
   cp ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_report.html ./targets/"$target"/"$foldername"/aquatone_report.html
   cp ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt ./targets/"$target"/"$foldername"/aquatone_urls.txt
   echo "${green}Aquatone finished...${reset}"
 }
-
 run_gobuster_dir(){
   echo "${yellow}Running Gobuster dir...${reset}"
   read_direct_wordlist | parallel --results ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/ gobuster dir -z -q -u {} -w ./wordlists/directory-list.txt -f -k -e -r -a "Mozilla/5.0 \(X11\; Ubuntu\; Linux x86_64\; rv\:80.0\) Gecko/20100101 Firefox/80.0"
+<<<<<<< HEAD
+  ret=$?
+  if [[ $ret -ne 0 ]] ; then
+=======
   if [[ $? -ne 0 ]] ; then
+>>>>>>> main
     notify_error
   fi
   cat ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/1/"$target"/stdout | awk -F ' ' '{print $1}' >> ./targets/"$target"/"$foldername"/live_paths.txt
   echo "${green}Gobuster dir finished...${reset}"
 }
-
 run_dirb(){
   true
 }
-
 run_nuclei(){
   echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
   nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
@@ -189,16 +243,30 @@ run_nuclei(){
 #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
+<<<<<<< HEAD
+subdomain_scanning(){
+  nuclei -v -json -l ./deepdive/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./deepdive/nuclei-vulns.json
+}
+=======
 
+>>>>>>> main
 run_zap(){
   echo "${yellow}Running zap scan...${reset}"
   echo "${red} Just kidding! Working on it though.${reset}"
   echo "${green}zap scan finished...${reset}"
 }
-
 run_nmap(){
   true
 }
+<<<<<<< HEAD
+notify_finished(){
+  if [ -z "$slack_url" ]; then
+    echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
+  else
+    echo "${yellow}Notification being generated and sent...${reset}"
+    num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
+    data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
+=======
 
 notify_finished(){
   if [ -z "$slack_url" ]; then
@@ -218,10 +286,36 @@ notify_error(){
     echo "${yellow}Error notification being generated and sent...${reset}"
     num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
     data1=''{\"text\":\"There\ was\ an\ error\ on\ your\ scan\ of\ "'"$target"'"!\ Check\ your\ instance\ of\ \`the\_hunting.sh\`\.\ \`the\_hunting.sh\`\ still\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
+>>>>>>> main
     curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     echo "${green}Notification sent!${reset}"
   fi
 }
+<<<<<<< HEAD
+notify_subdomain_scan(){
+  if [ -z "$slack_url" ]; then
+    echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
+  else
+    echo "${yellow}Notification being generated and sent...${reset}"
+    num_of_vuln=$(< ./deepdive/nuclei-vulns.json  wc -l)
+    data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
+    curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    echo "${green}Notification sent!${reset}"
+  fi
+}
+notify_error(){
+  if [ -z "$slack_url" ]; then
+    echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
+  else
+    echo "${yellow}Error notification being generated and sent...${reset}"
+    num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
+    data1=''{\"text\":\"There\ was\ an\ error\ on\ your\ scan\ of\ "'"$target"'"!\ Check\ your\ instance\ of\ \`the\_hunting.sh\`\.\ \`the\_hunting.sh\`\ still\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
+    curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    echo "${green}Notification sent!${reset}"
+  fi
+}
+=======
+>>>>>>> main
 notify_success(){
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
@@ -233,6 +327,14 @@ notify_success(){
     echo "${green}Notification sent!${reset}"
   fi
 }
+<<<<<<< HEAD
+read_direct_wordlist(){
+  cat ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
+}
+uniq_subdomains(){
+  uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
+}
+=======
 
 read_direct_wordlist(){
   cat ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
@@ -242,6 +344,7 @@ uniq_subdomains(){
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
 
+>>>>>>> main
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
@@ -250,15 +353,12 @@ subdomain_enum(){
   #run_gobuster_vhost
   run_gobuster_dns
 }
-
 sub_takeover(){
   run_subjack
 }
-
 target_valid(){
   run_httprobe
 }
-
 webapp_valid(){
   run_aqua
 }
@@ -266,27 +366,26 @@ fuzz_em(){
   #run_gobuster_dir
   run_dirb
 }
-
 webapp_scan(){
   run_nuclei
 }
-
 port_scan(){
   run_nmap
 }
-
 # main func's
 recon(){
   subdomain_enum
   sub_takeover
 }
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
 validation(){
   target_valid
   webapp_valid
   uniq_subdomains
 }
-
 scanning(){
   port_scan
   fuzz_em
@@ -296,6 +395,46 @@ scanning(){
 logo(){
   base64 -d <<<"4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWXICDilojilojilZfilojilojilojilojilojilojilojilZcgICAgICAgIOKWiOKWiOKVlyAg4paI4paI4pWX4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWXIOKWiOKWiOKWiOKWiOKWiOKWiOKVlyAgICDilojilojilojilojilojilojilojilZfilojilojilZcgIOKWiOKWiOKVlwrilZrilZDilZDilojilojilZTilZDilZDilZ3ilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVkOKVkOKVnSAgICAgICAg4paI4paI4pWRICDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilojilojilZcgIOKWiOKWiOKVkeKVmuKVkOKVkOKWiOKWiOKVlOKVkOKVkOKVneKWiOKWiOKVkeKWiOKWiOKWiOKWiOKVlyAg4paI4paI4pWR4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWdICAgIOKWiOKWiOKVlOKVkOKVkOKVkOKVkOKVneKWiOKWiOKVkSAg4paI4paI4pWRCiAgIOKWiOKWiOKVkSAgIOKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKWiOKVlyAgICAgICAgICDilojilojilojilojilojilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZTilojilojilZcg4paI4paI4pWRICAg4paI4paI4pWRICAg4paI4paI4pWR4paI4paI4pWU4paI4paI4pWXIOKWiOKWiOKVkeKWiOKWiOKVkSAg4paI4paI4paI4pWXICAg4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4pWRCiAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVlOKVkOKVkOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVnSAgICAgICAgICDilojilojilZTilZDilZDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZHilojilojilZEgICDilojilojilZEgICDilZrilZDilZDilZDilZDilojilojilZHilojilojilZTilZDilZDilojilojilZEKICAg4paI4paI4pWRICAg4paI4paI4pWRICDilojilojilZHilojilojilojilojilojilojilojilZfilojilojilojilojilojilojilojilZfilojilojilZEgIOKWiOKWiOKVkeKVmuKWiOKWiOKWiOKWiOKWiOKWiOKVlOKVneKWiOKWiOKVkSDilZrilojilojilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZEg4pWa4paI4paI4paI4paI4pWR4pWa4paI4paI4paI4paI4paI4paI4pWU4pWd4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4pWR4paI4paI4pWRICDilojilojilZEKICAg4pWa4pWQ4pWdICAg4pWa4pWQ4pWdICDilZrilZDilZ3ilZrilZDilZDilZDilZDilZDilZDilZ3ilZrilZDilZDilZDilZDilZDilZDilZ3ilZrilZDilZ0gIOKVmuKVkOKVnSDilZrilZDilZDilZDilZDilZDilZ0g4pWa4pWQ4pWdICDilZrilZDilZDilZDilZ0gICDilZrilZDilZ0gICDilZrilZDilZ3ilZrilZDilZ0gIOKVmuKVkOKVkOKVkOKVnSDilZrilZDilZDilZDilZDilZDilZ0g4pWa4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZ0="
 }
+<<<<<<< HEAD
+credits(){
+  print_line
+  base64 -d <<<"ICAgQ3JlZGl0czogVGhhbmtzIHRvIGh0dHBzOi8vZ2l0aHViLmNvbS9PSiBodHRwczovL2dpdGh1Yi5jb20vT1dBU1AgaHR0cHM6Ly9naXRodWIuY29tL2hhY2NlcgogICBodHRwczovL2dpdGh1Yi5jb20vdG9tbm9tbm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9taWNoZW5yaWtzZW4gJiBUaGUgRGFyayBSYXZlciBmb3IgdGhlaXIKICAgd29yayBvbiB0aGUgcHJvZ3JhbXMgdGhhdCB3ZW50IGludG8gdGhlIG1ha2luZyBvZiB0aGVfaHVudGluZy5zaC4="
+  echo " "
+  print_line
+}
+licensing_info(){
+  base64 -d <<<"CXRoZV9odW50aW5nIENvcHlyaWdodCAoQykgMjAyMCAgQGluY3JlZGluY29tcAoJVGhpcyBwcm9ncmFtIGNvbWVzIHdpdGggQUJTT0xVVEVMWSBOTyBXQVJSQU5UWTsgZm9yIGRldGFpbHMgY2FsbCBgLi90aGVfaHVudGluZy5zaCAtbGljZW5zZScuCglUaGlzIGlzIGZyZWUgc29mdHdhcmUsIGFuZCB5b3UgYXJlIHdlbGNvbWUgdG8gcmVkaXN0cmlidXRlIGl0LgoJdW5kZXIgY2VydGFpbiBjb25kaXRpb25zOyB0eXBlIGAuL3RoZV9odW50aW5nLnNoIC1saWNlbnNlJyBmb3IgZGV0YWlscy4="
+  echo " "
+}
+print_line () {
+  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+  echo " "
+}
+open_program(){
+  logo
+  echo " "
+  credits
+  licensing_info
+  print_line
+}
+# main
+subdomain_option(){
+  clear
+  open_program
+  if [ ! -d ./deepdive ]; then
+    mkdir ./deepdive
+  fi
+  touch ./deepdive/subdomain.txt
+  touch ./deepdive/nuclei-vulns.json
+  subdomain_scanning
+  touch ./deepdive/subdomains.txt
+  duration=$SECONDS
+  echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
+  stty sane
+  tput sgr0
+}
+=======
+>>>>>>> main
 
 credits(){
   print_line
@@ -370,4 +509,12 @@ todate=$(date +"%Y-%m-%d")
 totime=$(date +"%I")
 path=$(pwd)
 foldername=$todate"-"$totime
+<<<<<<< HEAD
+if [ -s ./deepdive/subdomain.txt ]; then
+  subdomain_option
+else
+  main "$target"
+fi
+=======
 main "$target"
+>>>>>>> main

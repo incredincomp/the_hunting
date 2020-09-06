@@ -3,10 +3,17 @@ info:
   name: JMX Console
   author: Yash Anand @yashanand155
 <<<<<<< HEAD
+<<<<<<< HEAD
   severity: Low
 =======
   severity: low
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+  severity: low
+=======
+  severity: Low
+>>>>>>> main
+>>>>>>> testing
 requests:
   - method: GET
     path:

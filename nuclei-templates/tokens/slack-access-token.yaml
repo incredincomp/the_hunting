@@ -1,4 +1,6 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
 id: slack-access-token
 
 # xoxp-702234529XXX-688970480XXX-109182524XXXX-87fa5b4d2e62ac5c16fc6ea93bXXXXXX
@@ -20,6 +22,30 @@ requests:
         regex:
           - "xoxp-[0-9A-Za-z\\-]{72}"  # Person
           - "xoxb-[0-9A-Za-z\\-]{51}"  # Bot
+=======
+>>>>>>> testing
+id: slack-access-token
+
+# xoxp-702234529XXX-688970480XXX-109182524XXXX-87fa5b4d2e62ac5c16fc6ea93bXXXXXX
+# xoxb-702234529XXX-1076883857XXX-Ou9aRuvtFZ4DuTsepevXXXXX
+
+info:
+  name: Slack access token
+  author: nadino
+  severity: medium
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    extractors:
+      - type: regex
+        part: body
+        regex:
+          - "xoxp-[0-9A-Za-z\\-]{72}"  # Person
+          - "xoxb-[0-9A-Za-z\\-]{51}"  # Bot
+<<<<<<< HEAD
 =======
 id: slack-access-token
 
@@ -43,3 +69,6 @@ requests:
           - "xoxp-[0-9A-Za-z\\-]{72}"  # Person
           - "xoxb-[0-9A-Za-z\\-]{51}"  # Bot
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+>>>>>>> main
+>>>>>>> testing

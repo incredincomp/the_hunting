@@ -4,10 +4,17 @@ info:
   name: RabbitMQ Default Credentials
   author: fyoorer & dwisiswant0
 <<<<<<< HEAD
+<<<<<<< HEAD
   severity: High
 =======
   severity: high
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+  severity: high
+=======
+  severity: High
+>>>>>>> main
+>>>>>>> testing
 
 requests:
   - method: GET

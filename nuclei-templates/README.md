@@ -7,6 +7,7 @@
 [![Chat on Discord](https://img.shields.io/discord/695645237418131507.svg?logo=discord)](https://discord.gg/KECAGdH)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Templates are the core of [nuclei scanner](https://github.com/projectdiscovery/nuclei) which power the actual scanning engine. This repository stores and houses various templates for the scanner provided by our team as well as contributed by the community. We hope that you also contribute by sending templates via **pull requests** and grow the list.
 =======
 Templates are the core of [nuclei scanner](https://github.com/projectdiscovery/nuclei) which power the actual scanning engine. This repository stores and houses various templates for the scanner provided by our team as well as contributed by the community. We hope that you also contribute by sending templates via **pull requests** or [Github issue](https://github.com/projectdiscovery/nuclei-templates/issues/new?assignees=&labels=&template=submit-template.md&title=%5Bnuclei-template%5D+) and grow the list.
@@ -32,6 +33,33 @@ An overview of the nuclei template directory including number of templates and H
 
 ### nuclei templates `v7.0.0` tree overview 
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+Templates are the core of [nuclei scanner](https://github.com/projectdiscovery/nuclei) which power the actual scanning engine. This repository stores and houses various templates for the scanner provided by our team as well as contributed by the community. We hope that you also contribute by sending templates via **pull requests** or [Github issue](https://github.com/projectdiscovery/nuclei-templates/issues/new?assignees=&labels=&template=submit-template.md&title=%5Bnuclei-template%5D+) and grow the list.
+
+An overview of the nuclei template directory including number of templates and HTTP request associated with each directory. 
+
+### nuclei templates `v7.0.0`
+
+| Template Directory      	| Number of Templates      | Number of HTTP/DNS requests  |
+|---------------------------|--------------------------|------------------------------|
+| cves                     	|86                        |131                           |
+| default-credentials       |03                        |04                            |
+| dns                     	|04                        |04                            |
+| files                     |34                        |111                           |
+| generic-detections        |03                        |03                            |
+| panels                    |28                        |82                            |
+| security-misconfiguration |16                  	   |93                            |
+| subdomain-takeover        |02           			   |02                            |
+| technologies              |24      				   |43                            |
+| tokens                    |07                        |07                            |
+| vulnerabilities           |26          			   |55                            |
+| workflows                 |12              		   |12*                           |
+
+### nuclei templates `v7.0.0` tree overview 
+=======
+Templates are the core of [nuclei scanner](https://github.com/projectdiscovery/nuclei) which power the actual scanning engine. This repository stores and houses various templates for the scanner provided by our team as well as contributed by the community. We hope that you also contribute by sending templates via **pull requests** and grow the list.
+>>>>>>> main
+>>>>>>> testing
 
 <details>
 <summary>Template Directory</summary>
@@ -39,6 +67,7 @@ An overview of the nuclei template directory including number of templates and H
 ```
 ├── cves
 │   ├── CVE-2017-10075.yaml
+<<<<<<< HEAD
 <<<<<<< HEAD
 │   ├── CVE-2017-14849.yaml
 │   ├── CVE-2017-5638.yaml
@@ -48,6 +77,16 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── CVE-2017-5638.yaml
 │   ├── CVE-2017-7391.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── CVE-2017-14537.yaml
+│   ├── CVE-2017-14849.yaml
+│   ├── CVE-2017-5638.yaml
+│   ├── CVE-2017-7391.yaml
+=======
+│   ├── CVE-2017-14849.yaml
+│   ├── CVE-2017-5638.yaml
+>>>>>>> main
+>>>>>>> testing
 │   ├── CVE-2017-7529.yaml
 │   ├── CVE-2017-9506.yaml
 │   ├── CVE-2017-9841.yaml
@@ -69,23 +108,40 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── CVE-2018-5230.yaml
 │   ├── CVE-2018-7490.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 │   ├── CVE-2019-10475.yaml
 =======
 │   ├── CVE-2019-1010287.yaml
 │   ├── CVE-2019-10475.yaml
 │   ├── CVE-2019-11043.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── CVE-2019-1010287.yaml
+│   ├── CVE-2019-10475.yaml
+│   ├── CVE-2019-11043.yaml
+=======
+│   ├── CVE-2019-10475.yaml
+>>>>>>> main
+>>>>>>> testing
 │   ├── CVE-2019-11248.yaml
 │   ├── CVE-2019-11510.yaml
 │   ├── CVE-2019-11580.yaml
 │   ├── CVE-2019-12314.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+│   ├── CVE-2019-12461.yaml
+│   ├── CVE-2019-12593.yaml
+>>>>>>> testing
 │   ├── CVE-2019-14322.yaml
+│   ├── CVE-2019-14696.yaml
 │   ├── CVE-2019-14974.yaml
 │   ├── CVE-2019-15043.yaml
+│   ├── CVE-2019-16278.yaml
 │   ├── CVE-2019-16759-1.yaml
 │   ├── CVE-2019-16759.yaml
 │   ├── CVE-2019-17382.yaml
+<<<<<<< HEAD
 =======
 │   ├── CVE-2019-12461.yaml
 │   ├── CVE-2019-12593.yaml
@@ -99,6 +155,17 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── CVE-2019-17382.yaml
 │   ├── CVE-2019-17558.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── CVE-2019-17558.yaml
+=======
+│   ├── CVE-2019-14322.yaml
+│   ├── CVE-2019-14974.yaml
+│   ├── CVE-2019-15043.yaml
+│   ├── CVE-2019-16759-1.yaml
+│   ├── CVE-2019-16759.yaml
+│   ├── CVE-2019-17382.yaml
+>>>>>>> main
+>>>>>>> testing
 │   ├── CVE-2019-18394.yaml
 │   ├── CVE-2019-19368.yaml
 │   ├── CVE-2019-19781.yaml
@@ -119,13 +186,20 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── CVE-2020-10199.yaml
 │   ├── CVE-2020-10204.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 │   ├── CVE-2020-11034.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── CVE-2020-11034.yaml
+=======
+>>>>>>> main
+>>>>>>> testing
 │   ├── CVE-2020-1147.yaml
 │   ├── CVE-2020-12720.yaml
 │   ├── CVE-2020-13167.yaml
 │   ├── CVE-2020-13379.yaml
+<<<<<<< HEAD
 <<<<<<< HEAD
 │   ├── CVE-2020-17505.yaml
 │   ├── CVE-2020-17506.yaml
@@ -138,17 +212,38 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── CVE-2020-2140.yaml
 │   ├── CVE-2020-24223.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── CVE-2020-15920.yaml
+│   ├── CVE-2020-17505.yaml
+│   ├── CVE-2020-17506.yaml
+│   ├── CVE-2020-2096.yaml
+│   ├── CVE-2020-2140.yaml
+│   ├── CVE-2020-24223.yaml
+=======
+│   ├── CVE-2020-17505.yaml
+│   ├── CVE-2020-17506.yaml
+│   ├── CVE-2020-2096.yaml
+>>>>>>> main
+>>>>>>> testing
 │   ├── CVE-2020-3187.yaml
 │   ├── CVE-2020-3452.yaml
 │   ├── CVE-2020-5284.yaml
 │   ├── CVE-2020-5405.yaml
 │   ├── CVE-2020-5410.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 │   ├── CVE-2020-5412.yaml
 │   ├── CVE-2020-5776.yaml
 │   ├── CVE-2020-5777.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── CVE-2020-5412.yaml
+│   ├── CVE-2020-5776.yaml
+│   ├── CVE-2020-5777.yaml
+=======
+>>>>>>> main
+>>>>>>> testing
 │   ├── CVE-2020-5902.yaml
 │   ├── CVE-2020-6287.yaml
 │   ├── CVE-2020-7209.yaml
@@ -183,9 +278,15 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── ds_store.yaml
 │   ├── elasticsearch.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 │   ├── error-logs.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── error-logs.yaml
+=======
+>>>>>>> main
+>>>>>>> testing
 │   ├── exposed-kibana.yaml
 │   ├── exposed-svn.yaml
 │   ├── filezilla.yaml
@@ -199,6 +300,7 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── phpinfo.yaml
 │   ├── public-tomcat-instance.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 │   ├── security.txt.yaml
 │   ├── server-status-localhost.yaml
 =======
@@ -207,15 +309,31 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── server-status-localhost.yaml
 │   ├── sql-dump.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── robots.txt.yaml
+│   ├── security.txt.yaml
+│   ├── server-status-localhost.yaml
+│   ├── sql-dump.yaml
+=======
+│   ├── security.txt.yaml
+│   ├── server-status-localhost.yaml
+>>>>>>> main
+>>>>>>> testing
 │   ├── telerik-dialoghandler-detect.yaml
 │   ├── telerik-fileupload-detect.yaml
 │   ├── tomcat-scripts.yaml
 │   ├── wadl-files.yaml
 │   ├── web-config.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 │   ├── wordpress-debug-log.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── wordpress-debug-log.yaml
+=======
+>>>>>>> main
+>>>>>>> testing
 │   ├── wordpress-directory-listing.yaml
 │   ├── wordpress-user-enumeration.yaml
 │   ├── wp-xmlrpc.yaml
@@ -235,9 +353,15 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── globalprotect-panel.yaml
 │   ├── grafana-detect.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 │   ├── iomega-lenovo-emc-shared-nas-detect.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── iomega-lenovo-emc-shared-nas-detect.yaml
+=======
+>>>>>>> main
+>>>>>>> testing
 │   ├── jenkins-asyncpeople.yaml
 │   ├── jmx-console.yaml
 │   ├── kubernetes-pods.yaml
@@ -246,9 +370,15 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── pfsense-web-gui.yaml
 │   ├── phpmyadmin-panel.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 │   ├── polycom-admin-detect.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── polycom-admin-detect.yaml
+=======
+>>>>>>> main
+>>>>>>> testing
 │   ├── pulse-secure-panel.yaml
 │   ├── rabbitmq-dashboard.yaml
 │   ├── sap-netweaver-detect.yaml
@@ -259,26 +389,45 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── tikiwiki-cms.yaml
 │   ├── traefik-dashboard
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 │   ├── traefik-dashboard.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── traefik-dashboard.yaml
+=======
+>>>>>>> main
+>>>>>>> testing
 │   ├── weave-scope-dashboard-detect.yaml
 │   ├── webeditors.yaml
 │   └── workspaceone-uem-airWatch-dashboard-detect.yaml
 ├── payloads
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 │   ├── CVE-2020-5776.csv
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── CVE-2020-5776.csv
+=======
+>>>>>>> main
+>>>>>>> testing
 │   └── CVE-2020-6287.xml
 ├── security-misconfiguration
 │   ├── basic-cors-flash.yaml
 │   ├── basic-cors.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 │   ├── drupal-user-enum-ajax.yaml
 │   ├── drupal-user-enum-redirect.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── drupal-user-enum-ajax.yaml
+│   ├── drupal-user-enum-redirect.yaml
+=======
+>>>>>>> main
+>>>>>>> testing
 │   ├── front-page-misconfig.yaml
 │   ├── jira-service-desk-signup.yaml
 │   ├── jira-unauthenticated-dashboards.yaml
@@ -311,9 +460,15 @@ An overview of the nuclei template directory including number of templates and H
 │   ├── linkerd-badrule-detect.yaml
 │   ├── linkerd-ssrf-detect.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 │   ├── magmi-detect.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+│   ├── magmi-detect.yaml
+=======
+>>>>>>> main
+>>>>>>> testing
 │   ├── netsweeper-webadmin-detect.yaml
 │   ├── prometheus-exposed-panel.yaml
 │   ├── s3-detect.yaml
@@ -366,9 +521,15 @@ An overview of the nuclei template directory including number of templates and H
     ├── jira-exploitaiton-workflow.yaml
     ├── liferay-rce-workflow.yaml
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     ├── magmi-workflow.yaml
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+    ├── magmi-workflow.yaml
+=======
+>>>>>>> main
+>>>>>>> testing
     ├── netsweeper-preauth-rce-workflow.yaml
     ├── rabbitmq-workflow.yaml
     ├── sap-netweaver-workflow.yaml
@@ -380,10 +541,17 @@ An overview of the nuclei template directory including number of templates and H
 </details>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 13 directories, **235 templates**. 
 =======
 13 directories, **263 templates**. 
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+13 directories, **263 templates**. 
+=======
+13 directories, **235 templates**. 
+>>>>>>> main
+>>>>>>> testing
 
 Please navigate to https://nuclei.projectdiscovery.io for detailed documentation to build new and your own custom templates and many example templates for easy understanding. 
 
@@ -394,6 +562,12 @@ Please navigate to https://nuclei.projectdiscovery.io for detailed documentation
 
 Thanks again for your contribution and keeping the community vibrant. :heart:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
+=======
+
+=======
+>>>>>>> main
+>>>>>>> testing
