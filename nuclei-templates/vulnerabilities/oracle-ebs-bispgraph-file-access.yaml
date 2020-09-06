@@ -3,18 +3,7 @@ id: oracle-ebs-bispgrapgh-file-read
 info:
   name: Oracle EBS Bispgraph File Access
   author: "Alfie Njeru (@emenalf) - https://the-infosec.com"
-<<<<<<< HEAD
-<<<<<<< HEAD
-  severity: Critical
-=======
   severity: critical
->>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
-=======
-  severity: critical
-=======
-  severity: Critical
->>>>>>> main
->>>>>>> testing
   description: todo
 
 requests:

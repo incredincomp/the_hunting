@@ -1,15 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-id: IBM InfoPrint Directory Traversal
-=======
 id: ibm-infoprint-directory-traversal
->>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
-=======
-id: ibm-infoprint-directory-traversal
-=======
-id: IBM InfoPrint Directory Traversal
->>>>>>> main
->>>>>>> testing
 
 info:
   name: IBM InfoPrint 4247-Z03 Impact Matrix Printer - Directory Traversal

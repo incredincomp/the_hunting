@@ -6,18 +6,7 @@ id: jira-unauthenticated-dashboards
 info:
   name: Jira Unauthenticated Dashboards
   author: TechbrunchFR
-<<<<<<< HEAD
-<<<<<<< HEAD
-  severity: Info
-=======
   severity: info
->>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
-=======
-  severity: info
-=======
-  severity: Info
->>>>>>> main
->>>>>>> testing
 
 requests:
   - method: GET

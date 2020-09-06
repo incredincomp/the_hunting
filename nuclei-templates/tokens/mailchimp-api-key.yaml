@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 id: mailchimp-access-key-value
 
 info:
@@ -18,45 +15,3 @@ requests:
         part: body
         regex:
           - "[0-9a-f]{32}-us[0-9]{1,2}"
-=======
->>>>>>> testing
-id: mailchimp-access-key-value
-
-info:
-  name: Mailchimp API Value
-  author: puzzlepeaches
-  severity: medium
-
-requests:
-  - method: GET
-    path:
-      - "{{BaseURL}}"
-
-    extractors:
-      - type: regex
-        part: body
-        regex:
-          - "[0-9a-f]{32}-us[0-9]{1,2}"
-<<<<<<< HEAD
-=======
-id: mailchimp-access-key-value
-
-info:
-  name: Mailchimp API Value
-  author: puzzlepeaches
-  severity: medium
-
-requests:
-  - method: GET
-    path:
-      - "{{BaseURL}}"
-
-    extractors:
-      - type: regex
-        part: body
-        regex:
-          - "[0-9a-f]{32}-us[0-9]{1,2}"
->>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
-=======
->>>>>>> main
->>>>>>> testing

@@ -1,15 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-id: Jaspersoft-detect
-=======
 id: jaspersoft-detect
->>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
-=======
-id: jaspersoft-detect
-=======
-id: Jaspersoft-detect
->>>>>>> main
->>>>>>> testing
 
 info:
   name: Jaspersoft detected

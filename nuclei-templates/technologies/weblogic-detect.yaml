@@ -1,15 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-id: WebLogic-Detect
-=======
 id: weblogic-detect
->>>>>>> 38b66d3b23c3d36d0bf842267c549749e787cadf
-=======
-id: weblogic-detect
-=======
-id: WebLogic-Detect
->>>>>>> main
->>>>>>> testing
 
 info:
   name: Detect Weblogic
