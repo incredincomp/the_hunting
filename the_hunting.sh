@@ -18,7 +18,7 @@
 #                nuclei, chromium, and parallel on ubuntu 20.04 or axiom droplet
 #
 #          BUGS: wont scan the same site twice, either in the same hour or period
-#         NOTES: v0.2.2
+#         NOTES: v0.3.0
 #        AUTHOR: @incredincomp
 #  ORGANIZATION:
 #       CREATED: 08/27/2020 16:55:54
@@ -201,7 +201,7 @@ run_nuclei(){
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 subdomain_scanning(){
-  nuclei -v -json -l ./deepdive/"$subdomain_scan_target"/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./deepdive/"$subdomain_scan_target"/nuclei-vulns.json
+  nuclei -v -json -l ./deepdive/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./deepdive/nuclei-vulns.json
 }
 run_zap(){
   echo "${yellow}Running zap scan...${reset}"
