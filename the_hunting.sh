@@ -53,8 +53,7 @@ chromiumPath=/snap/bin/chromium
 
 type -P parallel &>/dev/null || sudo apt install parallel -y
 
-if [ -s ./slack_url.txt ]
-then
+if [ -s ./slack_url.txt ]; then
   slack_url=$(<slack_url.txt)
 else
   slack_url=""
@@ -332,7 +331,6 @@ subdomain_option(){
   touch ./deepdive/nuclei-vulns.json
   subdomain_scanning
   notify_subdomain_scan
-  touch ./deepdive/subdomains.txt
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
   stty sane
