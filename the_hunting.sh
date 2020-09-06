@@ -98,7 +98,7 @@ while getopts "d:s:el" o; do
 done
 shift $((OPTIND - 1))
 
-if [ -z "$target" ] && [ -z ${subreport[*]} ]; then
+if [ -z "$target" ] && [ -z ${subreport[*]} ] && [ -z ${subdomain_scan_target[*]}]; then
    usage; exit 1;
 fi
 
