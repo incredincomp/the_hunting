@@ -80,6 +80,9 @@ while getopts "d:s:el" o; do
             IFS=","
             subdomain_scan_target+=($OPTARG)
             unset IFS
+            if [ -s ./deepdive/subdomain.txt ]; then
+              mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
+            fi
             IFS=$'\n'
             for u in "${subdomain_scan_target[@]}"; do
               printf "%s\n" "https://"$u"" >> ./deepdive/subdomain.txt
