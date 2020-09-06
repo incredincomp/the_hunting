@@ -81,6 +81,11 @@ while getopts "d:s:el" o; do
             IFS=","
             subdomain_scan_target+=($OPTARG)
             unset IFS
+            IFS=$'\n'
+            for u in "${subdomain_scan_target[@]}"; do
+              printf "%s\n" "https://"$u"" >> ./deepdive/subdomain.txt
+            done
+            unset IFS
             ;;
         l)
             less ./LICENSE
@@ -92,37 +97,7 @@ while getopts "d:s:el" o; do
     esac
 done
 shift $((OPTIND - 1))
-if [ ! -n "${subdomain_scan_target[@]}" ]; then
-  if [ ! -d ./deepdive ]; then
-    mkdir ./deepdive
-  fi
-  if [ ! -d ./deepdive/"${subdomain_scan_target[@]}" ]; then
-    mkdir ./deepdive/"${subdomain_scan_target[*]}"
-  fi
-    touch ./deepdive/"${subdomain_scan_target[*]}"/subdomain.txt
-    touch ./deepdive/"${subdomain_scan_target[*]}"/nuclei-vulns.json
-    IFS=$'\n'
-    for u in "${subdomain_scan_target[@]}"; do
-      printf "%s\n" "https://"$u"" >> ./deepdive/"${subdomain_scan_target[*]}"/subdomain.txt
-    done
-    unset IFS
-    nuclei -v -json -l ./deepdive/"${subdomain_scan_target[@]}"/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./deepdive/"$subdomain_scan_target"/nuclei-results.json
-    for u in "${subdomain_scan_target[@]}"; do
-      if [ -z "$slack_url" ]; then
-        echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
-      else
-        echo "${yellow}Notification being generated and sent...${reset}"
-        num_of_vuln=$(< ./deepdive/"${subdomain_scan_target[@]}"/nuclei-vulns.json  wc -l)
-        data1=''{\"text\":\"Your\ scan\ of\ "'"${subdomain_scan_target[@]}"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
-        curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
-        echo "${green}Notification sent!${reset}"
-      fi
-    done
-    touch ./deepdive/"${subdomain_scan_target[@]}"/subdomains.txt
-    exit 0
-else
-  true
-fi
+
 if [ -z "$target" ] && [ -z ${subreport[*]} ]; then
    usage; exit 1;
 fi
@@ -252,8 +227,8 @@ notify_subdomain_scan(){
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
     echo "${yellow}Notification being generated and sent...${reset}"
-    num_of_vuln=$(< ./deepdive/"$subdomain_scan_target"/nuclei-vulns.json  wc -l)
-    data1=''{\"text\":\"Your\ scan\ of\ "'"$subdomain_scan_target"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"\+\\-'"\ vulnerabilities.\"}''
+    num_of_vuln=$(< ./deepdive/nuclei-vulns.json  wc -l)
+    data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
     curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     echo "${green}Notification sent!${reset}"
   fi
@@ -329,7 +304,6 @@ scanning(){
   webapp_scan
 }
 subdomain_scanning(){
-  nuclei -v -json -l ./deepdive/"$subdomain_scan_target"/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./deepdive/"$subdomain_scan_target"/nuclei-results.json
 }
 # graphic opening stuff
 logo(){
@@ -357,6 +331,23 @@ open_program(){
   print_line
 }
 # main
+subdomain_option(){
+  clear
+  open_program
+  if [ ! -d ./deepdive ]; then
+    mkdir ./deepdive
+  fi
+  touch ./deepdive/subdomain.txt
+  touch ./deepdive/nuclei-vulns.json
+  subdomain_scanning
+  done
+  touch ./deepdive/subdomains.txt
+  duration=$SECONDS
+  echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
+  stty sane
+  tput sgr0
+}
+
 main(){
   clear
   open_program
@@ -404,4 +395,8 @@ todate=$(date +"%Y-%m-%d")
 totime=$(date +"%I")
 path=$(pwd)
 foldername=$todate"-"$totime
-main "$target"
+if [ -s ./deepdive/subdomain.txt ]; then
+  subdomain_option
+else
+  main "$target"
+fi
