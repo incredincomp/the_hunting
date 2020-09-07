@@ -85,7 +85,7 @@ while getopts "d:s:el" o; do
             fi
             IFS=$'\n'
             for u in "${subdomain_scan_target[@]}"; do
-              printf "%s\n" "https://"$u"" >> ./deepdive/subdomain.txt
+              printf "%s\n" "https://""$u" >> ./deepdive/subdomain.txt
             done
             unset IFS
             ;;
@@ -109,16 +109,15 @@ excludedomains(){
     echo "No domains have been excluded."
   else
     echo "Excluding domains (if you set them with -e)..."
-    IFS=$'\n'
-    # prints the $excluded array to excluded.txt with newlines
-    printf "%s\n" "${excluded[*]}" > ./"$target"/excluded.txt
+    for u in "${excluded[@]}"; do
+      printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
+    done
     # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
-    grep -vFf ./"$target"/excluded.txt ./"$target"/alldomains.txt > ./"$target"/alldomains2.txt
-    mv ./"$target"/alldomains2.txt ./"$target"/alldomains.txt
+#    grep -vFf ./"$target"/excluded.txt ./"$target"/alldomains.txt > ./"$target"/alldomains2.txt
+#    mv ./"$target"/alldomains2.txt ./"$target"/alldomains.txt
     #rm ./$domain/$foldername/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
     echo "${green}Subdomains that have been excluded from discovery:${reset}"
     printf "%s\n" "${excluded[@]}"
-    unset IFS
   fi
 }
 # parents
@@ -203,7 +202,7 @@ run_nuclei(){
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 subdomain_scanning(){
-  nuclei -v -json -l ./deepdive/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -o ./deepdive/nuclei-vulns.json
+  nuclei -v -json -l ./deepdive/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./deepdive/nuclei-vulns.json
 }
 
 run_zap(){
@@ -399,6 +398,7 @@ main(){
   touch ./targets/"$target"/"$foldername"/ipaddress.txt
   touch ./targets/"$target"/"$foldername"/temp-clean.txt
 
+  excludedomains
   recon "$target"
   validation
   scanning "$target"
@@ -414,6 +414,7 @@ totime=$(date +"%I")
 path=$(pwd)
 foldername=$todate"-"$totime
 if [ -s ./deepdive/subdomain.txt ]; then
+  excludedomains
   subdomain_option
 else
   main "$target"
