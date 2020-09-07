@@ -60,7 +60,6 @@ else
 fi
 
 target=""
-subreport=""
 subdomain_scan_target=""
 usage() { echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
 
@@ -100,7 +99,7 @@ while getopts ":d:s:e:l:" o; do
 done
 shift $((OPTIND - 1))
 
-if [ -z "$target" ] && [ -z ${subreport[*]} ] && [ -z ${subdomain_scan_target[*]} ]; then
+if [ -z "$target" ] && [[ -z ${subdomain_scan_target[*]} ]]; then
    usage; exit 1;
 fi
 
