@@ -381,57 +381,60 @@ open_program(){
 
 # main
 main(){
-  clear
-  open_program
-  if [ -d "./targets/"$target"" ]
-  then
-    echo "$target is a known target."
-  else
-    mkdir ./targets/"$target"/
-  fi
-  if [ -z "$slack_url" ]; then
-    echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
-  fi
+  if [ -z "$subdomain_scan_target" ]; then
+    clear
+    open_program
+    if [ -d "./targets/"$target"" ]
+    then
+      echo "$target is a known target."
+    else
+      mkdir ./targets/"$target"/
+    fi
+    if [ -z "$slack_url" ]; then
+      echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
+    fi
 
-  mkdir ./targets/"$target"/"$foldername"
-  mkdir ./targets/"$target"/"$foldername"/aqua/
-  mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/
-  mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/parsedjson/
-  mkdir ./targets/"$target"/"$foldername"/subdomain_enum/
-  mkdir ./targets/"$target"/"$foldername"/subdomain_enum/amass/
-  mkdir ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/
-  mkdir ./targets/"$target"/"$foldername"/screenshots/
-  mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/
-  mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/
-  mkdir ./targets/"$target"/"$foldername"/scanning/
-  mkdir ./targets/"$target"/"$foldername"/scanning/nmap/
-  mkdir ./targets/"$target"/"$foldername"/scanning/nuclei/
-  touch ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
-  touch ./targets/"$target"/"$foldername"/subdomain-takeover-results.json
-  touch ./targets/"$target"/"$foldername"/live_paths.txt
-  touch ./targets/"$target"/"$foldername"/alldomains.txt
-  touch ./targets/"$target"/"$foldername"/ipaddress.txt
-  touch ./targets/"$target"/"$foldername"/temp-clean.txt
+    mkdir ./targets/"$target"/"$foldername"
+    mkdir ./targets/"$target"/"$foldername"/aqua/
+    mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/
+    mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/parsedjson/
+    mkdir ./targets/"$target"/"$foldername"/subdomain_enum/
+    mkdir ./targets/"$target"/"$foldername"/subdomain_enum/amass/
+    mkdir ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/
+    mkdir ./targets/"$target"/"$foldername"/screenshots/
+    mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/
+    mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/
+    mkdir ./targets/"$target"/"$foldername"/scanning/
+    mkdir ./targets/"$target"/"$foldername"/scanning/nmap/
+    mkdir ./targets/"$target"/"$foldername"/scanning/nuclei/
+    touch ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+    touch ./targets/"$target"/"$foldername"/subdomain-takeover-results.json
+    touch ./targets/"$target"/"$foldername"/live_paths.txt
+    touch ./targets/"$target"/"$foldername"/alldomains.txt
+    touch ./targets/"$target"/"$foldername"/ipaddress.txt
+    touch ./targets/"$target"/"$foldername"/temp-clean.txt
 
-  excludedomains
-  recon "$target"
-  validation
-  notify_finished
-  echo "${green}Scan for "$target" finished successfully${reset}"
-  duration=$SECONDS
-  echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
-  stty sane
-  tput sgr0
+    excludedomains
+    recon "$target"
+    validation
+    notify_finished
+    echo "${green}Scan for "$target" finished successfully${reset}"
+    duration=$SECONDS
+    echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
+    stty sane
+    tput sgr0
+  else #scanning only
+    clear
+    open_program
+    echo "${green}Scanning only.. please wait.${reset}"
+    excludedomains "$excluded"
+    subdomain_option
+    undo_amass_config
+    undo_subdomain_file
+  fi
 }
 todate=$(date +"%Y-%m-%d")
 totime=$(date +"%I:%M")
 path=$(pwd)
 foldername=$todate"-"$totime
-if [ -z "$subdomain_scan_target" ]; then
-  main "$target"
-else
-  excludedomains "$excluded"
-  subdomain_option
-  undo_amass_config
-  undo_subdomain_file
-fi
+main
