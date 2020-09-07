@@ -104,21 +104,21 @@ if [ -z "$target" ] && [[ -z ${subdomain_scan_target[*]} ]]; then
 fi
 
 excludedomains(){
-  if [ -z "$excluded" ]; then
-    echo "No domains have been excluded."
-  else
     echo "Excluding domains (if you set them with -e)..."
-    cp ./amass_config.ini ./amass_config.bak
-    for u in "${excluded[@]}"; do
-      printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
-    done
+    if [ -z "$excluded" ]; then
+      echo "No subdomains have been exluded"
+    else
+      cp ./amass_config.ini ./amass_config.bak
+      for u in "${excluded[@]}"; do
+        printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
+      done
     # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
 #    grep -vFf ./"$target"/excluded.txt ./"$target"/alldomains.txt > ./"$target"/alldomains2.txt
 #    mv ./"$target"/alldomains2.txt ./"$target"/alldomains.txt
     #rm ./$domain/$foldername/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
-    echo "${green}Subdomains that have been excluded from discovery:${reset}"
-    printf "%s\n" "${excluded[@]}"
-  fi
+      echo "${green}Subdomains that have been excluded from discovery:${reset}"
+      printf "%s\n" "${excluded[@]}"
+    fi
 }
 # parents
 run_amass(){
@@ -427,7 +427,7 @@ foldername=$todate"-"$totime
 if [ -z "$subdomain_scan_target" ]; then
   main "$target"
 else
-  excludedomains
+  excludedomains "$excluded"
   subdomain_option
   undo_amass_config
   undo_subdomain_file
