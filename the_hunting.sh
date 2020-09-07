@@ -124,7 +124,7 @@ excludedomains(){
 # parents
 run_amass(){
   echo "${yellow}Running Amass enum...${reset}"
-  amass enum -norecursive --passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d https://"$target"
+  amass enum -norecursive --passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   ret=$?
   if [[ $ret -ne 0 ]] ; then
     notify_error
@@ -268,7 +268,7 @@ subdomain_enum(){
   run_amass
 #Gobuster trying to make them run at same time
   #run_gobuster_vhost
-  run_gobuster_dns
+  #run_gobuster_dns
 }
 sub_takeover(){
   run_subjack
