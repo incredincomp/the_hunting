@@ -124,7 +124,7 @@ excludedomains(){
 # parents
 run_amass(){
   echo "${yellow}Running Amass enum...${reset}"
-  amass enum -norecursive --passive -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d https://"$target"
+  amass enum -norecursive --passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d https://"$target"
   ret=$?
   if [[ $ret -ne 0 ]] ; then
     notify_error
