@@ -408,7 +408,6 @@ main(){
   excludedomains
   recon "$target"
   validation
-  scanning "$target"
   notify_finished
   echo "${green}Scan for "$target" finished successfully${reset}"
   duration=$SECONDS
