@@ -17,12 +17,12 @@
 #  REQUIREMENTS: amass, gobuster, subjack, aquatone, httprobe, dirb, nmap,
 #                nuclei, chromium, and parallel on ubuntu 20.04 or axiom droplet
 #
-#          BUGS: wont scan the same site twice, either in the same hour or period
-#         NOTES: v0.3.0
+#          BUGS:
+#         NOTES: v0.3.1
 #        AUTHOR: @incredincomp
 #  ORGANIZATION:
 #       CREATED: 08/27/2020 16:55:54
-#      REVISION: 08/31/2020 00:29:00
+#      REVISION: 09/07/2020 01:29:00
 #     LICENSING: the_hunting Copyright (C) 2020  @incredincomp
 #                This program comes with ABSOLUTELY NO WARRANTY;
 #                for details, type `./the_hunting.sh -l'.
@@ -202,7 +202,7 @@ run_nuclei(){
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 subdomain_scanning(){
-  nuclei -v -json -l ./deepdive/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./deepdive/nuclei-vulns.json
+  nuclei -v -json -l ./deepdive/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./deepdive/nuclei-vulns.json
 }
 
 run_zap(){
@@ -251,6 +251,7 @@ notify_error(){
 undo_amass_config(){
   if [ -s ./amass_config.bak ]; then
     mv ./amass_config.bak ./amass_config.ini
+    rm ./amass_config.bak
   fi
 }
 
