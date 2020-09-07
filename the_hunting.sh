@@ -105,7 +105,7 @@ fi
 
 excludedomains(){
     echo "Excluding domains (if you set them with -e)..."
-    if [ -z "${excluded[*]}" ]; then
+    if [ "${#excluded[@]}" -eq 0 ]; then
       echo "No subdomains have been exluded"
     else
       cp ./amass_config.ini ./amass_config.bak
