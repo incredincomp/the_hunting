@@ -31,7 +31,7 @@
 #                for details, type `./the_hunting.sh -l'.
 #===============================================================================
 clear
-set -o nounset                 # Treat unset variables as an error
+#set -o nounset                 # Treat unset variables as an error
 set -e
 #set -xv                       # Uncomment to print script in console for debug
 
