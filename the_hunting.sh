@@ -417,7 +417,7 @@ main(){
   tput sgr0
 }
 todate=$(date +"%Y-%m-%d")
-totime=$(date +"%I")
+totime=$(date +"%I:%M")
 path=$(pwd)
 foldername=$todate"-"$totime
 if [ -s ./deepdive/subdomain.txt ]; then
