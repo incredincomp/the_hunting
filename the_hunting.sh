@@ -84,7 +84,7 @@ while getopts ":d:s:e:l:" o; do
             fi
             IFS=$'\n'
             for u in "${subdomain_scan_target[@]}"; do
-              printf "%s\n" "https://""$u" >> ./deepdive/subdomain.txt
+              printf "%s\n" "$u" >> ./deepdive/subdomain.txt
             done
             unset IFS
             ;;
@@ -182,6 +182,7 @@ run_aqua(){
   echo "${green}Aquatone finished...${reset}"
 }
 run_gobuster_dir(){
+  #crazy headed and dangerous, untested really.. dont know what happens with output
   echo "${yellow}Running Gobuster dir...${reset}"
   read_direct_wordlist | parallel --results ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/ gobuster dir -z -q -u {} -w ./wordlists/directory-list.txt -f -k -e -r -a "Mozilla/5.0 \(X11\; Ubuntu\; Linux x86_64\; rv\:80.0\) Gecko/20100101 Firefox/80.0"
   ret=$?
@@ -196,7 +197,7 @@ run_dirb(){
 }
 run_nuclei(){
   echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
-  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
+  nuclei -v -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
 #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
 #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
