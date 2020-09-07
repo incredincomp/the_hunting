@@ -108,14 +108,16 @@ excludedomains(){
     if [ "${#excluded[@]}" -eq 0 ]; then
       echo "No subdomains have been exluded"
     else
+      touch ./targets/"$target"/"$foldername"/excluded.txt
       cp ./amass_config.ini ./amass_config.bak
       for u in "${excluded[@]}"; do
         printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
+        printf "%s\n" "$u" > ./targets/"$target"/"$foldername"/excluded.txt
       done
-    # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
-#    grep -vFf ./"$target"/excluded.txt ./"$target"/alldomains.txt > ./"$target"/alldomains2.txt
-#    mv ./"$target"/alldomains2.txt ./"$target"/alldomains.txt
-    #rm ./$domain/$foldername/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
+      # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
+      grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/excluded-responsive-domains-80-443.txt
+      mv ./targets/"$target"/"$foldername"/excluded-responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+      #rm ./targets/"$target"/"$foldername"/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
       echo "${green}Subdomains that have been excluded from discovery:${reset}"
       printf "%s\n" "${excluded[@]}"
     fi
