@@ -109,6 +109,7 @@ excludedomains(){
     echo "No domains have been excluded."
   else
     echo "Excluding domains (if you set them with -e)..."
+    cp ./amass_config.ini ./amass_config.bak
     for u in "${excluded[@]}"; do
       printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
     done
@@ -245,6 +246,12 @@ notify_error(){
     data1=''{\"text\":\"There\ was\ an\ error\ on\ your\ scan\ of\ "'"$target"'"!\ Check\ your\ instance\ of\ \`the\_hunting.sh\`\.\ \`the\_hunting.sh\`\ still\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
     curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     echo "${green}Notification sent!${reset}"
+  fi
+}
+
+undo_amass_config(){
+  if [ -s ./amass_config.bak ]; then
+    mv ./amass_config.bak ./amass_config.ini
   fi
 }
 
@@ -416,6 +423,7 @@ foldername=$todate"-"$totime
 if [ -s ./deepdive/subdomain.txt ]; then
   excludedomains
   subdomain_option
+  undo_amass_config
 else
   main "$target"
 fi
