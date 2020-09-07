@@ -255,6 +255,11 @@ undo_amass_config(){
   fi
 }
 
+undo_subdomain_file(){
+  if [ -s ./deepdive/subdomain.txt ]; then
+    echo "" > ./deepdive/subdomain.txt
+  fi
+}
 read_direct_wordlist(){
   cat ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
@@ -340,6 +345,7 @@ subdomain_option(){
   touch ./deepdive/nuclei-vulns.json
   subdomain_scanning
   notify_subdomain_scan
+  undo_subdomain_file
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
   stty sane
