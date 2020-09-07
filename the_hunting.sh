@@ -345,7 +345,6 @@ subdomain_option(){
   touch ./deepdive/nuclei-vulns.json
   subdomain_scanning
   notify_subdomain_scan
-  undo_subdomain_file
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
   stty sane
@@ -425,10 +424,11 @@ todate=$(date +"%Y-%m-%d")
 totime=$(date +"%I:%M")
 path=$(pwd)
 foldername=$todate"-"$totime
-if [ -s ./deepdive/subdomain.txt ]; then
+if [ -z "$subdomain_scan_target" ]; then
+  main "$target"
+else
   excludedomains
   subdomain_option
   undo_amass_config
-else
-  main "$target"
+  undo_subdomain_file
 fi
