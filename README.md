@@ -59,13 +59,15 @@ Scan a CSV list of subdomains from the cli
 
 ![](https://github.com/incredincomp/usage-videos/blob/master/the_hunting1.PNG)
 
+_Anything crossed out currently is implemented to a point, but turned off in the production version. Manually uncomment them in the script if you want to use them_
+
 ## Recon
 
 ### Subdomains
 
 #### Subdomain Enum
-gobuster - vhost & dns
-https://github.com/OJ/gobuster
+~~gobuster - vhost & dns
+https://github.com/OJ/gobuster~~
 
 Amass
 https://github.com/OWASP/Amass
@@ -91,8 +93,8 @@ https://github.com/michenriksen/aquatone
 to-do: Dirb
 https://tools.kali.org/web-applications/dirb
 
-Gobuster - dir
-https://github.com/OJ/gobuster
+~~Gobuster - dir
+https://github.com/OJ/gobuster~~
 
 ### Port Scanning
 #### To-do: nmap
