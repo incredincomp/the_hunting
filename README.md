@@ -19,9 +19,11 @@ Connect to your axiom droplet
 `axiom-ssh <instance> --tmux`
 
 ## Set up `the_hunting.sh`
-`git pull https://github.com/incredincomp/the_hunting`
 
-`cd ~/the_hunting`
+```bash
+git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git
+cd the_hunting/
+```
 
 ### need to run install.sh on fresh ubuntu 20.04 to install pre-req tools that come with axiom *THIS IS UNTESTED AND DANGEROUS, GOOD LUCK
 `chmod +x install.sh the_hunting.sh`
