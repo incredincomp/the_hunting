@@ -382,7 +382,15 @@ open_program(){
 
 # main
 main(){
-  if [ -z "$subdomain_scan_target" ]; then
+  if [ -s ./deepdive/subdomain.txt ]; then
+    clear
+    open_program
+    echo "${green}Scanning only.. please wait.${reset}"
+    excludedomains "$excluded"
+    subdomain_option
+    undo_amass_config
+    undo_subdomain_file
+  else #scanning only
     clear
     open_program
     if [ -d "./targets/"$target"" ]
@@ -424,14 +432,6 @@ main(){
     echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
     stty sane
     tput sgr0
-  else #scanning only
-    clear
-    open_program
-    echo "${green}Scanning only.. please wait.${reset}"
-    excludedomains "$excluded"
-    subdomain_option
-    undo_amass_config
-    undo_subdomain_file
   fi
 }
 todate=$(date +"%Y-%m-%d")
