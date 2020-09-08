@@ -2,6 +2,9 @@
 a *cheap* vuln finding robot. Currently in Dev. Please be careful with it. Its a violent script if I've ever written one. Only does Recon branch fully right now, still pretty useful probably. Nothing is rate limited so youll probably get IP blocked over it, specifically during gobuster dir if youre not already banned before getting there.
 Cheers!
 
+< Huge shoutout to my dude @1efty for his help bringing this script into the 21st century!
+
+https://github.com/1efty https://twitter.com/ONEefty />
 # Requirements
 
 * Axiom https://github.com/pry0cc/axiom
