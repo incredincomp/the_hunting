@@ -269,7 +269,7 @@ send_file(){
     echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
   else
     echo "${yellow}File being sent...${reset}"
-    curl -F file=@deepdive/nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels=$slack_channel -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
+    curl -F file=@deepdive/nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels="$slack_channel" -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
     echo "${green}File sent!${reset}"
   fi
 }
