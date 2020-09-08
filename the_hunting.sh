@@ -283,7 +283,8 @@ undo_amass_config(){
 
 undo_subdomain_file(){
   if [ -s ./deepdive/subdomain.txt ]; then
-    echo "" > ./deepdive/subdomain.txt
+    rm ./deepdive/subdomain.txt
+    touch ./deepdive/subdomain.txt
   fi
 }
 read_direct_wordlist(){
@@ -292,6 +293,10 @@ read_direct_wordlist(){
 
 uniq_subdomains(){
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
+}
+# working on this
+make_scan_list(){
+  cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | tr '\n' ',' > csv-responsive-domains.txt
 }
 # children
 subdomain_enum(){
@@ -372,6 +377,7 @@ subdomain_option(){
   subdomain_scanning
   notify_subdomain_scan
   send_file
+  undo_subdomain_file
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
   stty sane
@@ -411,8 +417,6 @@ main(){
     echo "${green}Scanning only.. please wait.${reset}"
     excludedomains "$excluded"
     subdomain_option
-    undo_amass_config
-    undo_subdomain_file
   else #scanning only
     clear
     open_program
@@ -450,6 +454,7 @@ main(){
     recon "$target"
     validation
     notify_finished
+    undo_amass_config
     echo "${green}Scan for "$target" finished successfully${reset}"
     duration=$SECONDS
     echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
