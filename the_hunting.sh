@@ -386,7 +386,6 @@ main(){
     clear
     open_program
     echo "${green}Scanning only.. please wait.${reset}"
-    excludedomains "$excluded"
     subdomain_option
     undo_amass_config
     undo_subdomain_file
