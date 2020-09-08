@@ -124,8 +124,8 @@ excludedomains(){
         printf "%s\n" "$u" > ./targets/"$target"/"$foldername"/excluded.txt
       done
       # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
-      grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/excluded-responsive-domains-80-443.txt
-      mv ./targets/"$target"/"$foldername"/excluded-responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+      #grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/excluded-responsive-domains-80-443.txt
+      #mv ./targets/"$target"/"$foldername"/excluded-responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
       #rm ./targets/"$target"/"$foldername"/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
       echo "${green}Subdomains that have been excluded from discovery:${reset}"
       printf "%s\n" "${excluded[@]}"
@@ -411,7 +411,7 @@ open_program(){
 
 # main
 main(){
-  if [ -s ./deepdive/subdomain.txt ]; then
+  if [[ -z ${subdomain_scan_target[*]} ]]; then
     clear
     open_program
     echo "${green}Scanning only.. please wait.${reset}"
