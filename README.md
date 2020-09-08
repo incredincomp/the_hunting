@@ -37,7 +37,18 @@ need sudo for program installs with apt
 `sudo ./install.sh -i`
 
 ## Usage
+Recon a root domain name for responsive subdomains
+
 `./the_hunting.sh -d <target domain>`
+
+Exclude out of scope domains from your recon results before scanning
+
+`./the_hunting.sh -d <target domain> -e excluded.domain.com,other.domain.com`
+
+Scan a CSV list of subdomains from the cli
+
+`./the_hunting.sh -s sub.domain.com,sue.domain.com,paul.domain.com`
+
 
 # Methodology
 
