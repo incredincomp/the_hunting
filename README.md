@@ -11,6 +11,11 @@ https://github.com/1efty https://twitter.com/ONEefty />
 * DigitalOcean Account
 * Some API keys if you want good results for subdomain enum
 
+# Warning
+Slack integration is included.. you need to add some data to aptly named files and you should be off to the races. Mind you, if you set up file upload by filling in the proper data in `./bot_user_oauth_at.txt` and `./slack_channel.txt`, you also need to have the a bot setup with the proper permissions to post files to whatever channel, then invite the bot to that channel. 
+
+Your data is in slacks hands then though, so if you are working within specific privacy and private program scopes, you may need to adjust course accordingly and do some research before you start dumping possibly important data on your targets into slacks servers and therefore the world. Be smart about it.
+
 # Commands
 ## Axiom
 Start your axiom droplet
