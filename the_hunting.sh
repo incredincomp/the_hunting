@@ -58,6 +58,16 @@ if [ -s ./slack_url.txt ]; then
 else
   slack_url=""
 fi
+if [ -s ./bot_user_oauth_at.txt ]; then
+  bot_token=$(<bot_user_oauth_at.txt)
+else
+  bot_token=""
+fi
+if [ -s ./slack_channel ]; then
+  slack_channel=$(<slack_channel.txt)
+else
+  slack_channel=""
+fi
 
 target=""
 subdomain_scan_target=""
@@ -252,6 +262,19 @@ notify_error(){
   fi
 }
 
+send_file(){
+  if [ -z "$slack_channel" ] && [ -z "$bot_token" ]; then
+    echo "${red}Notifications not set up."
+    echo "${red}Add your slack channel to ./slack_channel.txt"
+    echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
+  else
+    echo "${yellow}File being sent...${reset}"
+    num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
+    curl -F file=@deepdive/nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels=$slack_channel -H "Authorization: Bearer "$bot_token"" https://slack.com/api/files.upload
+    echo "${green}File sent!${reset}"
+  fi
+}
+
 undo_amass_config(){
   if [ -s ./amass_config.bak ]; then
     mv ./amass_config.bak ./amass_config.ini
@@ -388,6 +411,7 @@ main(){
     echo "${green}Scanning only.. please wait.${reset}"
     excludedomains "$excluded"
     subdomain_option
+    send_file
     undo_amass_config
     undo_subdomain_file
   else #scanning only
