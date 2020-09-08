@@ -107,8 +107,6 @@ fi
 excludedomains(){
     echo "Excluding domains (if you set them with -e)..."
     if [ "${#excluded[@]}" -eq 0 ]; then
-      echo "No subdomains have been exluded"
-    else
       touch ./targets/"$target"/"$foldername"/excluded.txt
       cp ./amass_config.ini ./amass_config.bak
       for u in "${excluded[@]}"; do
@@ -121,6 +119,8 @@ excludedomains(){
       #rm ./targets/"$target"/"$foldername"/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
       echo "${green}Subdomains that have been excluded from discovery:${reset}"
       printf "%s\n" "${excluded[@]}"
+    else
+      echo "No subdomains have been exluded"
     fi
 }
 # parents
@@ -386,6 +386,7 @@ main(){
     clear
     open_program
     echo "${green}Scanning only.. please wait.${reset}"
+    excludedomains "$excluded"
     subdomain_option
     undo_amass_config
     undo_subdomain_file
