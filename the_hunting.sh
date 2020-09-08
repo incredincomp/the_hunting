@@ -263,7 +263,7 @@ notify_error(){
 }
 
 send_file(){
-  if [ -z "$slack_channel" ] && [ -z "$bot_token" ]; then
+  if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -s ./deepdive/nuclei-vulns.json ]; then
     echo "${red}Notifications not set up."
     echo "${red}Add your slack channel to ./slack_channel.txt"
     echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
