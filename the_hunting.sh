@@ -411,7 +411,7 @@ open_program(){
 
 # main
 main(){
-  if [[ -z ${subdomain_scan_target[*]} ]]; then
+  if [[ -z "$target" ]]; then
     subdomain_option
   else #scanning only
     clear
