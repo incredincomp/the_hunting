@@ -122,6 +122,7 @@ excludedomains(){
       for u in "${excluded[@]}"; do
         printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
         printf "%s\n" "$u" > ./targets/"$target"/"$foldername"/excluded.txt
+        printf "%s\n" "$u" > ./deepdive/excluded.txt
       done
       # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
       #grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/excluded-responsive-domains-80-443.txt
@@ -295,8 +296,13 @@ uniq_subdomains(){
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
 # working on this
-make_scan_list(){
-  cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | tr '\n' ',' > csv-responsive-domains.txt
+clean_scan_list(){
+  if [ -s ./deepdive/excluded.txt ]; then
+  # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
+    grep -vFf ./deepdive/excluded.txt ./deepdive/subdomain.txt > ./deepdive/subdomain.txt
+  else
+    true
+  fi
 }
 # children
 subdomain_enum(){
@@ -374,6 +380,7 @@ subdomain_option(){
   fi
   touch ./deepdive/subdomain.txt
   touch ./deepdive/nuclei-vulns.json
+  clean_scan_list
   subdomain_scanning
   notify_subdomain_scan
   send_file
