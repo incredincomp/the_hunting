@@ -63,7 +63,7 @@ if [ -s ./bot_user_oauth_at.txt ]; then
 else
   bot_token=""
 fi
-if [ -s ./slack_channel ]; then
+if [ -s ./slack_channel.txt ]; then
   slack_channel=$(<slack_channel.txt)
 else
   slack_channel=""
@@ -269,8 +269,7 @@ send_file(){
     echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
   else
     echo "${yellow}File being sent...${reset}"
-    num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
-    curl -F file=@deepdive/nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels=$slack_channel -H "Authorization: Bearer "$bot_token"" https://slack.com/api/files.upload
+    curl -F file=@deepdive/nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels=$slack_channel -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
     echo "${green}File sent!${reset}"
   fi
 }
@@ -372,6 +371,7 @@ subdomain_option(){
   touch ./deepdive/nuclei-vulns.json
   subdomain_scanning
   notify_subdomain_scan
+  send_file
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
   stty sane
@@ -411,7 +411,6 @@ main(){
     echo "${green}Scanning only.. please wait.${reset}"
     excludedomains "$excluded"
     subdomain_option
-    send_file
     undo_amass_config
     undo_subdomain_file
   else #scanning only
