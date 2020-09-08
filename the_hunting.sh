@@ -412,10 +412,6 @@ open_program(){
 # main
 main(){
   if [[ -z ${subdomain_scan_target[*]} ]]; then
-    clear
-    open_program
-    echo "${green}Scanning only.. please wait.${reset}"
-    excludedomains "$excluded"
     subdomain_option
   else #scanning only
     clear
