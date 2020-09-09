@@ -122,17 +122,21 @@ excludedomains(){
       for u in "${excluded[@]}"; do
         printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
         printf "%s\n" "$u" > ./targets/"$target"/"$foldername"/excluded.txt
-        printf "%s\n" "$u" > ./deepdive/excluded.txt
+        #printf "%s\n" "$u" > ./deepdive/excluded.txt
       done
       # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
-      #grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/excluded-responsive-domains-80-443.txt
-      #mv ./targets/"$target"/"$foldername"/excluded-responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+      #grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
+      #mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
       #rm ./targets/"$target"/"$foldername"/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
       echo "${green}Subdomains that have been excluded from discovery:${reset}"
       printf "%s\n" "${excluded[@]}"
     else
       echo "No subdomains have been exluded"
     fi
+}
+double_check_excluded(){
+  grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
+  mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
 }
 # parents
 run_amass(){
@@ -210,7 +214,7 @@ run_dirb(){
   true
 }
 run_nuclei(){
-  echo "${yellow}Running Nuclei stock cve templates scan...${reset}"
+  echo "${yellow}Running Nuclei templates scan...${reset}"
   nuclei -v -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
 #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
 #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
@@ -264,7 +268,7 @@ notify_error(){
 }
 
 send_file(){
-  if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -s ./deepdive/nuclei-vulns.json ]; then
+  if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./deepdive/nuclei-vulns.json ]; then
     echo "${red}Notifications not set up."
     echo "${red}Add your slack channel to ./slack_channel.txt"
     echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
@@ -278,7 +282,7 @@ send_file(){
 undo_amass_config(){
   if [ -s ./amass_config.bak ]; then
     mv ./amass_config.bak ./amass_config.ini
-    rm ./amass_config.bak
+    #rm ./amass_config.bak
   fi
 }
 
@@ -295,15 +299,13 @@ read_direct_wordlist(){
 uniq_subdomains(){
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
-# working on this
-clean_scan_list(){
-  if [ -s ./deepdive/excluded.txt ]; then
-  # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
-    grep -vFf ./deepdive/excluded.txt ./deepdive/subdomain.txt > ./deepdive/subdomain.txt
-  else
-    true
-  fi
+
+
+make_csv(){
+  touch ./csvs/"$target""-"csv.txt
+  paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./csvs/"$target""-"csv.txt
 }
+
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
@@ -380,7 +382,6 @@ subdomain_option(){
   fi
   touch ./deepdive/subdomain.txt
   touch ./deepdive/nuclei-vulns.json
-  clean_scan_list
   subdomain_scanning
   notify_subdomain_scan
   send_file
@@ -458,6 +459,7 @@ main(){
     validation
     notify_finished
     undo_amass_config
+    double_check_excluded
     echo "${green}Scan for "$target" finished successfully${reset}"
     duration=$SECONDS
     echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
