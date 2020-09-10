@@ -118,10 +118,10 @@ excludedomains(){
     else
       touch ./targets/"$target"/"$foldername"/excluded.txt
       #cp ./amass_config.ini ./amass_config.bak
-      #IFS=$'\n'
+      IFS=$'\n'
       #for u in "${excluded[*]}"; do
         #printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
-      printf "%s\n" "${excluded[*]}" >> ./targets/"$target"/"$foldername"/excluded.txt
+      printf "%s\n" "${excluded[*]}" > ./targets/"$target"/"$foldername"/excluded.txt
         #printf "%s\n" "$u" > ./deepdive/excluded.txt
       #done
       #unset IFS
@@ -130,8 +130,9 @@ excludedomains(){
       #mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
       #rm ./targets/"$target"/"$foldername"/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
       echo "${green}Subdomains that have been excluded from discovery:${reset}"
-      #printf "%s\n" ${excluded[@]}
-      cat ./targets/"$target"/"$foldername"/excluded.txt
+      printf "%s\n" "${excluded[@]}"
+      unset IFS
+      #cat ./targets/"$target"/"$foldername"/excluded.txt
     fi
 }
 double_check_excluded(){
