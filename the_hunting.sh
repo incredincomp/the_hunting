@@ -31,7 +31,7 @@
 #                for details, type `./the_hunting.sh -l'.
 #===============================================================================
 clear
-#set -o nounset                 # Treat unset variables as an error
+set -o nounset                 # Treat unset variables as an error
 set -e
 #set -xv                       # Uncomment to print script in console for debug
 
@@ -117,14 +117,14 @@ excludedomains(){
       echo "No subdomains have been exluded"
     else
       touch ./targets/"$target"/"$foldername"/excluded.txt
-      cp ./amass_config.ini ./amass_config.bak
-      IFS=$'\n'
+      #cp ./amass_config.ini ./amass_config.bak
+      #IFS=$'\n'
       for u in "${excluded[@]}"; do
-        printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
+        #printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
         printf "%s\n" "$u" > ./targets/"$target"/"$foldername"/excluded.txt
         #printf "%s\n" "$u" > ./deepdive/excluded.txt
       done
-      unset IFS
+      #unset IFS
       # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
       #grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
       #mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
