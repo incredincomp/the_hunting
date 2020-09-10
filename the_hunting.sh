@@ -80,12 +80,12 @@ while getopts "d:s:el" o; do
             target="$OPTARG"
             ;;
         e)
-            excluded=(${OPTARG/,/ })
+            excluded=("${OPTARG/,/ }")
             ;;
         s)
             set -f
             IFS=","
-            subdomain_scan_target+=($OPTARG)
+            subdomain_scan_target+=("$OPTARG")
             unset IFS
             if [ -s ./deepdive/subdomain.txt ]; then
               mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
@@ -119,7 +119,7 @@ excludedomains(){
       touch ./targets/"$target"/"$foldername"/excluded.txt
       #cp ./amass_config.ini ./amass_config.bak
       #IFS=$'\n'
-      for u in ${excluded[@]}; do
+      for u in "${excluded[@]}"; do
         #printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
         printf "%s\n" "$u" > ./targets/"$target"/"$foldername"/excluded.txt
         #printf "%s\n" "$u" > ./deepdive/excluded.txt
