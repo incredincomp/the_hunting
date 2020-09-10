@@ -80,7 +80,10 @@ while getopts "d:s:el" o; do
             target="$OPTARG"
             ;;
         e)
-            excluded=("${OPTARG/,/ }")
+            set -f
+            IFS=","
+            excluded+=($OPTARG)
+            unset IFS
             ;;
         s)
             set -f
