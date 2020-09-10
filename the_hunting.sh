@@ -113,7 +113,7 @@ fi
 
 excludedomains(){
     echo "Excluding domains (if you set them with -e)..."
-    if [ ${#excluded[@]} -eq 0 ]; then
+    if [ ${#excluded[@]} -eq 1 ]; then
       echo "No subdomains have been exluded"
     else
       touch ./targets/"$target"/"$foldername"/excluded.txt
