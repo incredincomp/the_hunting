@@ -119,7 +119,7 @@ excludedomains(){
       touch ./targets/"$target"/"$foldername"/excluded.txt
       #cp ./amass_config.ini ./amass_config.bak
       #IFS=$'\n'
-      for u in ${#excluded[@]}; do
+      for u in ${excluded[@]}; do
         #printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
         printf "%s\n" "$u" > ./targets/"$target"/"$foldername"/excluded.txt
         #printf "%s\n" "$u" > ./deepdive/excluded.txt
