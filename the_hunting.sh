@@ -119,11 +119,11 @@ excludedomains(){
       touch ./targets/"$target"/"$foldername"/excluded.txt
       #cp ./amass_config.ini ./amass_config.bak
       #IFS=$'\n'
-      for u in "${excluded[*]}"; do
+      #for u in "${excluded[*]}"; do
         #printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
-        printf "%s\n" $u > ./targets/"$target"/"$foldername"/excluded.txt
+      printf "%s\n" "${excluded[*]}" >> ./targets/"$target"/"$foldername"/excluded.txt
         #printf "%s\n" "$u" > ./deepdive/excluded.txt
-      done
+      #done
       #unset IFS
       # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
       #grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
