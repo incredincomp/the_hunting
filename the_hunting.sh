@@ -11,18 +11,19 @@
 #          my workflow from countless bb folk, most notibly and recently from
 #          @hakluke on his "how to crush bug bounties in your first 12 months"
 #          which you can find here https://youtu.be/u_4FUs2vlKg?t=20009
-#          thanks everyone
+#          thanks everyone, SPECIALLY @1efty!!! Thanks ;)
 #
 #       OPTIONS: ---
 #  REQUIREMENTS: amass, gobuster, subjack, aquatone, httprobe, dirb, nmap,
-#                nuclei, chromium, and parallel on ubuntu 20.04 or axiom droplet
+#                nuclei, chromium, and parallel on ubuntu 20.04 or just
+#                use an axiom droplet
 #
 #          BUGS:
-#         NOTES: v0.3.1
+#         NOTES: v0.3.2
 #        AUTHOR: @incredincomp
 #  ORGANIZATION:
 #       CREATED: 08/27/2020 16:55:54
-#      REVISION: 09/07/2020 01:29:00
+#      REVISION: 09/10/2020 00:08:00
 #     LICENSING: the_hunting Copyright (C) 2020  @incredincomp
 #                This program comes with ABSOLUTELY NO WARRANTY;
 #                for details, type `./the_hunting.sh -l'.
@@ -137,10 +138,6 @@ excludedomains(){
       unset IFS
       #cat ./targets/"$target"/"$foldername"/excluded.txt
     fi
-}
-double_check_excluded(){
-  grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
-  mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
 }
 # parents
 run_amass(){
@@ -299,17 +296,17 @@ undo_subdomain_file(){
 read_direct_wordlist(){
   cat ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
-
 uniq_subdomains(){
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
-
-
 make_csv(){
   touch ./csvs/"$target""-"csv.txt
   paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./csvs/"$target""-"csv.txt
 }
-
+double_check_excluded(){
+  grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
+  mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+}
 # children
 subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
@@ -444,26 +441,24 @@ main(){
     mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/parsedjson/
     mkdir ./targets/"$target"/"$foldername"/subdomain_enum/
     mkdir ./targets/"$target"/"$foldername"/subdomain_enum/amass/
-    mkdir ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/
+    #mkdir ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/
     mkdir ./targets/"$target"/"$foldername"/screenshots/
-    mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/
-    mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/
+    #mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/
+    #mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/
     mkdir ./targets/"$target"/"$foldername"/scanning/
-    mkdir ./targets/"$target"/"$foldername"/scanning/nmap/
+    #mkdir ./targets/"$target"/"$foldername"/scanning/nmap/
     mkdir ./targets/"$target"/"$foldername"/scanning/nuclei/
     touch ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
     touch ./targets/"$target"/"$foldername"/subdomain-takeover-results.json
-    touch ./targets/"$target"/"$foldername"/live_paths.txt
     touch ./targets/"$target"/"$foldername"/alldomains.txt
-    touch ./targets/"$target"/"$foldername"/ipaddress.txt
     touch ./targets/"$target"/"$foldername"/temp-clean.txt
 
     excludedomains
     recon "$target"
     validation
     notify_finished
-    undo_amass_config
     double_check_excluded
+    make_csv
     echo "${green}Scan for "$target" finished successfully${reset}"
     duration=$SECONDS
     echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
