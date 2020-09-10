@@ -74,7 +74,7 @@ subdomain_scan_target=""
 declare -a excluded=()
 usage() { echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
 
-while getopts "d:s:el" o; do
+while getopts ":d:s:e:l" o; do
     case "${o}" in
         d)
             target="$OPTARG"
