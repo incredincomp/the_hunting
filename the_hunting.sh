@@ -131,7 +131,7 @@ excludedomains(){
       #mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
       #rm ./targets/"$target"/"$foldername"/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
       echo "${green}Subdomains that have been excluded from discovery:${reset}"
-      printf "%s\n" "${excluded[@]}"
+      printf "%s\n" ${excluded[@]}
     fi
 }
 double_check_excluded(){
