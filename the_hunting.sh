@@ -80,10 +80,7 @@ while getopts "d:s:el" o; do
             target="$OPTARG"
             ;;
         e)
-            set -f
-            IFS=","
-            excluded+=($OPTARG)
-            unset IFS
+            excluded=(${OPTARG/,/ })
             ;;
         s)
             set -f
@@ -121,17 +118,20 @@ excludedomains(){
     else
       touch ./targets/"$target"/"$foldername"/excluded.txt
       cp ./amass_config.ini ./amass_config.bak
+      IFS=$'\n'
       for u in "${excluded[@]}"; do
         printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
         printf "%s\n" "$u" > ./targets/"$target"/"$foldername"/excluded.txt
         #printf "%s\n" "$u" > ./deepdive/excluded.txt
       done
+      unset IFS
       # this form of grep takes two files, reads the input from the first file, finds in the second file and removes
       #grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
       #mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
       #rm ./targets/"$target"/"$foldername"/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
       echo "${green}Subdomains that have been excluded from discovery:${reset}"
-      printf "%s\n" ${excluded[@]}
+      #printf "%s\n" ${excluded[@]}
+      cat ./targets/"$target"/"$foldername"/excluded.txt
     fi
 }
 double_check_excluded(){
