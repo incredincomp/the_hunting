@@ -116,7 +116,7 @@ fi
 
 excludedomains(){
     echo "Excluding domains (if you set them with -e)..."
-    if [ "${#excluded[@]}" -eq 0 ]; then
+    if [ ${#excluded[@]} -eq 0 ]; then
       echo "No subdomains have been exluded"
     else
       touch ./targets/"$target"/"$foldername"/excluded.txt
@@ -132,7 +132,6 @@ excludedomains(){
       #rm ./targets/"$target"/"$foldername"/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
       echo "${green}Subdomains that have been excluded from discovery:${reset}"
       printf "%s\n" "${excluded[@]}"
-
     fi
 }
 double_check_excluded(){
