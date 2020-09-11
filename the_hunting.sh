@@ -87,18 +87,13 @@ while getopts ":d:s:e:l" o; do
             unset IFS
             ;;
         s)
-            set -f
-            IFS=","
             subdomain_scan_target+=("$OPTARG")
-            unset IFS
             if [ -s ./deepdive/subdomain.txt ]; then
               mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
             fi
-            IFS=$'\n'
             for u in "${subdomain_scan_target[@]}"; do
-              printf "%s\n" "$u" >> ./deepdive/subdomain.txt
+              printf "%s\n" "$u" > ./deepdive/subdomain.txt
             done
-            unset IFS
             ;;
         l)
             less ./LICENSE
@@ -250,11 +245,15 @@ notify_subdomain_scan(){
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
     echo "${yellow}Notification being generated and sent...${reset}"
-    num_of_vuln=$(< ./deepdive/nuclei-vulns.json  wc -l)
-    data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
-    curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
-    echo "${green}Notification sent!${reset}"
+    if [ -s ./deepdive/nuclei-vulns.json ]; then
+      num_of_vuln=$(< ./deepdive/nuclei-vulns.json  wc -l)
+      data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
+      curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    else
+      data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ 0\ vulnerabilities.\"}''
+      curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
   fi
+  echo "${green}Notification sent!${reset}"
 }
 notify_error(){
   if [ -z "$slack_url" ]; then
