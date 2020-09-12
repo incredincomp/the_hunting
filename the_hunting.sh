@@ -154,7 +154,6 @@ run_amass(){
 }
 #new amass
 run_json_amass(){
-  echo "${yellow}Running Amass enum...${reset}"
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
     amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   else
@@ -165,7 +164,6 @@ run_json_amass(){
     #notify_error
   #fi
   #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
-  echo "${green}Amass enum finished.${reset}"
 }
 #gobuster vhost broken
 run_gobuster_vhost(){
