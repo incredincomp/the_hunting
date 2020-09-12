@@ -81,10 +81,7 @@ while getopts ":d:s:e:l" o; do
             target="$OPTARG"
             ;;
         e)
-            set -f
-            IFS=","
-            excluded+=($OPTARG)
-            unset IFS
+            excluded="$OPTARG"
             ;;
         s)
             set -f
@@ -149,6 +146,21 @@ run_amass(){
     amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   else
     amass enum -norecursive --passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
+  fi
+  #ret=$?
+  #if [[ $ret -ne 0 ]] ; then
+    #notify_error
+  #fi
+  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
+  echo "${green}Amass enum finished.${reset}"
+}
+#new amass
+run_json_amass(){
+  echo "${yellow}Running Amass enum...${reset}"
+  if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
+    amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txtaw -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+  else
+    amass enum -norecursive --passive -config ./amass_config.ini -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   fi
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
@@ -240,7 +252,7 @@ run_zap(){
 run_nmap(){
   true
 }
-#notifications
+# notifications slack
 notify_finished(){
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
@@ -322,6 +334,9 @@ make_csv(){
 double_check_excluded(){
   grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
   mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+}
+parse_json(){
+
 }
 # children
 subdomain_enum(){
