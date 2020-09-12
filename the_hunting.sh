@@ -333,9 +333,9 @@ double_check_excluded(){
 }
 parse_json(){
   # ips
-  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json | jq '.addresses[].ip' > ./targets/"$target"/"$foldername"/"$target"-ips.txt
+  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json | jq -r '.addresses[].ip' > ./targets/"$target"/"$foldername"/"$target"-ips.txt
   #domain names
-  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json | jq '.name' > ./targets/"$target"/"$foldername"/subdomains-jq.txt
+  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json | jq -r '.name' > ./targets/"$target"/"$foldername"/subdomains-jq.txt
 }
 # children
 subdomain_enum(){
@@ -343,6 +343,7 @@ subdomain_enum(){
 #Amass https://github.com/OWASP/Amass
   #run_amass
   run_json_amass
+  parse_json
   echo "${green}Amass enum finished.${reset}"
 #Gobuster trying to make them run at same time
   #run_gobuster_vhost
