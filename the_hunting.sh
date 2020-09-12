@@ -87,13 +87,18 @@ while getopts ":d:s:e:l" o; do
             unset IFS
             ;;
         s)
-            subdomain_scan_target+=("$OPTARG")
+            set -f
+            IFS=","
+            subdomain_scan_target+=($OPTARG)
+            unset IFS
             if [ -s ./deepdive/subdomain.txt ]; then
               mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
             fi
+            IFS=$'\n'
             for u in "${subdomain_scan_target[@]}"; do
-              printf "%s\n" "$u" > ./deepdive/subdomain.txt
+              printf "%s\n" "$u" >> ./deepdive/subdomain.txt
             done
+            unset IFS
             ;;
         l)
             less ./LICENSE
@@ -252,6 +257,7 @@ notify_subdomain_scan(){
     else
       data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ 0\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    fi
   fi
   echo "${green}Notification sent!${reset}"
 }
@@ -268,14 +274,18 @@ notify_error(){
 }
 
 send_file(){
-  if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./deepdive/nuclei-vulns.json ]; then
-    echo "${red}Notifications not set up."
-    echo "${red}Add your slack channel to ./slack_channel.txt"
-    echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
+  if [ -z "$slack_url" ]; then
+    echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
-    echo "${yellow}File being sent...${reset}"
-    curl -F file=@deepdive/nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels="$slack_channel" -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
-    echo "${green}File sent!${reset}"
+    if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./deepdive/nuclei-vulns.json ]; then
+      echo "${red}Notifications not set up."
+      echo "${red}Add your slack channel to ./slack_channel.txt"
+      echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
+    else
+      echo "${yellow}File being sent...${reset}"
+      curl -F file=@deepdive/nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels="$slack_channel" -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
+      echo "${green}File sent!${reset}"
+    fi
   fi
 }
 
