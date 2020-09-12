@@ -164,6 +164,13 @@ run_json_amass(){
   #fi
   #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
 }
+run_subfinder_json(){
+    subfinder -config subfinder.yaml -d "$target"-o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW
+  #ret=$?
+  #if [[ $ret -ne 0 ]] ; then
+    #notify_error
+  #fi
+}
 #gobuster vhost broken
 run_gobuster_vhost(){
   echo "${yellow}Running Gobuster vhost...${reset}"
@@ -196,7 +203,7 @@ run_subjack(){
 }
 run_httprobe(){
   echo "${yellow}Running httprobe...${reset}"
-  cat ./targets/"$target"/"$foldername"/alldomains.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+  cat ./targets/"$target"/"$foldername"/subdomains-jq.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   ret=$?
   if [[ $ret -ne 0 ]] ; then
     notify_error
@@ -205,7 +212,7 @@ run_httprobe(){
 }
 run_aqua(){
   echo "${yellow}Running Aquatone...${reset}"
-  cat ./targets/"$target"/"$foldername"/alldomains.txt | aquatone -threads $auquatoneThreads -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out
+  cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | aquatone -threads $auquatoneThreads -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out
   ret=$?
   if [[ $ret -ne 0 ]] ; then
     notify_error
@@ -332,16 +339,17 @@ double_check_excluded(){
 }
 parse_json(){
   # ips
-  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json | jq -r '.addresses[].ip' > ./targets/"$target"/"$foldername"/"$target"-ips.txt
+  cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.ip' > ./targets/"$target"/"$foldername"/"$target"-ips.txt
   #domain names
-  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json | jq -r '.name' > ./targets/"$target"/"$foldername"/subdomains-jq.txt
+  cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.name' > ./targets/"$target"/"$foldername"/subdomains-jq.txt
 }
 # children
 subdomain_enum(){
   echo "${yellow}Running Amass enum...${reset}"
 #Amass https://github.com/OWASP/Amass
   #run_amass
-  run_json_amass
+  #run_json_amass
+  run_subfinder_json
   parse_json
   echo "${green}Amass enum finished.${reset}"
 #Gobuster trying to make them run at same time
@@ -473,7 +481,7 @@ main(){
     mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/
     mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/parsedjson/
     mkdir ./targets/"$target"/"$foldername"/subdomain_enum/
-    mkdir ./targets/"$target"/"$foldername"/subdomain_enum/amass/
+    #mkdir ./targets/"$target"/"$foldername"/subdomain_enum/amass/
     #mkdir ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/
     mkdir ./targets/"$target"/"$foldername"/screenshots/
     #mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/
