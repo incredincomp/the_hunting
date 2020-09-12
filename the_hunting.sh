@@ -31,7 +31,6 @@
 #                it under certain conditions;
 #                for details, type `./the_hunting.sh -l'.
 #===============================================================================
-clear
 #set -o nounset                 # Treat unset variables as an error
 set -e
 #set -xv                       # Uncomment to print script in console for debug
@@ -155,9 +154,9 @@ run_amass(){
 #new amass
 run_json_amass(){
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
-    amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+    amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   else
-    amass enum -norecursive --passive -config ./amass_config.ini -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+    amass enum -norecursive --passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   fi
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
