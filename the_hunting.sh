@@ -81,10 +81,7 @@ while getopts ":d:s:e:l" o; do
             target="$OPTARG"
             ;;
         e)
-            set -f
-            IFS=","
-            excluded+=($OPTARG)
-            unset IFS
+            excluded="$OPTARG"
             ;;
         s)
             set -f
@@ -240,7 +237,7 @@ run_zap(){
 run_nmap(){
   true
 }
-#notifications
+# notifications slack
 notify_finished(){
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
