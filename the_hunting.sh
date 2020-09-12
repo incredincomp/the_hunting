@@ -141,7 +141,6 @@ excludedomains(){
 }
 # parents
 run_amass(){
-  echo "${yellow}Running Amass enum...${reset}"
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
     amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   else
@@ -152,10 +151,22 @@ run_amass(){
     #notify_error
   #fi
   cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
-  echo "${green}Amass enum finished.${reset}"
 }
 #new amass
-
+run_json_amass(){
+  echo "${yellow}Running Amass enum...${reset}"
+  if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
+    amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txtaw -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+  else
+    amass enum -norecursive --passive -config ./amass_config.ini -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+  fi
+  #ret=$?
+  #if [[ $ret -ne 0 ]] ; then
+    #notify_error
+  #fi
+  #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
+  echo "${green}Amass enum finished.${reset}"
+}
 #gobuster vhost broken
 run_gobuster_vhost(){
   echo "${yellow}Running Gobuster vhost...${reset}"
@@ -322,10 +333,19 @@ double_check_excluded(){
   grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
   mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
 }
+parse_json(){
+  # ips
+  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json | jq '.addresses[].ip' > ./targets/"$target"/"$foldername"/"$target"-ips.txt
+  #domain names
+  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json | jq '.name' > ./targets/"$target"/"$foldername"/subdomains-jq.txt
+}
 # children
 subdomain_enum(){
+  echo "${yellow}Running Amass enum...${reset}"
 #Amass https://github.com/OWASP/Amass
-  run_amass
+  #run_amass
+  run_json_amass
+  echo "${green}Amass enum finished.${reset}"
 #Gobuster trying to make them run at same time
   #run_gobuster_vhost
   #run_gobuster_dns
@@ -467,6 +487,8 @@ main(){
     touch ./targets/"$target"/"$foldername"/subdomain-takeover-results.json
     touch ./targets/"$target"/"$foldername"/alldomains.txt
     touch ./targets/"$target"/"$foldername"/temp-clean.txt
+    touch ./targets/"$target"/"$foldername"/subdomains-jq.txt
+    touch ./targets/"$target"/"$foldername"/"$target"-ips.txt
 
     excludedomains
     recon "$target"
