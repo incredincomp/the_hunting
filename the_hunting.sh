@@ -141,9 +141,9 @@ excludedomains(){
 # parents
 run_amass(){
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
-    amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
+    amass enum -norecursive -passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   else
-    amass enum -norecursive --passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
+    amass enum -norecursive -passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   fi
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
@@ -154,9 +154,9 @@ run_amass(){
 #new amass
 run_json_amass(){
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
-    amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+    amass enum -norecursive -passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   else
-    amass enum -norecursive --passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+    amass enum -norecursive -passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   fi
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
