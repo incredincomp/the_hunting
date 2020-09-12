@@ -117,15 +117,17 @@ fi
 
 excludedomains(){
     echo "Excluding domains (if you set them with -e)..."
-    if [ ${#excluded[@]} -eq 0 ]; then
+    if [ -z "$excluded" ]; then
       echo "No subdomains have been exluded"
     else
       touch ./targets/"$target"/"$foldername"/excluded.txt
+      #stupid cause its simple and it works
+      echo $excluded | tr -s ',' '\n' >> ./targets/"$target"/"$foldername"/excluded.txt
       #cp ./amass_config.ini ./amass_config.bak
-      IFS=$'\n'
+      #IFS=$'\n'
       #for u in "${excluded[*]}"; do
         #printf "%s\n" "subdomain = ""$u" >> ./amass_config.ini
-      printf "%s\n" "${excluded[*]}" > ./targets/"$target"/"$foldername"/excluded.txt
+        #printf "%s\n" "${excluded[*]}" > ./targets/"$target"/"$foldername"/excluded.txt
         #printf "%s\n" "$u" > ./deepdive/excluded.txt
       #done
       #unset IFS
@@ -134,19 +136,24 @@ excludedomains(){
       #mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
       #rm ./targets/"$target"/"$foldername"/excluded.txt # uncomment to remove excluded.txt, I left for testing purposes
       echo "${green}Subdomains that have been excluded from discovery:${reset}"
-      printf "%s\n" "${excluded[@]}"
-      unset IFS
+      cat ./targets/"$target"/"$foldername"/excluded.txt
+      #printf "%s\n" "${excluded[@]}"
+      #unset IFS
       #cat ./targets/"$target"/"$foldername"/excluded.txt
     fi
 }
 # parents
 run_amass(){
   echo "${yellow}Running Amass enum...${reset}"
-  amass enum -norecursive --passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
-  ret=$?
-  if [[ $ret -ne 0 ]] ; then
-    notify_error
+  if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
+    amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
+  else
+    amass enum -norecursive --passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   fi
+  #ret=$?
+  #if [[ $ret -ne 0 ]] ; then
+    #notify_error
+  #fi
   cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Amass enum finished.${reset}"
 }
