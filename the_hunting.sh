@@ -165,7 +165,7 @@ run_json_amass(){
   #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
 }
 run_subfinder_json(){
-    subfinder -config subfinder.yaml -d "$target"-o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW
+    subfinder -config ./subfinder.yaml -d "$target" -o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
     #notify_error
