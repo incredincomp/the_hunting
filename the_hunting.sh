@@ -194,7 +194,7 @@ run_gobuster_dns(){
 }
 run_subjack(){
   echo "${yellow}Running subjack...${reset}"
-  $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/alldomains.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "$HOME/go/src/github.com/haccer/subjack/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
+  $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "$HOME/go/src/github.com/haccer/subjack/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
   ret=$?
   if [[ $ret -ne 0 ]] ; then
     notify_error
@@ -260,7 +260,7 @@ notify_finished(){
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
     echo "${yellow}Notification being generated and sent...${reset}"
-    num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
+    num_of_subd=$(< ./targets/"$target"/"$foldername"/subdomains-jq.txt wc -l)
     data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
     curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     echo "${green}Notification sent!${reset}"
@@ -309,7 +309,7 @@ send_file(){
     fi
   fi
 }
-
+# << remove
 undo_amass_config(){
   if [ -s ./amass_config.bak ]; then
     mv ./amass_config.bak ./amass_config.ini
@@ -323,18 +323,22 @@ undo_subdomain_file(){
     touch ./deepdive/subdomain.txt
   fi
 }
+make_csv(){
+  touch ./csvs/"$target"-csv.txt
+  paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./csvs/"$target"-csv.txt
+}
+# >>
+
 read_direct_wordlist(){
   cat ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
 uniq_subdomains(){
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
-make_csv(){
-  touch ./csvs/"$target""-"csv.txt
-  paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./csvs/"$target""-"csv.txt
-}
+
 double_check_excluded(){
   grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
+  rm ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
 }
 parse_json(){
