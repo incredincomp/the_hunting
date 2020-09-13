@@ -165,7 +165,7 @@ run_json_amass(){
   #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
 }
 run_subfinder_json(){
-    subfinder -config ./subfinder.yaml -d "$target" -o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW
+    subfinder -config ./subfinder.yaml -d "$target" -o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW -all
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
     #notify_error
@@ -345,7 +345,7 @@ parse_json(){
   # ips
   cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.ip' > ./targets/"$target"/"$foldername"/"$target"-ips.txt
   #domain names
-  cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.name' > ./targets/"$target"/"$foldername"/subdomains-jq.txt
+  cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.host' > ./targets/"$target"/"$foldername"/subdomains-jq.txt
 }
 # children
 subdomain_enum(){
