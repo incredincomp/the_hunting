@@ -31,7 +31,6 @@
 #                it under certain conditions;
 #                for details, type `./the_hunting.sh -l'.
 #===============================================================================
-clear
 #set -o nounset                 # Treat unset variables as an error
 set -e
 #set -xv                       # Uncomment to print script in console for debug
@@ -141,21 +140,37 @@ excludedomains(){
 }
 # parents
 run_amass(){
-  echo "${yellow}Running Amass enum...${reset}"
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
-    amass enum -norecursive --passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
+    amass enum -norecursive -passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   else
-    amass enum -norecursive --passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
+    amass enum -norecursive -passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   fi
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
     #notify_error
   #fi
   cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
-  echo "${green}Amass enum finished.${reset}"
 }
 #new amass
-
+run_json_amass(){
+  if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
+    amass enum -norecursive -passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+  else
+    amass enum -norecursive -passive -config ./amass_config.ini -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+  fi
+  #ret=$?
+  #if [[ $ret -ne 0 ]] ; then
+    #notify_error
+  #fi
+  #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
+}
+run_subfinder_json(){
+    subfinder -config ./subfinder.yaml -d "$target" -o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW -all
+  #ret=$?
+  #if [[ $ret -ne 0 ]] ; then
+    #notify_error
+  #fi
+}
 #gobuster vhost broken
 run_gobuster_vhost(){
   echo "${yellow}Running Gobuster vhost...${reset}"
@@ -179,7 +194,7 @@ run_gobuster_dns(){
 }
 run_subjack(){
   echo "${yellow}Running subjack...${reset}"
-  $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/alldomains.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "$HOME/go/src/github.com/haccer/subjack/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
+  $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "$HOME/go/src/github.com/haccer/subjack/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
   ret=$?
   if [[ $ret -ne 0 ]] ; then
     notify_error
@@ -188,7 +203,7 @@ run_subjack(){
 }
 run_httprobe(){
   echo "${yellow}Running httprobe...${reset}"
-  cat ./targets/"$target"/"$foldername"/alldomains.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+  cat ./targets/"$target"/"$foldername"/subdomains-jq.txt | httprobe -c "$httprobeThreads" >> ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   ret=$?
   if [[ $ret -ne 0 ]] ; then
     notify_error
@@ -197,7 +212,7 @@ run_httprobe(){
 }
 run_aqua(){
   echo "${yellow}Running Aquatone...${reset}"
-  cat ./targets/"$target"/"$foldername"/alldomains.txt | aquatone -threads $auquatoneThreads -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out
+  cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | aquatone -threads $auquatoneThreads -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out
   ret=$?
   if [[ $ret -ne 0 ]] ; then
     notify_error
@@ -245,7 +260,7 @@ notify_finished(){
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
     echo "${yellow}Notification being generated and sent...${reset}"
-    num_of_subd=$(< ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt wc -l)
+    num_of_subd=$(< ./targets/"$target"/"$foldername"/subdomains-jq.txt wc -l)
     data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
     curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     echo "${green}Notification sent!${reset}"
@@ -294,7 +309,7 @@ send_file(){
     fi
   fi
 }
-
+# << remove
 undo_amass_config(){
   if [ -s ./amass_config.bak ]; then
     mv ./amass_config.bak ./amass_config.ini
@@ -308,24 +323,39 @@ undo_subdomain_file(){
     touch ./deepdive/subdomain.txt
   fi
 }
+make_csv(){
+  touch ./csvs/"$target"-csv.txt
+  paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./csvs/"$target"-csv.txt
+}
+# >>
+
 read_direct_wordlist(){
   cat ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
 uniq_subdomains(){
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >> ./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
-make_csv(){
-  touch ./csvs/"$target""-"csv.txt
-  paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./csvs/"$target""-"csv.txt
-}
+
 double_check_excluded(){
   grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
+  rm ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+}
+parse_json(){
+  # ips
+  cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.ip' > ./targets/"$target"/"$foldername"/"$target"-ips.txt
+  #domain names
+  cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.host' > ./targets/"$target"/"$foldername"/subdomains-jq.txt
 }
 # children
 subdomain_enum(){
+  echo "${yellow}Running Amass enum...${reset}"
 #Amass https://github.com/OWASP/Amass
-  run_amass
+  #run_amass
+  #run_json_amass
+  run_subfinder_json
+  parse_json
+  echo "${green}Amass enum finished.${reset}"
 #Gobuster trying to make them run at same time
   #run_gobuster_vhost
   #run_gobuster_dns
@@ -455,7 +485,7 @@ main(){
     mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/
     mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/parsedjson/
     mkdir ./targets/"$target"/"$foldername"/subdomain_enum/
-    mkdir ./targets/"$target"/"$foldername"/subdomain_enum/amass/
+    #mkdir ./targets/"$target"/"$foldername"/subdomain_enum/amass/
     #mkdir ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/
     mkdir ./targets/"$target"/"$foldername"/screenshots/
     #mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/
@@ -467,6 +497,8 @@ main(){
     touch ./targets/"$target"/"$foldername"/subdomain-takeover-results.json
     touch ./targets/"$target"/"$foldername"/alldomains.txt
     touch ./targets/"$target"/"$foldername"/temp-clean.txt
+    touch ./targets/"$target"/"$foldername"/subdomains-jq.txt
+    touch ./targets/"$target"/"$foldername"/"$target"-ips.txt
 
     excludedomains
     recon "$target"
