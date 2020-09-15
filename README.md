@@ -36,9 +36,8 @@ cd the_hunting/
 If you are using axiom to set up boxes and youve done the proceeding command on said box.. you should be free and clear to use it. The script with install chromium each time it is ran in a new box because its not automatically installed in an axiom box.. you could add the snap command to your `.axiom/images/axiom.json` file but I just leave my script to do it on its own, only takes a second and you only have to do it once on each new box you `axiom-init`. 
 *How I make it work for me...*
 
-I start by using the -d option, then I take the resulting responsive-domains-80-443.txt file, (working on scripting this into -d with -e usage) then I open the file inside notepad++ and open find, search for out of scope domains, remove all mentions that match your scope, (working on this also for -d) then inside notepad++ go to find and replace - then in `find what` write `\n` and `replace with` write `,` then change search mode to extended and click find and replace all. **Note** Check the last line because if you have an extra new line that will be replaced by a stray `,`
-
-You should be able to select all and copy and paste this file into your -s call now uninhibited. I personally am using ![eugeny/Terminus](https://github.com/eugeny/terminus) as my terminal so I have no issues with pasting URL lists of up to at least 880 hosts comprised of 28,000 different characters in a single command and having everything work out how it was designed.. screw any and all system resources honestly, they are machines.. break em then build em. Peace! ~@incredincomp
+I start by using the -d option on a domain i want. then after the recon scan it puts a csv file named after the host into the csv folder in root. If you cat this, (im working on allowing file input for -s)
+You should be able to select all though and copy and paste this file into your -s call now uninhibited. I personally am using ![eugeny/Terminus](https://github.com/eugeny/terminus) as my terminal(or im legit using my ipad now....) so I have no issues with pasting URL lists of up to at least 880 hosts comprised of 28,000 different characters in a single command and having everything work out how it was designed.. screw any and all system resources honestly, they are machines.. break em then build em. Peace! ~@incredincomp
 
 
 ### need to run install.sh on fresh ubuntu 20.04 to install pre-req tools that come with axiom *THIS IS UNTESTED AND DANGEROUS, GOOD LUCK
@@ -80,8 +79,11 @@ _Anything crossed out currently is implemented to a point, but turned off in the
 ~~gobuster - vhost & dns
 https://github.com/OJ/gobuster~~
 
-Amass
-https://github.com/OWASP/Amass
+~~Amass~~
+~~https://github.com/OWASP/Amass~~
+
+Subfinder
+https://github.com/projectdiscovery/subfinder
 
 #### Subdomain TakeOver
 Subjack
@@ -114,7 +116,7 @@ https://github.com/OJ/gobuster~~
 
 ##### nse scripts
 
-https://nmap.org/book/nse.html
+~~https://nmap.org/book/nse.html~~
 
 ### Webpage and Server Scanning
 
