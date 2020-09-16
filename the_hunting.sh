@@ -247,7 +247,7 @@ run_nuclei(){
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 subdomain_scanning(){
-  nuclei -v -json -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./deepdive/nuclei-vulns.json
+  nuclei -v -json -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
 }
 
 run_zap(){
@@ -431,7 +431,7 @@ subdomain_option(){
     mkdir ./deepdive
   fi
   touch ./deepdive/subdomain.txt
-  touch ./deepdive/nuclei-vulns.json
+  touch ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
   subdomain_scanning
   notify_subdomain_scan
   send_file
