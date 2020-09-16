@@ -111,7 +111,7 @@ while getopts ":d:s:e:f:l" o; do
 done
 shift $((OPTIND - 1))
 
-if [ -z "$target" ] && [[ -z ${subdomain_scan_target[*]} ]]; then
+if [ -z "$target" ] && [[ -z ${subdomain_scan_target[*]} ]] && [ -z "$subdomain_scan_target_file" ]; then
    usage; exit 1;
 fi
 
