@@ -74,7 +74,7 @@ subdomain_scan_target=""
 declare -a excluded=()
 usage() { echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
 
-while getopts ":d:s:e:l" o; do
+while getopts ":d:s:e:f:l" o; do
     case "${o}" in
         d)
             target="$OPTARG"
@@ -95,6 +95,10 @@ while getopts ":d:s:e:l" o; do
               printf "%s\n" "$u" >> ./deepdive/subdomain.txt
             done
             unset IFS
+            subdomain_scan_target_file="./deepdive/subdomain.txt"
+            ;;
+        f)
+            subdomain_scan_target_file="$OPTARG"
             ;;
         l)
             less ./LICENSE
@@ -243,7 +247,7 @@ run_nuclei(){
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 subdomain_scanning(){
-  nuclei -v -json -l ./deepdive/subdomain.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./deepdive/nuclei-vulns.json
+  nuclei -v -json -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./deepdive/nuclei-vulns.json
 }
 
 run_zap(){
