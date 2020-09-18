@@ -276,7 +276,7 @@ notify_subdomain_scan(){
   else
     echo "${yellow}Notification being generated and sent...${reset}"
     if [ -s ./deepdive/nuclei-vulns.json ]; then
-      num_of_vuln=$(< ./deepdive/nuclei-vulns.json  wc -l)
+      num_of_vuln=$(< ./deepdive/"$todate"-"$totime"-nuclei-vulns.json  wc -l)
       data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     else
@@ -302,13 +302,13 @@ send_file(){
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
-    if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./deepdive/nuclei-vulns.json ]; then
+    if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./deepdive/"$todate"-"$totime"-nuclei-vulns.json ]; then
       echo "${red}Notifications not set up."
       echo "${red}Add your slack channel to ./slack_channel.txt"
       echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
     else
       echo "${yellow}File being sent...${reset}"
-      curl -F file=@deepdive/nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels="$slack_channel" -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
+      curl -F file=@deepdive/"$todate"-"$totime"-nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels="$slack_channel" -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
       echo "${green}File sent!${reset}"
     fi
   fi
@@ -341,9 +341,11 @@ uniq_subdomains(){
 }
 
 double_check_excluded(){
-  grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
-  rm ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
-  mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+  if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
+    grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt > ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
+    rm ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+    mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt && rm ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
+  fi
 }
 parse_json(){
   # ips
