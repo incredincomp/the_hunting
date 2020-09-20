@@ -74,7 +74,7 @@ subdomain_scan_target=""
 declare -a excluded=()
 usage() { echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2; exit 1; }
 
-while getopts ":d:s:e:f:l" o; do
+while getopts ":d:s:e:f:asf:l" o; do
     case "${o}" in
         d)
             target="$OPTARG"
@@ -99,6 +99,9 @@ while getopts ":d:s:e:f:l" o; do
             ;;
         f)
             subdomain_scan_target_file="$OPTARG"
+            ;;
+        asf)
+            all_subdomain_scan_target_file="$OPTARG"
             ;;
         l)
             less ./LICENSE
@@ -241,7 +244,7 @@ run_dirb(){
 }
 run_nuclei(){
   echo "${yellow}Running Nuclei templates scan...${reset}"
-  nuclei -v -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-cve-results.json
+  nuclei -v -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-results.json
 #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
 #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
@@ -249,7 +252,9 @@ run_nuclei(){
 subdomain_scanning(){
   nuclei -v -json -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
 }
-
+all_subdomain_scanning(){
+  nuclei -v -json -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
+}
 run_zap(){
   echo "${yellow}Running zap scan...${reset}"
   echo "${red} Just kidding! Working on it though.${reset}"
@@ -276,11 +281,12 @@ notify_subdomain_scan(){
   else
     echo "${yellow}Notification being generated and sent...${reset}"
     if [ -s ./deepdive/nuclei-vulns.json ]; then
-      num_of_vuln=$(< ./deepdive/"$todate"-"$totime"-nuclei-vulns.json  wc -l)
+      num_of_vuln=$(< ./deepdive/nuclei-vulns.json  wc -l)
       data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     else
-      data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ 0\ vulnerabilities.\"}''
+      num_of_vuln=$(< ./deepdive/"$todate"-"$totime"-nuclei-vulns.json  wc -l)
+      data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     fi
   fi
@@ -432,9 +438,12 @@ subdomain_option(){
   if [ ! -d ./deepdive ]; then
     mkdir ./deepdive
   fi
-  touch ./deepdive/subdomain.txt
   touch ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
-  subdomain_scanning
+  if [ -z "$subdomain_scan_target"]; then
+    all_subdomain_scanning
+  else
+    subdomain_scanning
+  fi
   notify_subdomain_scan
   send_file
   undo_subdomain_file
