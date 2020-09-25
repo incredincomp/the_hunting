@@ -48,8 +48,9 @@ subdomainThreads=15
 subjackThreads=15
 httprobeThreads=50
 
-type -P chromium &>/dev/null || sudo snap install chromium
-chromiumPath=/snap/bin/chromium
+# Good call @1efty
+CHROMIUM="${CHROMIUM:-"chromium"}"
+chromiumPath="$(which $CHROMIUM)"
 
 type -P parallel &>/dev/null || sudo apt install parallel -y
 
