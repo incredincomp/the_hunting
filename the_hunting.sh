@@ -78,7 +78,7 @@ usage() { echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.dom
 #while [[ $1 ]]; do
 #	echo "Handling [$1]..."
 #	case "$1" in
-#    -d)
+#    --target)
 #        target="$OPTARG"
 #        ;;
 #    --exclude)
