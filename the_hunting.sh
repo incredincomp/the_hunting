@@ -77,92 +77,6 @@ usage() {
   echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2
   exit 1
 }
-# need help taking multiple options
-#while [[ $1 ]]; do
-#	echo "Handling [$1]..."
-#	case "$1" in
-#    --target)
-#        target="$OPTARG"
-#        ;;
-#    --exclude)
-#			  excluded="$OPTARG"
-#		  	;;
-#    --scan)
-#        set -f
-#        IFS=","
-#        subdomain_scan_target+=($OPTARG)
-#        unset IFS
-#        if [ -s ./deepdive/subdomain.txt ]; then
-#          mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
-#        fi
-#        IFS=$'\n'
-#        for u in "${subdomain_scan_target[@]}"; do
-#          printf "%s\n" "$u" >> ./deepdive/subdomain.txt
-#        done
-#        unset IFS
-#        subdomain_scan_target_file="./deepdive/subdomain.txt"
-#        ;;
-#    --file)
-#        subdomain_scan_target_file="$OPTARG"
-#  			;;
-#    --file-all)
-#        all_subdomain_scan_target_file="$OPTARG"
-#	  		;;
-#    --license)
-#        less ./LICENSE
-#        exit 1
-#	  		;;
-#    *)
-#        echo "Error: Unknown option: $1" >&2
-#        usage
-#	  		exit 1
-#	  		;;
-#	esac
-#done
-while getopts ":d:s:e:f:n:l" o; do
-  case "${o}" in
-  d)
-    target="$OPTARG"
-    ;;
-  e)
-    excluded="$OPTARG"
-    ;;
-  s)
-    set -f
-    IFS=","
-    subdomain_scan_target+=($OPTARG)
-    unset IFS
-    if [ -s ./deepdive/subdomain.txt ]; then
-      mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
-    fi
-    IFS=$'\n'
-    for u in "${subdomain_scan_target[@]}"; do
-      printf "%s\n" "$u" >>./deepdive/subdomain.txt
-    done
-    unset IFS
-    subdomain_scan_target_file="./deepdive/subdomain.txt"
-    ;;
-  f)
-    subdomain_scan_target_file="$OPTARG"
-    ;;
-  n)
-    all_subdomain_scan_target_file="$OPTARG"
-    ;;
-  l)
-    less ./LICENSE
-    exit 1
-    ;;
-  *)
-    usage
-    ;;
-  esac
-done
-shift $((OPTIND - 1))
-
-if [ -z "$target" ] && [[ -z ${subdomain_scan_target[*]} ]] && [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ]; then
-  usage
-  exit 1
-fi
 
 excludedomains() {
   echo "Excluding domains (if you set them with -e)..."
@@ -524,8 +438,72 @@ open_program() {
   print_line
 }
 
+function parse_args() {
+  while [[ $1 ]]; do
+    echo "Handling [$1]..."
+    case "$1" in
+    --target)
+      target="$2"
+      shift
+      shift
+      ;;
+    --exclude)
+      excluded="$2"
+      shift
+      shift
+      ;;
+    --scan)
+      set -f
+      IFS=","
+      subdomain_scan_target+=($2)
+      unset IFS
+      if [ -s ./deepdive/subdomain.txt ]; then
+        mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
+      fi
+      IFS=$'\n'
+      for u in "${subdomain_scan_target[@]}"; do
+        printf "%s\n" "$u" >>./deepdive/subdomain.txt
+      done
+      unset IFS
+      subdomain_scan_target_file="./deepdive/subdomain.txt"
+      shift
+      shift
+      ;;
+    --file)
+      subdomain_scan_target_file="$2"
+      shift
+      shift
+      ;;
+    --file-all)
+      all_subdomain_scan_target_file="$2"
+      shift
+      shift
+      ;;
+    --license)
+      less ./LICENSE
+      exit 1
+      ;;
+    *)
+      echo "Error: Unknown option: $1" >&2
+      usage
+      exit 1
+      ;;
+    esac
+  done
+}
+
 # main
 main() {
+
+  # parse CLI arguments
+  parse_args $@
+
+  # exit if certain variables are not set
+  if [ -z "$target" ] && [[ -z ${subdomain_scan_target[*]} ]] && [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ]; then
+    usage
+    exit 1
+  fi
+
   if [[ -z "$target" ]]; then
     subdomain_option
   else #scanning only
