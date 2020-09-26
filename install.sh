@@ -19,7 +19,7 @@ function update_the_hunting() {
 #prereqs
 function pre_reqs() {
   apt update && apt upgrade -y
-  apt install snapd sudo wget git make unzip parallel golang -y
+  apt install snapd sudo wget git make unzip parallel golang jq -y
   snap install chromium
 }
 
