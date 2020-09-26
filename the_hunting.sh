@@ -479,9 +479,13 @@ function parse_args() {
       shift
       shift
       ;;
+    --logo)
+      open_program
+      exit
+      ;;
     --license)
       less ./LICENSE
-      exit 1
+      exit
       ;;
     *)
       echo "Error: Unknown option: $1" >&2
