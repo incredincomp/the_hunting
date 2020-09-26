@@ -55,7 +55,7 @@ Recon a root domain name for responsive subdomains
 
 `./the_hunting.sh --target hackerone.com`
 
-Exclude out of scope domains from your recon results before scanning
+Exclude out of scope domains from your recon results before doing recon (leaving you with a clean scope subdomain list)
 
 `./the_hunting.sh --target hackerone.com --exclude support.hackerone.com,go.hacker.one,www.hackeronestatus.com,info.hacker.one,ma.hacker.one`
 
