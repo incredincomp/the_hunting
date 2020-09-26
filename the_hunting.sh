@@ -310,7 +310,7 @@ double_check_excluded() {
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
     grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
     rm ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
-    mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt && rm ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
+    mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   fi
 }
 parse_json() {
