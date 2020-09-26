@@ -23,7 +23,8 @@
         {
             "type": "shell",
             "inline": [
-                "/bin/bash /the_hunting/install.sh --install"
+                "cd /the_hunting",
+                "./install.sh --install"
             ]
         }
     ]
