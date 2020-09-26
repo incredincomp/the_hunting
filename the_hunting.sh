@@ -74,7 +74,7 @@ target=""
 subdomain_scan_target=""
 declare -a excluded=()
 usage() {
-  echo -e "Usage: ./the_hunting.sh -d <target domain> [-e] [excluded.domain.com,other.domain.com]\nOptions:\n  -e\t-\tspecify excluded subdomains\n " 1>&2
+  echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n --scan\t-\tscan a pasted csv list of subdomains\n --file\t-\tpass a newline seperated file of subdomains to scan\n --file-all\t-\tsame as --file, but uses all templates to scan\n --logo\t-\tprints a cool ass logo\n --license\t-\tprints a boring ass license" 1>&2
   exit 1
 }
 
