@@ -2,13 +2,12 @@
 a *cheap* vuln finding robot. Currently in heavy Dev. So please, be careful with it.. Its a violent script if I've ever written one. Nothing is rate limited so you'll probably get IP blocked over it, specifically during gobuster dir if youre not already banned before getting there.
 Cheers!
 
-< Huge shoutout to my dude @1efty for his help bringing this script into the 21st century!
-
-https://github.com/1efty https://twitter.com/ONEefty />
+< Huge shoutout to my dude ![@1efty](https://twitter.com/ONEefty) for his help bringing this script into the 21st century! && ![@1efty](https://github.com/1efty)'s github  />
 # Requirements
 
-* Axiom https://github.com/pry0cc/axiom
-* DigitalOcean Account
+* a healthy dose of tenacity
+* Axiom https://github.com/pry0cc/axiom *(for now)*
+* DigitalOcean Account *(for now)*
 * Some API keys if you want good results for subdomain enum
 
 # Warning
@@ -37,7 +36,7 @@ cd the_hunting/
 
 run --target then wait it out.. then when you get your notification you can just log back on and run `./the_hunting.sh -file ./target/date-time/responsive-domains-80-443.txt` 
 
-:heart: ~@incredincomp
+:heart: ~[@incredincomp](https://twitter.com/incredincomp)
 
 ### *THE INSTALL.SH SCRIPT IS SOMEWHAT TESTED, NOW BETTER FORMATTED, AND STILL MAYBE DANGEROUS.. GOOD LUCK*
 need sudo for program installs with packaging program
