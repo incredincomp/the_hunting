@@ -52,8 +52,6 @@ httprobeThreads=50
 CHROMIUM="${CHROMIUM:-"chromium"}"
 chromiumPath="$(which $CHROMIUM)"
 
-type -P parallel &>/dev/null || sudo apt install parallel -y
-
 if [ -s ./slack_url.txt ]; then
   slack_url=$(<slack_url.txt)
 else
