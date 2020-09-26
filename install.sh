@@ -6,6 +6,9 @@ usage() {
   exit 1
 }
 
+# setting up platform/system checks
+
+
 function update_all_tools() {
   # Probably need to add some uname checks and then set up package repo.
   apt update && apt upgrade -y

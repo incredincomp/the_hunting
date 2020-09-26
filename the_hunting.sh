@@ -479,6 +479,16 @@ function parse_args() {
       shift
       shift
       ;;
+    --install-pr)
+      ./install.sh --pre_reqs
+      echo "Pre-requirements installed"
+      exit
+      ;;
+    --install-all)
+      ./install.sh --install
+      echo "Everything installed"
+      exit
+      ;;
     --logo)
       open_program
       exit
