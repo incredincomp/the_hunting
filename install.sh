@@ -9,7 +9,6 @@ usage() {
 function update_all_tools() {
   # Probably need to add some uname checks and then set up package repo.
   apt update && apt upgrade -y
-  snap refresh
 }
 
 function update_the_hunting() {
@@ -19,13 +18,54 @@ function update_the_hunting() {
 #prereqs
 function pre_reqs() {
   apt update && apt upgrade -y
-  apt install snapd sudo wget git make unzip parallel golang jq -y
-  snap install chromium
+  apt install sudo wget git make unzip parallel golang jq -y
+  install_chromium
 }
 
 # tool install
+function install_chromium() {
+  # https://askubuntu.com/questions/1204571/chromium-without-snap
+  cat >/etc/apt/sources.lists.d/debian.list <<EOF
+deb http://ftp.debian.org/debian buster main
+deb http://ftp.debian.org/debian buster-updates main
+deb http://ftp.debian.org/debian-security buster/updates main
+EOF
+
+  # add debian signing keys
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DCC9EFBF77E11517
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys AA8E81B4331F7F50
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 112695A0E562B32A
+
+  # configure apt pinning
+  cat >/etc/apt/preferences.d/chromium.pref <<EOF
+# Note: 2 blank lines are required between entries
+Package: *
+Pin: release a=focal
+Pin-Priority: 500
+
+
+Package: *
+Pin: origin "ftp.debian.org"
+Pin-Priority: 300
+
+
+# Pattern includes 'chromium', 'chromium-browser' and similarly
+# named dependencies:
+Package: chromium*
+Pin: origin "ftp.debian.org"
+Pin-Priority: 700
+EOF
+
+  apt update && apt install chromium
+}
+
 function install_amass() {
-  snap install amass
+  curl -sSL https://github.com/OWASP/Amass/releases/download/v3.10.4/amass_linux_amd64.zip -o amass.zip
+  unzip amass.zip
+  mv amass /usr/local/bin
+  rm -rf amass.zip
+  amass -h
 }
 
 function install_gobuster() {
@@ -54,11 +94,11 @@ function install_aquatone() {
 }
 
 function install_nuclei() {
-  git clone https://github.com/projectdiscovery/nuclei.git
-  cd nuclei/cmd/nuclei/
-  go build .
-  mv nuclei /usr/local/bin/
-  cd ../../../
+  curl -sSL https://github.com/projectdiscovery/nuclei/releases/download/v2.1.1/nuclei_2.1.1_linux_amd64.tar.gz -o nuclei.tar.gz
+  tar -xzvf nuclei.tar.gz
+  mv nuclei /usr/local/bin
+  rm -rf nuclei.tar.gz
+  nuclei -h
 }
 
 function install_subfinder() {
