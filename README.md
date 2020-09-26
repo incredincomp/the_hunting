@@ -1,5 +1,5 @@
 # the_hunting
-a *cheap* vuln finding robot. Currently in Dev. Please be careful with it. Its a violent script if I've ever written one. Only does Recon branch fully right now, still pretty useful probably. Nothing is rate limited so youll probably get IP blocked over it, specifically during gobuster dir if youre not already banned before getting there.
+a *cheap* vuln finding robot. Currently in heavy Dev. So please, be careful with it.. Its a violent script if I've ever written one. Nothing is rate limited so you'll probably get IP blocked over it, specifically during gobuster dir if youre not already banned before getting there.
 Cheers!
 
 < Huge shoutout to my dude @1efty for his help bringing this script into the 21st century!
@@ -31,21 +31,15 @@ Connect to your axiom droplet
 ```bash
 git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git
 cd the_hunting/
-```
-
-If you are using axiom to set up boxes and youve done the proceeding command on said box.. you should be free and clear to use it. The script with install chromium each time it is ran in a new box because its not automatically installed in an axiom box.. you could add the snap command to your `.axiom/images/axiom.json` file but I just leave my script to do it on its own, only takes a second and you only have to do it once on each new box you `axiom-init`. 
+``` 
 
 ##*How I make it work for me...*##
 
-hit up -d then wait it out.. then when you get your notification you can just log back on and run `./the_hunting.sh -f ./target/date-time/responsive-domains-80-443.txt` 
+run --target then wait it out.. then when you get your notification you can just log back on and run `./the_hunting.sh -file ./target/date-time/responsive-domains-80-443.txt` 
 
-Peace! ~@incredincomp
+:heart: ~@incredincomp
 
-
-### need to run install.sh on fresh ubuntu 20.04 to install pre-req tools that come with axiom *THIS IS UNTESTED AND DANGEROUS, GOOD LUCK
-`chmod +x install.sh the_hunting.sh`
-
-### *THE INSTALL.SH SCRIPT IS UNTESTED, UNFORMATTED, AND DANGEROUS.. GOOD LUCK*
+### *THE INSTALL.SH SCRIPT IS SOMEWHAT TESTED, NOW BETTER FORMATTED, AND STILL MAYBE DANGEROUS.. GOOD LUCK*
 need sudo for program installs with packaging program
 
 `sudo ./install.sh --install`
@@ -70,6 +64,11 @@ Scan a file list of subdomains seperated by new line
 This will run all nuclei templates on your list of targets inside of `subdomains.txt`
 
 `./the-hunting.sh --file-all subdomains.txt`
+
+# To-Do/Upcoming
+1. switching to aws, probably cheaper and easier to manage. Able to store data and probably just send some encrypted emails.. *maybe need a domain for that though* ![#34](https://github.com/incredincomp/the_hunting/issues/34) 
+2. fixing directory structure/house cleaning ![#30](https://github.com/incredincomp/the_hunting/issues/30)
+
 
 # Methodology
 
@@ -110,7 +109,7 @@ https://github.com/michenriksen/aquatone
 ### Fuzzing
 #### Directory and file Fuzzing
 to-do: Dirb
-https://tools.kali.org/web-applications/dirb
+~~https://tools.kali.org/web-applications/dirb~~
 
 ~~Gobuster - dir
 https://github.com/OJ/gobuster~~
