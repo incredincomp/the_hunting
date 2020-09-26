@@ -1,0 +1,30 @@
+{
+    "variables": {
+        "api_token": "{{ env `DIGITALOCEAN_ACCESS_TOKEN` }}",
+        "the_hunting_dir": "{{ env `PWD` }}"
+    },
+    "builders": [
+        {
+            "type": "digitalocean",
+            "snapshot_name": "the_hunting-{{ timestamp }}",
+            "api_token": "{{ user `api_token` }}",
+            "image": "ubuntu-20-04-x64",
+            "region": "sfo2",
+            "size": "s-1vcpu-1gb",
+            "ssh_username": "root"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "{{ user `the_hunting_dir` }}",
+            "destination": "/the_hunting"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "/bin/bash /the_hunting/install.sh --install"
+            ]
+        }
+    ]
+}
