@@ -28,8 +28,7 @@ Connect to your axiom droplet
 ## Set up `the_hunting.sh`
 
 ```bash
-git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git
-cd the_hunting/
+git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git && cd the_hunting/
 ``` 
 
 ##*How I make it work for me...*##
