@@ -54,11 +54,11 @@ function install_aquatone() {
 }
 
 function install_nuclei() {
-  git clone https://github.com/projectdiscovery/nuclei.git
-  cd nuclei/cmd/nuclei/
-  go build .
-  mv nuclei /usr/local/bin/
-  cd ../../../
+  curl -sSL https://github.com/projectdiscovery/nuclei/releases/download/v2.1.1/nuclei_2.1.1_linux_amd64.tar.gz -o nuclei.tar.gz
+  tar -xzvf nuclei.tar.gz
+  mv nuclei /usr/local/bin
+  rm -rf nuclei.tar.gz
+  nuclei -h
 }
 
 function install_subfinder() {
