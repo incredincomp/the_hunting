@@ -53,23 +53,23 @@ need sudo for program installs with packaging program
 ## Usage
 Recon a root domain name for responsive subdomains
 
-`./the_hunting.sh -d <target domain>`
+`./the_hunting.sh --target hackerone.com`
 
 Exclude out of scope domains from your recon results before scanning
 
-`./the_hunting.sh -d <target domain> -e excluded.domain.com,other.domain.com`
+`./the_hunting.sh --target hackerone.com --exclude support.hackerone.com,go.hacker.one,www.hackeronestatus.com,info.hacker.one,ma.hacker.one`
 
 Scan a CSV list of subdomains from the cli
 
-`./the_hunting.sh -s sub.domain.com,sue.domain.com,paul.domain.com`
+`./the_hunting.sh --scan sub.domain.com,sue.domain.com,paul.domain.com`
 
 Scan a file list of subdomains seperated by new line
 
-`./the_hunting.sh -f subdomains.txt`
+`./the_hunting.sh --file subdomains.txt`
 
+This will run all nuclei templates on your list of targets inside of `subdomains.txt`
 
-
-
+`./the-hunting.sh --file-all subdomains.txt`
 
 # Methodology
 
