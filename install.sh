@@ -61,6 +61,13 @@ function install_nuclei() {
   cd ../../../
 }
 
+function install_subfinder() {
+  git clone https://github.com/projectdiscovery/subfinder.git
+  cd subfinder/v2/cmd/subfinder
+  go build .
+  mv subfinder /usr/local/bin/
+}
+
 function install_chromium() {
   # Probably need to add some uname checks and then set up package repo.
   type -P chromium &>/dev/null || sudo snap install chromium
@@ -73,6 +80,7 @@ function install_tools() {
   install_nuclei
   install_subjack
   install_chromium
+  install_subfinder
   install_aquatone
   install_httprobe
   cd ..
