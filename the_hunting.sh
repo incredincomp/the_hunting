@@ -35,12 +35,14 @@
 set -e
 #set -xv                       # Uncomment to print script in console for debug
 
+export GOPATH="${HOME}/go"
+export PATH="${PATH}:${GOPATH}/bin"
+
 red=$(tput setaf 1)
 green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 reset=$(tput sgr0)
 
-alias httprobe="~/go/bin/httprobe"
 # borrowed some stuff and general idea of automated platform from lazyrecon
 # https://github.com/nahamsec/lazyrecon
 auquatoneThreads=8
