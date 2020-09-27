@@ -102,7 +102,7 @@ function install_nuclei() {
   tar -xzvf nuclei.tar.gz
   mv nuclei /usr/local/bin
   rm -rf nuclei.tar.gz
-  nuclei -h
+  nuclei -version 
 }
 
 function install_subfinder() {
