@@ -319,6 +319,22 @@ parse_json() {
   #domain names
   cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.host' >./targets/"$target"/"$foldername"/subdomains-jq.txt
 }
+
+# doctl hax
+create_image() {
+  image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
+  size="s-1vcpu-1gb"
+  region="sfo2"
+  if [ -z $set_domain ]; then
+    domain=$set_domain
+  else
+    domain=""
+  fi
+  doctl compute droplet create --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
+}
+connect_image() {
+  true
+}
 # children
 subdomain_enum() {
   echo "${yellow}Running Amass enum...${reset}"
@@ -487,6 +503,15 @@ function parse_args() {
     --install-all)
       ./install.sh --install
       echo "Everything installed"
+      exit
+      ;;
+    --create)
+      ssh_key="$2"
+      create_image "$ssh_key"
+      exit
+      ;;
+    --connect)
+      connect_image
       exit
       ;;
     --logo)
