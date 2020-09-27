@@ -19,7 +19,7 @@
         {
             "type": "shell",
             "inline": [
-                "mkdir ~/backup-files"
+                "mkdir ~/backup-files",
                 "git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git",
                 "cd ./the_hunting",
                 "./install.sh --install",
