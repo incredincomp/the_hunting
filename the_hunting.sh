@@ -333,7 +333,10 @@ create_image() {
   doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
 }
 connect_image() {
-  true
+   doctl compute ssh the-hunting
+}
+remove_image() {
+   doctl compute droplet delete the-hunting
 }
 # children
 subdomain_enum() {
@@ -512,6 +515,10 @@ function parse_args() {
       ;;
     --connect)
       connect_image
+      exit
+      ;;
+    --remove)
+      remove_image
       exit
       ;;
     --logo)
