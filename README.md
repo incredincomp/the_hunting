@@ -6,8 +6,8 @@ Cheers!
 # Requirements
 
 * a healthy dose of tenacity
-* Axiom https://github.com/pry0cc/axiom *(for now)*
 * DigitalOcean Account *(for now)*
+* doctl installed and configured
 * Some API keys if you want good results for subdomain enum
 
 # Warning
@@ -16,24 +16,25 @@ Slack integration is included.. you need to add some data to aptly named files a
 Your data is in slacks hands then though, so if you are working within specific privacy and private program scopes, you may need to adjust course accordingly and do some research before you start dumping possibly important data on your targets into slacks servers and therefore the world. Be smart about it.
 
 # Commands
-## Axiom
-Start your axiom droplet
-
-`axiom-init`
-
-Connect to your axiom droplet
-
-`axiom-ssh <instance> --tmux`
-
 ## Set up `the_hunting.sh`
 
 ```bash
 git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git && cd the_hunting/
 ``` 
 
+export your digital ocean api key to env
+```bash
+export DIGITALOCEAN_ACCESS_TOKEN=1234546789abcdefghijkl
+```
+## Building box
+From inside /the_hunting.. run
+```
+make
+```
+
 ##*How I make it work for me...*##
 
-run --target then wait it out.. then when you get your notification you can just log back on and run `./the_hunting.sh -file ./target/date-time/responsive-domains-80-443.txt` 
+run --target then wait it out.. then when you get your notification you can just log back on and run `./the_hunting.sh --file ./target/date-time/responsive-domains-80-443.txt` 
 
 :heart: ~[@incredincomp](https://twitter.com/incredincomp)
 
@@ -43,6 +44,19 @@ need sudo for program installs with packaging program
 `sudo ./install.sh --install`
 
 ## Usage
+
+Pass this command your sshkey fingerprint from Digital that you would like to use for this box.
+
+`./the_hunting.sh --create aa:bb:cc:dd:ee:ff:gg:hh:ii`
+
+connect to your box
+
+`./the_hunting.sh --connect`
+
+delete your box
+
+`./the_hunting.sh --remove`
+
 Recon a root domain name for responsive subdomains
 
 `./the_hunting.sh --target hackerone.com`
@@ -61,7 +75,7 @@ Scan a file list of subdomains seperated by new line
 
 This will run all nuclei templates on your list of targets inside of `subdomains.txt`
 
-`./the-hunting.sh --file-all subdomains.txt`
+`./the_hunting.sh --file-all subdomains.txt`
 
 # To-Do/Upcoming
 1. switching to aws, probably cheaper and easier to manage. Able to store data and probably just send some encrypted emails.. *maybe need a domain for that though* ![#34](https://github.com/incredincomp/the_hunting/issues/34) 
