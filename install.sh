@@ -1,5 +1,5 @@
 #!/bin/bash -
-
+set -e
 #set -xv                       # Uncomment to print script in console for debug
 export GOPATH="${HOME}/go"
 #Shouldnt need to be ran in axiom droplet
