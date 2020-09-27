@@ -1,7 +1,8 @@
 {
     "variables": {
         "api_token": "{{ env `DIGITALOCEAN_ACCESS_TOKEN` }}",
-        "the_hunting_dir": "{{ env `PWD/backup-files` }}"
+        "the_hunting_dir": "{{ env `PWD` }}",,
+        "home": "{{env `HOME` }}"
     },
     "builders": [
         {
@@ -17,8 +18,8 @@
     "provisioners": [
         {
             "type": "file",
-            "source": "{{ user `the_hunting_dir` }}",
-            "destination": "/hunting-backup-files"
+            "source": "{{ user `the_hunting_dir` }}/backup-files",
+            "destination": "{{ user `home` }}/hunting-backup-files"
         },
         {
             "type": "shell",
