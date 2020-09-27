@@ -1,7 +1,7 @@
 {
     "variables": {
         "api_token": "{{ env `DIGITALOCEAN_ACCESS_TOKEN` }}",
-        "the_hunting_dir": "{{ env `PWD` }}",,
+        "the_hunting_dir": "{{ env `PWD` }}",
         "home": "{{env `HOME` }}"
     },
     "builders": [
