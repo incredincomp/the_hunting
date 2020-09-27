@@ -19,7 +19,7 @@
         {
             "type": "file",
             "source": "{{ user `the_hunting_dir` }}/backup-files",
-            "destination": "{{ user `the_hunting_dir` }}/backup-files"
+            "destination": "/the_hunting/backup-files"
         },
         {
             "type": "shell",
