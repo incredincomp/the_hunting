@@ -29,7 +29,7 @@
         {
             "type": "file",
             "source": "{{ user `the_hunting_dir` }}/backup-files/",
-            "destination": "/backup-files"
+            "destination": "~/backup-files"
         }
     ]
 }
