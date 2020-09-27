@@ -119,6 +119,11 @@ function install_chromium() {
   type -P chromium &>/dev/null || sudo snap install chromium
 }
 
+function install_jq() {
+  wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+  mv /jq-linux64 /usr/local/bin/jq
+}
+
 function install_tools() {
   cd ./temp
   install_amass
@@ -129,6 +134,7 @@ function install_tools() {
   install_subfinder
   install_aquatone
   install_httprobe
+  install_jq
   cd ..
 }
 
