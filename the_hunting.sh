@@ -330,7 +330,7 @@ create_image() {
   else
     domain=""
   fi
-  doctl compute droplet create --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
+  doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
 }
 connect_image() {
   true
