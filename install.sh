@@ -69,7 +69,7 @@ EOF
 function install_amass() {
   curl -sSL https://github.com/OWASP/Amass/releases/download/v3.10.4/amass_linux_amd64.zip -o amass.zip
   unzip amass.zip
-  mv amass /usr/local/bin/amass
+  mv amass_linux_amd64/amass /usr/local/bin/amass
 }
 
 function install_gobuster() {
