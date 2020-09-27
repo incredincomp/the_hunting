@@ -24,7 +24,7 @@ function update_the_hunting() {
 #prereqs
 function pre_reqs() {
   apt update && apt upgrade -y
-  apt install sudo wget git make unzip parallel golang jq -y
+  apt install sudo wget git make unzip parallel golang -y
   install_chromium
 }
 
@@ -69,9 +69,7 @@ EOF
 function install_amass() {
   curl -sSL https://github.com/OWASP/Amass/releases/download/v3.10.4/amass_linux_amd64.zip -o amass.zip
   unzip amass.zip
-  mv amass /usr/local/bin
-  rm -rf amass.zip
-  amass -h
+  mv amass /usr/local/bin/amass
 }
 
 function install_gobuster() {

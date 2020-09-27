@@ -20,10 +20,10 @@
             "type": "shell",
             "inline": [
                 "mkdir ~/backup-files",
+                "export GOPATH=~/go",
                 "git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git",
                 "cd ./the_hunting",
-                "./install.sh --install",
-                "cp -r ~/backup-files ~/the_hunting/"
+                "./install.sh --install"
             ]
         },
         {
