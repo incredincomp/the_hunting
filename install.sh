@@ -24,7 +24,7 @@ function update_the_hunting() {
 #prereqs
 function pre_reqs() {
   apt update && apt upgrade -y
-  apt install sudo wget git make unzip parallel golang -y
+  apt install sudo wget git make unzip parallel golang openjdk-8-jdk -y
   install_chromium
 }
 
@@ -102,7 +102,7 @@ function install_nuclei() {
   tar -xzvf nuclei.tar.gz
   mv nuclei /usr/local/bin
   rm -rf nuclei.tar.gz
-  nuclei -version 
+  nuclei -version
 }
 
 function install_subfinder() {
@@ -112,14 +112,19 @@ function install_subfinder() {
   mv subfinder /usr/local/bin/
 }
 
-function install_chromium() {
+# old chrome
+#function install_chromium() {
   # Probably need to add some uname checks and then set up package repo.
-  type -P chromium &>/dev/null || sudo snap install chromium
-}
+#  type -P chromium &>/dev/null || sudo snap install chromium
+#}
 
 function install_jq() {
   wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
   mv ./jq-linux64 /usr/local/bin/jq
+}
+
+function install_zap() {
+  true
 }
 
 function install_tools() {
@@ -133,6 +138,7 @@ function install_tools() {
   install_aquatone
   install_httprobe
   install_jq
+  install_zap
   cd ..
 }
 

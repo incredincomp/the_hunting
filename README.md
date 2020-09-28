@@ -16,17 +16,17 @@ Already changing the world around us to fit our needs :muscle:
 * Some API keys if you want good results for subdomain enum
 
 # Warning
-Slack integration is included.. you need to add some data to aptly named files and you should be off to the races. Mind you, if you set up file upload by filling in the proper data in `./bot_user_oauth_at.txt` and `./slack_channel.txt`, you also need to have the a bot setup with the proper permissions to post files to whatever channel, then invite the bot to that channel. 
+Slack integration is included.. you need to add some data to aptly named files and you should be off to the races. Mind you, if you set up file upload by filling in the proper data in `./bot_user_oauth_at.txt` and `./slack_channel.txt`, you also need to have the a bot setup with the proper permissions to post files to whatever channel, then invite the bot to that channel.
 
 Your data is in slacks hands then though, so if you are working within specific privacy and private program scopes, you may need to adjust course accordingly and do some research before you start dumping possibly important data on your targets into slacks servers and therefore the world. Be smart about it.
 
 # Commands
-## Set up `the_hunting.sh` on 
+## Set up `the_hunting.sh` on
 
 install the hunting
 ```bash
 git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git && cd the_hunting/
-``` 
+```
 
 install pre-reqs make and packer
 ```bash
@@ -38,6 +38,12 @@ export your digital ocean api key to env
 ```bash
 export DIGITALOCEAN_ACCESS_TOKEN=1234546789abcdefghijkl
 ```
+
+export your digital ocean ssh key fingerprint to env
+```bash
+export hunting_fingerprint=11:22:33:44:55:66:77:88:99:AA
+```
+
 ## Building box
 From inside /the_hunting.. run
 ```bash
@@ -46,7 +52,7 @@ make
 
 ##*How I make it work for me...*##
 
-run --target then wait it out.. then when you get your notification you can just log back on and run `./the_hunting.sh --file ./target/date-time/responsive-domains-80-443.txt` 
+run --target then wait it out.. then when you get your notification you can just log back on and run `./the_hunting.sh --file ./target/date-time/responsive-domains-80-443.txt`
 
 :heart: ~[@incredincomp](https://twitter.com/incredincomp)
 
@@ -62,7 +68,7 @@ sudo ./install.sh --install
 Pass this command your sshkey fingerprint from Digital that you would like to use for this box.
 
 ```bash
-./the_hunting.sh --create aa:bb:cc:dd:ee:ff:gg:hh:ii
+./the_hunting.sh --create $hunting_fingerprint
 ```
 
 connect to your box
@@ -108,7 +114,7 @@ This will run all nuclei templates on your list of targets inside of `subdomains
 ```
 
 # To-Do/Upcoming
-1. switching to aws, probably cheaper and easier to manage. Able to store data and probably just send some encrypted emails.. *maybe need a domain for that though* ![#34](https://github.com/incredincomp/the_hunting/issues/34) 
+1. switching to aws, probably cheaper and easier to manage. Able to store data and probably just send some encrypted emails.. *maybe need a domain for that though* ![#34](https://github.com/incredincomp/the_hunting/issues/34)
 2. fixing directory structure/house cleaning ![#30](https://github.com/incredincomp/the_hunting/issues/30)
 
 
