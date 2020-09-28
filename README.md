@@ -3,6 +3,11 @@ a *cheap* vuln finding robot. Currently in heavy Dev. So please, be careful with
 Cheers!
 
 < Huge shoutout to my dude ![@1efty](https://twitter.com/ONEefty) for his help bringing this script into the 21st century! && ![@1efty](https://github.com/1efty)'s github  />
+
+Already changing the world around us to fit our needs :muscle:
+
+[proof](https://github.com/projectdiscovery/nuclei/pull/330)
+
 # Requirements
 
 * a healthy dose of tenacity
