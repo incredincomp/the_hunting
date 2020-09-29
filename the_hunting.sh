@@ -216,8 +216,12 @@ all_subdomain_scanning() {
   nuclei -v -json -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
 }
 run_zap() {
+  file="$subdomain_scan_target_file"
   echo "${yellow}Running zap scan...${reset}"
   echo "${red} Just kidding! Working on it though.${reset}"
+  for u in $file; do
+    docker run -v $(pwd):/targets/"$target"/"$foldername"/zap/wrk/:rw -t owasp/zap2docker-weekly zap-baseline.py -t $u -g gen.conf -J ./targets/"$target"/"$foldername"/"$u"-scan.json 
+  done
   echo "${green}zap scan finished...${reset}"
 }
 run_nmap() {
@@ -293,9 +297,10 @@ undo_subdomain_file() {
     touch ./deepdive/subdomain.txt
   fi
 }
-make_csv() {
+make_files() {
   touch ./csvs/"$target"-csv.txt
   paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./csvs/"$target"-csv.txt
+  cp ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt ./files/newline/"$target"-newline.txt
 }
 # >>
 
@@ -305,7 +310,6 @@ read_direct_wordlist() {
 uniq_subdomains() {
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >>./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
-
 double_check_excluded() {
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
     grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
@@ -589,7 +593,7 @@ main() {
     validation
     notify_finished
     double_check_excluded
-    make_csv
+    make_files
     echo "${green}Scan for "$target" finished successfully${reset}"
     duration=$SECONDS
     echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."

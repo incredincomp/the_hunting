@@ -131,7 +131,7 @@ function install_jq() {
 }
 
 function install_zap() {
-  docker pull owasp/zap2docker-stable
+  docker pull owasp/zap2docker-weekly
 }
 
 function install_tools() {
