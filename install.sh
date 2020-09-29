@@ -24,11 +24,18 @@ function update_the_hunting() {
 #prereqs
 function pre_reqs() {
   apt update && apt upgrade -y
-  apt install sudo wget git make unzip parallel golang openjdk-8-jdk -y
+  apt install sudo wget git make unzip parallel golang openjdk-8-jdk apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
   install_chromium
 }
 
 # tool install
+function install_docker() {
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  apt-get update
+  apt-get install docker-ce docker-ce-cli containerd.io
+}
+
 function install_chromium() {
   # https://askubuntu.com/questions/1204571/chromium-without-snap
   cat >/etc/apt/sources.lists.d/debian.list <<EOF
@@ -124,7 +131,7 @@ function install_jq() {
 }
 
 function install_zap() {
-  true
+  docker pull owasp/zap2docker-stable
 }
 
 function install_tools() {
