@@ -215,17 +215,33 @@ subdomain_scanning() {
 all_subdomain_scanning() {
   nuclei -v -json -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
 }
-run_zap() {
-  file="$subdomain_scan_target_file"
-  echo "${yellow}Running zap scan...${reset}"
-  echo "${red} Just kidding! Working on it though.${reset}"
-  for u in $file; do
-    docker run -v $(pwd):/targets/"$target"/"$foldername"/zap/wrk/:rw -t owasp/zap2docker-weekly zap-baseline.py -t $u -g gen.conf -J ./targets/"$target"/"$foldername"/"$u"-scan.json 
-  done
-  echo "${green}zap scan finished...${reset}"
-}
 run_nmap() {
   true
+}
+# zap stuff
+start_zap() {
+  file="$subdomain_scan_target_file"
+  echo "${yellow}Starting zap instance...${reset}"
+  echo "${red} Just kidding! Working on it though.${reset}"
+  ./home/root/zap/zap.sh -daemon -port 8090 -config api.key=12345 &>/dev/null &
+  echo "${green}zap started!${reset}"
+}
+stop_zap() {
+  curl -s "http://localhost:8090/JSON/core/action/shutdown/?apikey=12345"
+}
+zap_spider() {
+  file="$subdomain_scan_target_file"
+  for sf in $file; do
+    curl -s "http://localhost:8090/JSON/spider/action/scan/?apikey=12345&zapapiformat=JSON&formMethod=GET&url=""$sf" | jq .
+  # get spider status, check it every 30 seconds until value is 100
+    while true; do
+      value=$(curl -s "http://localhost:8090/JSON/spider/view/status/?apikey=12345" | jq -r ".status")
+      if [ value = "100" ]; then
+        break
+      fi
+      sleep 15
+    done
+  done
 }
 # notifications slack
 notify_finished() {

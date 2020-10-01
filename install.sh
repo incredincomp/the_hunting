@@ -131,7 +131,8 @@ function install_jq() {
 }
 
 function install_zap() {
-  docker pull owasp/zap2docker-weekly
+  wget https://github.com/zaproxy/zaproxy/releases/download/v2.9.0/ZAP_2.9.0_Crossplatform.zip
+  unzip ZAP_2.9.0_Crossplatform.zip -d ~/zap/
 }
 
 function install_tools() {
