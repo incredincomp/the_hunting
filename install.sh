@@ -31,7 +31,7 @@ function pre_reqs() {
 # tool install
 function install_chromium() {
   # https://askubuntu.com/questions/1204571/chromium-without-snap
-  touch /etc/apt/sources.lists.d/debian.list
+  echo "" > /etc/apt/sources.lists.d/debian.list
   cat >/etc/apt/sources.lists.d/debian.list <<EOF
 deb http://ftp.debian.org/debian buster main
 deb http://ftp.debian.org/debian buster-updates main
