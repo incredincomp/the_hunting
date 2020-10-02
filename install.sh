@@ -25,7 +25,6 @@ function update_the_hunting() {
 function pre_reqs() {
   apt update && apt upgrade -y
   apt install sudo wget git unzip parallel golang openjdk-8-jdk -y
-  install_chromium
 }
 
 # tool install
@@ -112,12 +111,6 @@ function install_subfinder() {
   go build .
   mv subfinder /usr/local/bin/
 }
-
-# old chrome
-#function install_chromium() {
-  # Probably need to add some uname checks and then set up package repo.
-#  type -P chromium &>/dev/null || sudo snap install chromium
-#}
 
 function install_jq() {
   wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
