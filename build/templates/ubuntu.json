@@ -20,7 +20,7 @@
             "type": "shell",
             "inline": [
                 "mkdir ~/backup-files",
-                "echo '' >> /etc/apt/sources.lists.d/debian.list"
+                "echo '' >> /etc/apt/sources.lists.d/debian.list",
                 "git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git",
                 "cd ./the_hunting",
                 "./install.sh --install"
