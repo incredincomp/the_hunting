@@ -24,7 +24,7 @@ function update_the_hunting() {
 #prereqs
 function pre_reqs() {
   apt update && apt upgrade -y
-  apt install sudo wget git unzip parallel golang openjdk-8-jdk -y
+  apt install sudo wget git unzip parallel golang openjdk-8-jdk build-essential -y
 }
 
 # tool install
