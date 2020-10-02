@@ -343,20 +343,28 @@ parse_json() {
 # doctl hax
 create_image() {
   image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
-  size="s-1vcpu-1gb"
-  region="sfo2"
-  if [ -z $set_domain ]; then
-    domain=$set_domain
+  if [ -n "$image_id"]; then
+    echo "No snapshots have been created. Have you run make lately?"
+    exit
   else
-    domain=""
+    size="s-1vcpu-1gb"
+    region="sfo2"
+    if [ -z $set_domain ]; then
+      domain=$set_domain
+    else
+      domain=""
+    fi
+    doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
   fi
-  doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
 }
 connect_image() {
    doctl compute ssh the-hunting
 }
 remove_image() {
    doctl compute droplet delete the-hunting
+}
+backup_image() {
+  drop_ip=$(doctl compute droplet list --tag-name "PublicIPv4")
 }
 # children
 subdomain_enum() {
