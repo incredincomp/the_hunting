@@ -10,7 +10,7 @@ usage() {
 }
 
 # setting up platform/system checks
-
+dist=$(lsb_release -is)
 
 function update_all_tools() {
   # Probably need to add some uname checks and then set up package repo.
@@ -66,6 +66,9 @@ EOF
   apt update && apt install chromium
 }
 
+function snap_install_chrome() {
+snap install chromium
+}
 function install_amass() {
   curl -sSL https://github.com/OWASP/Amass/releases/download/v3.10.4/amass_linux_amd64.zip -o amass.zip
   unzip amass.zip
@@ -123,11 +126,15 @@ function install_zap() {
 
 function install_tools() {
   cd ./temp
+  if [ "$dist" == "Ubuntu" ]; then
+    snap_install_chrome
+  else
+    install_chromium
+  fi
   install_amass
   install_gobuster
   install_nuclei
   install_subjack
-  install_chromium
   install_subfinder
   install_aquatone
   install_httprobe
