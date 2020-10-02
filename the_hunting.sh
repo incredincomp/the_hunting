@@ -323,7 +323,7 @@ parse_json() {
 # doctl hax
 create_image() {
   image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
-  if [ -n "$image_id"]; then
+  if [ -n "$image_id" ]; then
     echo "No snapshots have been created. Have you run make lately?"
     exit
   else
