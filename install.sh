@@ -24,8 +24,7 @@ function update_the_hunting() {
 #prereqs
 function pre_reqs() {
   apt update && apt upgrade -y
-  apt install sudo wget git make unzip parallel golang openjdk-8-jdk -y
-  install_chromium
+  apt install sudo wget git unzip parallel golang openjdk-8-jdk build-essential s3fs -y
 }
 
 # tool install
@@ -112,17 +111,22 @@ function install_subfinder() {
   mv subfinder /usr/local/bin/
 }
 
-# old chrome
-#function install_chromium() {
-  # Probably need to add some uname checks and then set up package repo.
-#  type -P chromium &>/dev/null || sudo snap install chromium
-#}
-
 function install_jq() {
   wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
   mv ./jq-linux64 /usr/local/bin/jq
 }
 
+function compile_s3fs() {
+  git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+  cd s3fs-fuse
+  ./autogen.sh
+  ./configure
+  make
+  sudo make install
+}
+function finish_s3fs() {
+  echo "hunting-loot /home/root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other 0 0" >> /etc/fstab
+}
 function install_zap() {
   true
 }
@@ -139,6 +143,7 @@ function install_tools() {
   install_httprobe
   install_jq
   install_zap
+  finish_s3fs
   cd ..
 }
 
