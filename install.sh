@@ -10,7 +10,7 @@ usage() {
 }
 
 # setting up platform/system checks
-
+dist=$(lsb_release -is)
 
 function update_all_tools() {
   # Probably need to add some uname checks and then set up package repo.
@@ -24,8 +24,7 @@ function update_the_hunting() {
 #prereqs
 function pre_reqs() {
   apt update && apt upgrade -y
-  apt install sudo wget git make unzip parallel golang openjdk-8-jdk apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
-  install_chromium
+  apt install sudo wget git unzip parallel golang openjdk-8-jdk build-essential -y
 }
 
 # tool install
@@ -38,6 +37,7 @@ function install_docker() {
 
 function install_chromium() {
   # https://askubuntu.com/questions/1204571/chromium-without-snap
+  echo "" >> /etc/apt/sources.lists.d/debian.list
   cat >/etc/apt/sources.lists.d/debian.list <<EOF
 deb http://ftp.debian.org/debian buster main
 deb http://ftp.debian.org/debian buster-updates main
@@ -73,6 +73,9 @@ EOF
   apt update && apt install chromium
 }
 
+function snap_install_chrome() {
+snap install chromium
+}
 function install_amass() {
   curl -sSL https://github.com/OWASP/Amass/releases/download/v3.10.4/amass_linux_amd64.zip -o amass.zip
   unzip amass.zip
@@ -119,12 +122,6 @@ function install_subfinder() {
   mv subfinder /usr/local/bin/
 }
 
-# old chrome
-#function install_chromium() {
-  # Probably need to add some uname checks and then set up package repo.
-#  type -P chromium &>/dev/null || sudo snap install chromium
-#}
-
 function install_jq() {
   wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
   mv ./jq-linux64 /usr/local/bin/jq
@@ -137,11 +134,15 @@ function install_zap() {
 
 function install_tools() {
   cd ./temp
+  if [ "$dist" == "Ubuntu" ]; then
+    snap_install_chrome
+  else
+    install_chromium
+  fi
   install_amass
   install_gobuster
   install_nuclei
   install_subjack
-  install_chromium
   install_subfinder
   install_aquatone
   install_httprobe

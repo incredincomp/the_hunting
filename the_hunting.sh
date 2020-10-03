@@ -343,10 +343,7 @@ parse_json() {
 # doctl hax
 create_image() {
   image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
-  if [ -n "$image_id"]; then
-    echo "No snapshots have been created. Have you run make lately?"
-    exit
-  else
+  if [ -n "$image_id" ]; then
     size="s-1vcpu-1gb"
     region="sfo2"
     if [ -z $set_domain ]; then
@@ -355,6 +352,9 @@ create_image() {
       domain=""
     fi
     doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
+  else
+    echo "No snapshots have been created. Have you run make lately?"
+    exit
   fi
 }
 connect_image() {
