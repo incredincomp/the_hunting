@@ -14,6 +14,7 @@ Already changing the world around us to fit our needs :muscle:
 * DigitalOcean Account
 * doctl installed and configured
 * Some API keys if you want good results for subdomain enum
+* Works on Ubuntu 20.04 + ask @1efty
 * if you want to backup your box super easy without scp, configure aws like below
 
 # Warning

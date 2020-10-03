@@ -10,7 +10,7 @@ usage() {
 }
 
 # setting up platform/system checks
-
+dist=$(lsb_release -is)
 
 function update_all_tools() {
   # Probably need to add some uname checks and then set up package repo.
@@ -28,8 +28,16 @@ function pre_reqs() {
 }
 
 # tool install
+function install_docker() {
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  apt-get update
+  apt-get install docker-ce docker-ce-cli containerd.io
+}
+
 function install_chromium() {
   # https://askubuntu.com/questions/1204571/chromium-without-snap
+  echo "" >> /etc/apt/sources.lists.d/debian.list
   cat >/etc/apt/sources.lists.d/debian.list <<EOF
 deb http://ftp.debian.org/debian buster main
 deb http://ftp.debian.org/debian buster-updates main
@@ -65,6 +73,9 @@ EOF
   apt update && apt install chromium
 }
 
+function snap_install_chrome() {
+snap install chromium
+}
 function install_amass() {
   curl -sSL https://github.com/OWASP/Amass/releases/download/v3.10.4/amass_linux_amd64.zip -o amass.zip
   unzip amass.zip
@@ -128,16 +139,21 @@ function finish_s3fs() {
   echo "hunting-loot /home/root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other 0 0" >> /etc/fstab
 }
 function install_zap() {
-  true
+  wget https://github.com/zaproxy/zaproxy/releases/download/v2.9.0/ZAP_2.9.0_Crossplatform.zip
+  unzip ZAP_2.9.0_Crossplatform.zip -d ~/zap/
 }
 
 function install_tools() {
   cd ./temp
+  if [ "$dist" == "Ubuntu" ]; then
+    snap_install_chrome
+  else
+    install_chromium
+  fi
   install_amass
   install_gobuster
   install_nuclei
   install_subjack
-  install_chromium
   install_subfinder
   install_aquatone
   install_httprobe

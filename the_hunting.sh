@@ -216,13 +216,33 @@ subdomain_scanning() {
 all_subdomain_scanning() {
   nuclei -v -json -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
 }
-run_zap() {
-  echo "${yellow}Running zap scan...${reset}"
-  echo "${red} Just kidding! Working on it though.${reset}"
-  echo "${green}zap scan finished...${reset}"
-}
 run_nmap() {
   true
+}
+# zap stuff
+start_zap() {
+  file="$subdomain_scan_target_file"
+  echo "${yellow}Starting zap instance...${reset}"
+  echo "${red} Just kidding! Working on it though.${reset}"
+  ./home/root/zap/zap.sh -daemon -port 8090 -config api.key=12345 &>/dev/null &
+  echo "${green}zap started!${reset}"
+}
+stop_zap() {
+  curl -s "http://localhost:8090/JSON/core/action/shutdown/?apikey=12345"
+}
+zap_spider() {
+  file="$subdomain_scan_target_file"
+  for sf in $file; do
+    curl -s "http://localhost:8090/JSON/spider/action/scan/?apikey=12345&zapapiformat=JSON&formMethod=GET&url=""$sf" | jq .
+  # get spider status, check it every 30 seconds until value is 100
+    while true; do
+      value=$(curl -s "http://localhost:8090/JSON/spider/view/status/?apikey=12345" | jq -r ".status")
+      if [ value = "100" ]; then
+        break
+      fi
+      sleep 15
+    done
+  done
 }
 # notifications slack
 notify_finished() {
@@ -294,9 +314,10 @@ undo_subdomain_file() {
     touch ./deepdive/subdomain.txt
   fi
 }
-make_csv() {
+make_files() {
   touch ./csvs/"$target"-csv.txt
   paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./csvs/"$target"-csv.txt
+  cp ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt ./files/newline/"$target"-newline.txt
 }
 # >>
 
@@ -306,7 +327,6 @@ read_direct_wordlist() {
 uniq_subdomains() {
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >>./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
-
 double_check_excluded() {
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
     grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
@@ -324,12 +344,18 @@ parse_json() {
 # doctl hax
 create_image() {
   image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
-  size="s-1vcpu-1gb"
-  region="sfo2"
-  if [ -z $set_domain ]; then
-    domain=$set_domain
+  if [ -n "$image_id" ]; then
+    size="s-1vcpu-1gb"
+    region="sfo2"
+    if [ -z $set_domain ]; then
+      domain=$set_domain
+    else
+      domain=""
+    fi
+    doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
   else
-    domain=""
+    echo "No snapshots have been created. Have you run make lately?"
+    exit
   fi
   doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
 }
@@ -592,7 +618,7 @@ main() {
     validation
     notify_finished
     double_check_excluded
-    make_csv
+    make_files
     echo "${green}Scan for "$target" finished successfully${reset}"
     duration=$SECONDS
     echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
