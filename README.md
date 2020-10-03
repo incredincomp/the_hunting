@@ -14,6 +14,7 @@ Already changing the world around us to fit our needs :muscle:
 * DigitalOcean Account *(for now)*
 * doctl installed and configured
 * Some API keys if you want good results for subdomain enum
+* Works on Ubuntu 20.04 + ask @1efty
 
 # Warning
 Slack integration is included.. you need to add some data to aptly named files and you should be off to the races. Mind you, if you set up file upload by filling in the proper data in `./bot_user_oauth_at.txt` and `./slack_channel.txt`, you also need to have the a bot setup with the proper permissions to post files to whatever channel, then invite the bot to that channel.

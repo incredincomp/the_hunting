@@ -28,6 +28,13 @@ function pre_reqs() {
 }
 
 # tool install
+function install_docker() {
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  apt-get update
+  apt-get install docker-ce docker-ce-cli containerd.io
+}
+
 function install_chromium() {
   # https://askubuntu.com/questions/1204571/chromium-without-snap
   echo "" >> /etc/apt/sources.lists.d/debian.list
@@ -121,7 +128,8 @@ function install_jq() {
 }
 
 function install_zap() {
-  true
+  wget https://github.com/zaproxy/zaproxy/releases/download/v2.9.0/ZAP_2.9.0_Crossplatform.zip
+  unzip ZAP_2.9.0_Crossplatform.zip -d ~/zap/
 }
 
 function install_tools() {

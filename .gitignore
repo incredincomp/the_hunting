@@ -3,3 +3,8 @@ bot_user_oauth_at.txt
 slack_channel.txt
 amass_config.ini
 subfinder.yaml
+files/*
+targets/*
+deepdive/*
+backup-files/*
+temp/*
