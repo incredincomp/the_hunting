@@ -7,3 +7,5 @@ chmod 664 /etc/systemd/system/s3fs.service
 systemctl daemon-reload
 systemctl enable s3fs.service
 apt update && apt upgrade -y
+export S3_ENDPOINT=$(cat ./the_hunting/backup-files/s3-endpoint.txt)
+export S3_BUCKET=$(cat ./the_hunting/backup-files/s3-bucket.txt)

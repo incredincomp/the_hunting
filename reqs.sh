@@ -37,9 +37,11 @@ function aws_create() {
   read answer2
   if [ "$answer2" == y ]; then
     s3_endpoint=$(aws s3api create-bucket --bucket hunting-loot-"$rand" --profile the_hunting | jq -r ".Location" | tr -d /)
+    echo "$s3_endpoint" > ./backup-files/s3-bucket.txt
     echo "http://""$s3_endpoint"".s3.us-east-1.amazonaws.com" > ./backup-files/s3-endpoint.txt
   fi
   echo "You are ready to rock and roll. Run 'make build' and wear your mask!"
 }
 install_make
+install_packer
 install_awscli

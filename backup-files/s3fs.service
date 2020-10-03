@@ -2,7 +2,7 @@
 After=network.service
 
 [Service]
-ExecStart=s3fs hunting-loot /root/the_hunting/s3-booty -o nonempty -o url=http://hunting-loot.s3.amazonaws.com/
+ExecStart=s3fs $S3_BUCKET /root/the_hunting/s3-booty -o nonempty -o url=$S3_ENDPOINT
 
 [Install]
 WantedBy=default.target
