@@ -18,12 +18,7 @@
     "provisioners": [
         {
             "type": "shell",
-            "inline": [
-                "mkdir ~/backup-files",
-                "git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git",
-                "cd ./the_hunting",
-                "./install.sh --install"
-            ]
+            "script": "./build/scripts/start.sh"
         },
         {
             "type": "file",
@@ -32,10 +27,11 @@
         },
         {
             "type": "shell",
-            "inline": [
-                "cp ~/backup-files/passwd-s3fs /etc/passwd-s3fs",
-                "chmod 600 /etc/passwd-s3fs"
-            ]
+            "script": "./build/scripts/provision.sh"
+        },
+        {
+            "type": "shell",
+            "script": "./build/scripts/finish.sh"
         }
     ]
 }
