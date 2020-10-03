@@ -55,17 +55,17 @@ ssh_file="~/.ssh/id_rsa"
 CHROMIUM="${CHROMIUM:-"chromium"}"
 chromiumPath="$(which $CHROMIUM)"
 
-if [ -s ./slack_url.txt ]; then
+if [ -s ./backup-files/slack_url.txt ]; then
   slack_url=$(<slack_url.txt)
 else
   slack_url=""
 fi
-if [ -s ./bot_user_oauth_at.txt ]; then
+if [ -s ./backup-files/bot_user_oauth_at.txt ]; then
   bot_token=$(<bot_user_oauth_at.txt)
 else
   bot_token=""
 fi
-if [ -s ./slack_channel.txt ]; then
+if [ -s ./backup-files/slack_channel.txt ]; then
   slack_channel=$(<slack_channel.txt)
 else
   slack_channel=""
@@ -109,9 +109,9 @@ excludedomains() {
 # parents
 run_amass() {
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
-    amass enum -norecursive -passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
+    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   else
-    amass enum -norecursive -passive -config ./amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
+    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   fi
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
@@ -122,9 +122,9 @@ run_amass() {
 #new amass
 run_json_amass() {
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
-    amass enum -norecursive -passive -config ./amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   else
-    amass enum -norecursive -passive -config ./amass_config.ini -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   fi
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
@@ -133,7 +133,7 @@ run_json_amass() {
   #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
 }
 run_subfinder_json() {
-  subfinder -silent -config ./subfinder.yaml -d "$target" -o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW -all
+  subfinder -silent -config ./backup-files/subfinder.yaml -d "$target" -o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW -all
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
   #notify_error
