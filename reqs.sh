@@ -1,4 +1,5 @@
 #!/bin/bash
+rand=$(openssl rand -hex 16)
 function install_make() {
   sudo apt install make
 }
@@ -25,7 +26,7 @@ function install_packer() {
 function aws_config() {
   echo "Set your aws configuration here, would you like to do this? [yn]"
   read answer
-  echo "You need to use us-west-1 for now.. sorry."
+  echo "You need to use us-east-1 for now.. sorry."
   if [ "$answer" == y ]; then
     aws configure --profile the_hunting
     export AWS_PROFILE=the_hunting
@@ -35,7 +36,8 @@ function aws_create() {
   echo "Do you need a new bucket to use? this may destroy data, beware! [yn]"
   read answer2
   if [ "$answer2" == y ]; then
-    aws s3api create-bucket --bucket hunting-loot --create-bucket-configuration LocationConstraint=us-west-1
+    s3_endpoint=$(aws s3api create-bucket --bucket hunting-loot-"$rand" --profile the_hunting | jq -r ".Location" | tr -d /)
+    echo "http://""$s3_endpoint"".s3.us-east-1.amazonaws.com" > ./backup-files/s3-endpoint.txt
   fi
   echo "You are ready to rock and roll. Run 'make build' and wear your mask!"
 }
