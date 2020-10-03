@@ -27,6 +27,7 @@ function aws_config() {
   read answer
   if [ "$answer" == y ]; then
     aws configure --profile the_hunting
+    export AWS_PROFILE=the_hunting
   fi
 }
 function aws_create() {
