@@ -3,8 +3,9 @@ bot_user_oauth_at.txt
 slack_channel.txt
 amass_config.ini
 subfinder.yaml
+passwd-s3fs
 files/*
 targets/*
 deepdive/*
 temp/*
-#backup-files/*
+backup-files/*
