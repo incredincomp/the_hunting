@@ -22,6 +22,6 @@ fi
 echo "Do you need a new bucket to use? this may destroy data, beware! [yn]"
 read answer2
 if [ "$answer2" == y ]; then
-  aws s3api create-bucket --bucket hunting-loot --region us-west-2
+  aws s3api create-bucket --bucket hunting-loot
 fi
 echo "You are ready to rock and roll. Run ./the_hunting.sh and stay safe!"
