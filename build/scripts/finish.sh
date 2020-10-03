@@ -2,3 +2,4 @@
 cp ~/backup-files/passwd-s3fs /etc/passwd-s3fs
 chmod 600 /etc/passwd-s3fs
 cp ~/backup-files/* ~/the_hunting/backup-files/
+apt update && apt upgrade -y
