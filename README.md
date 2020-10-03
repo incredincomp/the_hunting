@@ -33,7 +33,7 @@ git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git &
 install pre-reqs make and packer
 ```bash
 chmod +x reqs.sh
-sudo ./reqs.sh
+./reqs.sh
 ```
 
 export your digital ocean api key to env
