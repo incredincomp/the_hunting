@@ -26,7 +26,7 @@ function aws_config() {
   echo "Set your aws configuration here, would you like to do this? [yn]"
   read answer
   if [ "$answer" == y ]; then
-    aws configure --profile the_hunting
+    aws configure set default.region us-west-1 --profile the_hunting 
     export AWS_PROFILE=the_hunting
   fi
 }
@@ -34,7 +34,7 @@ function aws_create() {
   echo "Do you need a new bucket to use? this may destroy data, beware! [yn]"
   read answer2
   if [ "$answer2" == y ]; then
-    aws s3api create-bucket --bucket hunting-loot
+    aws s3api create-bucket --bucket hunting-loot --create-bucket-configuration LocationConstraint=us-west-1
   fi
   echo "You are ready to rock and roll. Run ./the_hunting.sh and stay safe!"
 }
