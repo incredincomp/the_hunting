@@ -56,17 +56,17 @@ CHROMIUM="${CHROMIUM:-"chromium"}"
 chromiumPath="$(which $CHROMIUM)"
 
 if [ -s ./backup-files/slack_url.txt ]; then
-  slack_url=$(<slack_url.txt)
+  slack_url=$(<./backup-files/slack_url.txt)
 else
   slack_url=""
 fi
 if [ -s ./backup-files/bot_user_oauth_at.txt ]; then
-  bot_token=$(<bot_user_oauth_at.txt)
+  bot_token=$(<./backup-files/bot_user_oauth_at.txt)
 else
   bot_token=""
 fi
 if [ -s ./backup-files/slack_channel.txt ]; then
-  slack_channel=$(<slack_channel.txt)
+  slack_channel=$(<./backup-files/slack_channel.txt)
 else
   slack_channel=""
 fi
