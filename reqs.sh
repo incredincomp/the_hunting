@@ -37,7 +37,7 @@ function aws_create() {
   if [ "$answer2" == y ]; then
     aws s3api create-bucket --bucket hunting-loot --create-bucket-configuration LocationConstraint=us-west-1
   fi
-  echo "You are ready to rock and roll. Run ./the_hunting.sh and stay safe!"
+  echo "You are ready to rock and roll. Run 'make build' and wear your mask!"
 }
 install_make
 install_awscli
