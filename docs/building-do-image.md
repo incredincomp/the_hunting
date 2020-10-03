@@ -4,7 +4,7 @@ There is a [Packer](https:/github.com/hashicorp/packer) template available that 
 
 ## Setup Environment
 
-The only requirement is that `$DIGITALOCEAN_ACCESS_TOKEN` is properly set in the environment. If you have `yq` installed it is quite simple.
+The only requirement is that `$DIGITALOCEAN_ACCESS_TOKEN` is properly set in the environment. If you have `yq` installed, it is quite simple.
 
 MacOS
 

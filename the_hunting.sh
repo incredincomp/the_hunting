@@ -50,6 +50,7 @@ subdomainThreads=15
 subjackThreads=15
 httprobeThreads=50
 
+ssh_file="~/.ssh/id_rsa"
 # Good call @1efty
 CHROMIUM="${CHROMIUM:-"chromium"}"
 chromiumPath="$(which $CHROMIUM)"
@@ -132,7 +133,7 @@ run_json_amass() {
   #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
 }
 run_subfinder_json() {
-  subfinder -config ./subfinder.yaml -d "$target" -o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW -all
+  subfinder -silent -config ./subfinder.yaml -d "$target" -o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW -all
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
   #notify_error
@@ -356,16 +357,16 @@ create_image() {
     echo "No snapshots have been created. Have you run make lately?"
     exit
   fi
+  doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
 }
 connect_image() {
-   doctl compute ssh the-hunting
+  doctl compute ssh the-hunting
 }
 remove_image() {
-   doctl compute droplet delete the-hunting
+  doctl compute droplet delete the-hunting
 }
-backup_image() {
-  drop_ip=$(doctl compute droplet list --tag-name "PublicIPv4")
-}
+# S3fs-fuse
+
 # children
 subdomain_enum() {
   echo "${yellow}Running Amass enum...${reset}"

@@ -11,10 +11,11 @@ Already changing the world around us to fit our needs :muscle:
 # Requirements
 
 * a healthy dose of tenacity
-* DigitalOcean Account *(for now)*
+* DigitalOcean Account
 * doctl installed and configured
 * Some API keys if you want good results for subdomain enum
 * Works on Ubuntu 20.04 + ask @1efty
+* if you want to backup your box super easy without scp, configure aws like below
 
 # Warning
 Slack integration is included.. you need to add some data to aptly named files and you should be off to the races. Mind you, if you set up file upload by filling in the proper data in `./bot_user_oauth_at.txt` and `./slack_channel.txt`, you also need to have the a bot setup with the proper permissions to post files to whatever channel, then invite the bot to that channel.
@@ -113,6 +114,8 @@ This will run all nuclei templates on your list of targets inside of `subdomains
 ```bash
 ./the_hunting.sh --file-all subdomains.txt
 ```
+### Configure AWS for backups.
+You are going to need to run `sudo ./reqs.sh` and configure AWS cli through that prompt or have it done previously.
 
 # To-Do/Upcoming
 1. switching to aws, probably cheaper and easier to manage. Able to store data and probably just send some encrypted emails.. *maybe need a domain for that though* ![#34](https://github.com/incredincomp/the_hunting/issues/34)

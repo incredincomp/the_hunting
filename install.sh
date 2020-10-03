@@ -24,7 +24,7 @@ function update_the_hunting() {
 #prereqs
 function pre_reqs() {
   apt update && apt upgrade -y
-  apt install sudo wget git unzip parallel golang openjdk-8-jdk build-essential -y
+  apt install sudo wget git unzip parallel golang openjdk-8-jdk build-essential s3fs -y
 }
 
 # tool install
@@ -127,6 +127,17 @@ function install_jq() {
   mv ./jq-linux64 /usr/local/bin/jq
 }
 
+function compile_s3fs() {
+  git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+  cd s3fs-fuse
+  ./autogen.sh
+  ./configure
+  make
+  sudo make install
+}
+function finish_s3fs() {
+  echo "hunting-loot /home/root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other 0 0" >> /etc/fstab
+}
 function install_zap() {
   wget https://github.com/zaproxy/zaproxy/releases/download/v2.9.0/ZAP_2.9.0_Crossplatform.zip
   unzip ZAP_2.9.0_Crossplatform.zip -d ~/zap/
@@ -148,6 +159,7 @@ function install_tools() {
   install_httprobe
   install_jq
   install_zap
+  finish_s3fs
   cd ..
 }
 
