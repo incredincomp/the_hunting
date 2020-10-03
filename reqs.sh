@@ -25,8 +25,9 @@ function install_packer() {
 function aws_config() {
   echo "Set your aws configuration here, would you like to do this? [yn]"
   read answer
+  echo "You need to use us-west-1 for now.. sorry."
   if [ "$answer" == y ]; then
-    aws configure set default.region us-west-1 --profile the_hunting 
+    aws configure --profile the_hunting
     export AWS_PROFILE=the_hunting
   fi
 }
