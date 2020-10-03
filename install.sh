@@ -159,7 +159,7 @@ function install_tools() {
   install_httprobe
   install_jq
   install_zap
-  finish_s3fs
+  #finish_s3fs
   cd ..
 }
 
