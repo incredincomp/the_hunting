@@ -8,6 +8,8 @@ Already changing the world around us to fit our needs :muscle:
 
 [proof](https://github.com/projectdiscovery/nuclei/pull/330)
 
+:heart: ~[@incredincomp](https://twitter.com/incredincomp)
+
 # Requirements
 
 * a healthy dose of tenacity
@@ -49,14 +51,9 @@ export hunting_fingerprint=11:22:33:44:55:66:77:88:99:AA
 ## Building box
 From inside /the_hunting.. run
 ```bash
-make
+make build
 ```
-
-##*How I make it work for me...*##
-
-run --target then wait it out.. then when you get your notification you can just log back on and run `./the_hunting.sh --file ./target/date-time/responsive-domains-80-443.txt`
-
-:heart: ~[@incredincomp](https://twitter.com/incredincomp)
+Should complete after about 10 minutes.
 
 ### *THE INSTALL.SH SCRIPT IS SOMEWHAT TESTED, NOW BETTER FORMATTED, AND STILL MAYBE DANGEROUS.. GOOD LUCK*
 need sudo for program installs with packaging program
@@ -114,8 +111,15 @@ This will run all nuclei templates on your list of targets inside of `subdomains
 ```bash
 ./the_hunting.sh --file-all subdomains.txt
 ```
+
+## Configuration
+### Config Files
+All your config files are to be stored inside of `./backup-files/`. I have placed default configs for subfinder and amass in here for you, as well as the other files needed for a fully configured instance. 
+*The one really important one right now is the `./backup-files/subfinder.yaml` one, add some keys/delete all the stuff you dont need.*
+
 ### Configure AWS for backups.
 You are going to need to run `sudo ./reqs.sh` and configure AWS cli through that prompt or have it done previously.
+also, make a file named `./backup-files/passwd-s3fs` on your host machine and that will be copied over on provision and moved to where it needs to be.
 
 # To-Do/Upcoming
 1. switching to aws, probably cheaper and easier to manage. Able to store data and probably just send some encrypted emails.. *maybe need a domain for that though* ![#34](https://github.com/incredincomp/the_hunting/issues/34)
