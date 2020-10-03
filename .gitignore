@@ -6,5 +6,4 @@ subfinder.yaml
 files/*
 targets/*
 deepdive/*
-backup-files/*
 temp/*
