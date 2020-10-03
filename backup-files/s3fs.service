@@ -1,0 +1,8 @@
+[Unit]
+After=network.service
+
+[Service]
+ExecStart=s3fs hunting-loot /root/the_hunting/s3-booty -o nonempty
+
+[Install]
+WantedBy=default.target
