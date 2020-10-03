@@ -136,7 +136,7 @@ function compile_s3fs() {
   sudo make install
 }
 function finish_s3fs() {
-  echo "hunting-loot /home/root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other 0 0" >> /etc/fstab
+  echo "hunting-loot /home/root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other,url=http://hunting-loot.s3-us-west-1.amazonaws.com 0 0" >> /etc/fstab
 }
 function install_zap() {
   wget https://github.com/zaproxy/zaproxy/releases/download/v2.9.0/ZAP_2.9.0_Crossplatform.zip

@@ -31,6 +31,13 @@
             "type": "file",
             "source": "{{ user `the_hunting_dir` }}/backup-files/",
             "destination": "~/backup-files"
+        },
+        {
+            "type": "shell"
+            "inline": [
+                "cp ~/backup-files/passwd-s3fs /etc/passwd-s3fs",
+                "chmod 600 /etc/passwd-s3fs"
+            ]
         }
     ]
 }
