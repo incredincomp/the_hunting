@@ -1,6 +1,7 @@
 #!/bin/bash
 apt install make python3-pip
 python3 -m pip install --user awscli
+export PATH="${PATH}:/root/.local/bin"
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 sudo apt-get update && sudo apt-get install packer
