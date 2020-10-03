@@ -17,7 +17,7 @@ sudo apt-get update && sudo apt-get install packer
 echo "Set your aws configuration here, would you like to do this? [yn]"
 read answer
 if [ "$answer" == y ]; then
-  aws configure set region us-west-2 --profile default
+  aws configure set region us-west-2
 fi
 echo "Do you need a new bucket to use? this may destroy data, beware! [yn]"
 read answer2
