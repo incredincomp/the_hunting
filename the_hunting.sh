@@ -357,7 +357,6 @@ create_image() {
     echo "No snapshots have been created. Have you run make lately?"
     exit
   fi
-  doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
 }
 connect_image() {
   doctl compute ssh the-hunting
