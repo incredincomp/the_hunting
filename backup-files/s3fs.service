@@ -2,6 +2,7 @@
 After=network.service
 
 [Service]
+EnvironmentFile=/root/.bashrc
 ExecStart=s3fs $S3_BUCKET /root/the_hunting/s3-booty -o nonempty -o url=$S3_ENDPOINT
 
 [Install]
