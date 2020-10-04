@@ -74,12 +74,12 @@ fi
 target=""
 subdomain_scan_target=""
 declare -a excluded=()
-usage() {
+function usage() {
   echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n --scan\t-\tscan a pasted csv list of subdomains\n --file\t-\tpass a newline seperated file of subdomains to scan\n --file-all\t-\tsame as --file, but uses all templates to scan\n --logo\t-\tprints a cool ass logo\n --license\t-\tprints a boring ass license" 1>&2
   exit 1
 }
 
-excludedomains() {
+function excludedomains() {
   echo "Excluding domains (if you set them with -e)..."
   if [ -z "$excluded" ]; then
     echo "No subdomains have been exluded"
@@ -107,7 +107,7 @@ excludedomains() {
   fi
 }
 # parents
-run_amass() {
+function run_amass() {
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
     amass enum -norecursive -passive -config ./backup-files/amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   else
@@ -120,7 +120,7 @@ run_amass() {
   cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >>./targets/"$target"/"$foldername"/alldomains.txt
 }
 #new amass
-run_json_amass() {
+function run_json_amass() {
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
     amass enum -norecursive -passive -config ./backup-files/amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   else
@@ -132,7 +132,7 @@ run_json_amass() {
   #fi
   #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
 }
-run_subfinder_json() {
+function run_subfinder_json() {
   subfinder -silent -config ./backup-files/subfinder.yaml -d "$target" -o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW -all
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
@@ -140,7 +140,7 @@ run_subfinder_json() {
   #fi
 }
 #gobuster vhost broken
-run_gobuster_vhost() {
+function run_gobuster_vhost() {
   echo "${yellow}Running Gobuster vhost...${reset}"
   gobuster vhost -u "$target" -w ./wordlists/subdomains-top-110000.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
   ret=$?
@@ -150,7 +150,7 @@ run_gobuster_vhost() {
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt >>./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster vhost finished.${reset}"
 }
-run_gobuster_dns() {
+function run_gobuster_dns() {
   echo "${yellow}Running Gobuster dns...${reset}"
   gobuster dns -d "$target" -w ./wordlists/subdomains-top-110000.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
   ret=$?
@@ -160,7 +160,7 @@ run_gobuster_dns() {
   cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt | awk -F ' ' '{print $2}' >>./targets/"$target"/"$foldername"/alldomains.txt
   echo "${green}Gobuster dns finished.${reset}"
 }
-run_subjack() {
+function run_subjack() {
   echo "${yellow}Running subjack...${reset}"
   $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "$HOME/go/src/github.com/haccer/subjack/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
   ret=$?
@@ -169,7 +169,7 @@ run_subjack() {
   fi
   echo "${green}subjack finished.${reset}"
 }
-run_httprobe() {
+function run_httprobe() {
   echo "${yellow}Running httprobe...${reset}"
   cat ./targets/"$target"/"$foldername"/subdomains-jq.txt | httprobe -c "$httprobeThreads" >>./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   ret=$?
@@ -178,7 +178,7 @@ run_httprobe() {
   fi
   echo "${green}httprobe finished.${reset}"
 }
-run_aqua() {
+function run_aqua() {
   echo "${yellow}Running Aquatone...${reset}"
   cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | aquatone -threads $auquatoneThreads -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out
   ret=$?
@@ -189,7 +189,7 @@ run_aqua() {
   cp ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt ./targets/"$target"/"$foldername"/aquatone_urls.txt
   echo "${green}Aquatone finished...${reset}"
 }
-run_gobuster_dir() {
+function run_gobuster_dir() {
   #crazy headed and dangerous, untested really.. dont know what happens with output
   echo "${yellow}Running Gobuster dir...${reset}"
   read_direct_wordlist | parallel --results ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/ gobuster dir -z -q -u {} -w ./wordlists/directory-list.txt -f -k -e -r -a "Mozilla/5.0 \(X11\; Ubuntu\; Linux x86_64\; rv\:80.0\) Gecko/20100101 Firefox/80.0"
@@ -200,37 +200,37 @@ run_gobuster_dir() {
   cat ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/1/"$target"/stdout | awk -F ' ' '{print $1}' >>./targets/"$target"/"$foldername"/live_paths.txt
   echo "${green}Gobuster dir finished...${reset}"
 }
-run_dirb() {
+function run_dirb() {
   true
 }
-run_nuclei() {
+function run_nuclei() {
   echo "${yellow}Running Nuclei templates scan...${reset}"
   nuclei -v -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-results.json
   #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
   #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
-subdomain_scanning() {
+function subdomain_scanning() {
   nuclei -v -json -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
 }
-all_subdomain_scanning() {
+function all_subdomain_scanning() {
   nuclei -v -json -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
 }
-run_nmap() {
+function run_nmap() {
   true
 }
 # zap stuff
-start_zap() {
+function start_zap() {
   file="$subdomain_scan_target_file"
   echo "${yellow}Starting zap instance...${reset}"
   echo "${red} Just kidding! Working on it though.${reset}"
   ./home/root/zap/zap.sh -daemon -port 8090 -config api.key=12345 &>/dev/null &
   echo "${green}zap started!${reset}"
 }
-stop_zap() {
+function stop_zap() {
   curl -s "http://localhost:8090/JSON/core/action/shutdown/?apikey=12345"
 }
-zap_spider() {
+function zap_spider() {
   file="$subdomain_scan_target_file"
   for sf in $file; do
     curl -s "http://localhost:8090/JSON/spider/action/scan/?apikey=12345&zapapiformat=JSON&formMethod=GET&url=""$sf" | jq .
@@ -245,7 +245,7 @@ zap_spider() {
   done
 }
 # notifications slack
-notify_finished() {
+function notify_finished() {
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
@@ -256,7 +256,7 @@ notify_finished() {
     echo "${green}Notification sent!${reset}"
   fi
 }
-notify_subdomain_scan() {
+function notify_subdomain_scan() {
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
@@ -273,7 +273,7 @@ notify_subdomain_scan() {
   fi
   echo "${green}Notification sent!${reset}"
 }
-notify_error() {
+function notify_error() {
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
@@ -285,7 +285,7 @@ notify_error() {
   fi
 }
 
-send_file() {
+function send_file() {
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
@@ -301,40 +301,38 @@ send_file() {
   fi
 }
 # << remove
-undo_amass_config() {
+function undo_amass_config() {
   if [ -s ./amass_config.bak ]; then
     mv ./amass_config.bak ./amass_config.ini
     #rm ./amass_config.bak
   fi
 }
 
-undo_subdomain_file() {
+function undo_subdomain_file() {
   if [ -s ./deepdive/subdomain.txt ]; then
     rm ./deepdive/subdomain.txt
     touch ./deepdive/subdomain.txt
   fi
 }
-make_files() {
-  touch ./csvs/"$target"-csv.txt
-  paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./csvs/"$target"-csv.txt
-  cp ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt ./files/newline/"$target"-newline.txt
-}
-# >>
 
-read_direct_wordlist() {
+function make_files() {
+  paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./s3-booty/"$target"-csv.txt
+  cp ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt ./s3-booty/"$target"-newline.txt
+}
+function read_direct_wordlist() {
   cat ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
-uniq_subdomains() {
+function uniq_subdomains() {
   uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >>./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
-double_check_excluded() {
+function double_check_excluded() {
   if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
     grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
     rm ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
     mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   fi
 }
-parse_json() {
+function parse_json() {
   # ips
   cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.ip' >./targets/"$target"/"$foldername"/"$target"-ips.txt
   #domain names
@@ -342,7 +340,7 @@ parse_json() {
 }
 
 # doctl hax
-create_image() {
+function create_image() {
   image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
   if [ -n "$image_id" ]; then
     size="s-1vcpu-1gb"
@@ -358,16 +356,19 @@ create_image() {
     exit
   fi
 }
-connect_image() {
+function connect_image() {
   doctl compute ssh the-hunting
 }
-remove_image() {
+function remove_image() {
   doctl compute droplet delete the-hunting
 }
 # S3fs-fuse
-
+function upload_s3() {
+  aws cp ./targets/"$target"/"$foldername" s3://$S3_BUCKET
+  aws cp  s3://$S3_BUCKET
+}
 # children
-subdomain_enum() {
+function subdomain_enum() {
   echo "${yellow}Running Amass enum...${reset}"
   #Amass https://github.com/OWASP/Amass
   #run_amass
@@ -379,59 +380,59 @@ subdomain_enum() {
   #run_gobuster_vhost
   #run_gobuster_dns
 }
-sub_takeover() {
+function sub_takeover() {
   run_subjack
 }
-target_valid() {
+function target_valid() {
   run_httprobe
 }
-webapp_valid() {
+function webapp_valid() {
   run_aqua
 }
-fuzz_em() {
+function fuzz_em() {
   #run_gobuster_dir
   run_dirb
 }
-webapp_scan() {
+function webapp_scan() {
   run_nuclei
 }
-port_scan() {
+function port_scan() {
   run_nmap
 }
 # main func's
-recon() {
+function recon() {
   subdomain_enum
   sub_takeover
 }
-validation() {
+function validation() {
   target_valid
   webapp_valid
   uniq_subdomains
 }
-scanning() {
+function scanning() {
   port_scan
   fuzz_em
   webapp_scan
 }
 # graphic opening stuff
-logo() {
+function logo() {
   base64 -d <<<"4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWXICDilojilojilZfilojilojilojilojilojilojilojilZcgICAgICAgIOKWiOKWiOKVlyAg4paI4paI4pWX4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWXIOKWiOKWiOKWiOKWiOKWiOKWiOKVlyAgICDilojilojilojilojilojilojilojilZfilojilojilZcgIOKWiOKWiOKVlwrilZrilZDilZDilojilojilZTilZDilZDilZ3ilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVkOKVkOKVnSAgICAgICAg4paI4paI4pWRICDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilojilojilZcgIOKWiOKWiOKVkeKVmuKVkOKVkOKWiOKWiOKVlOKVkOKVkOKVneKWiOKWiOKVkeKWiOKWiOKWiOKWiOKVlyAg4paI4paI4pWR4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWdICAgIOKWiOKWiOKVlOKVkOKVkOKVkOKVkOKVneKWiOKWiOKVkSAg4paI4paI4pWRCiAgIOKWiOKWiOKVkSAgIOKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKWiOKVlyAgICAgICAgICDilojilojilojilojilojilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZTilojilojilZcg4paI4paI4pWRICAg4paI4paI4pWRICAg4paI4paI4pWR4paI4paI4pWU4paI4paI4pWXIOKWiOKWiOKVkeKWiOKWiOKVkSAg4paI4paI4paI4pWXICAg4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4pWRCiAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVlOKVkOKVkOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVnSAgICAgICAgICDilojilojilZTilZDilZDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZHilojilojilZEgICDilojilojilZEgICDilZrilZDilZDilZDilZDilojilojilZHilojilojilZTilZDilZDilojilojilZEKICAg4paI4paI4pWRICAg4paI4paI4pWRICDilojilojilZHilojilojilojilojilojilojilojilZfilojilojilojilojilojilojilojilZfilojilojilZEgIOKWiOKWiOKVkeKVmuKWiOKWiOKWiOKWiOKWiOKWiOKVlOKVneKWiOKWiOKVkSDilZrilojilojilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZEg4pWa4paI4paI4paI4paI4pWR4pWa4paI4paI4paI4paI4paI4paI4pWU4pWd4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4pWR4paI4paI4pWRICDilojilojilZEKICAg4pWa4pWQ4pWdICAg4pWa4pWQ4pWdICDilZrilZDilZ3ilZrilZDilZDilZDilZDilZDilZDilZ3ilZrilZDilZDilZDilZDilZDilZDilZ3ilZrilZDilZ0gIOKVmuKVkOKVnSDilZrilZDilZDilZDilZDilZDilZ0g4pWa4pWQ4pWdICDilZrilZDilZDilZDilZ0gICDilZrilZDilZ0gICDilZrilZDilZ3ilZrilZDilZ0gIOKVmuKVkOKVkOKVkOKVnSDilZrilZDilZDilZDilZDilZDilZ0g4pWa4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZ0="
 }
-credits() {
+function credits() {
   print_line
   base64 -d <<<"Q3JlZGl0czogVGhhbmtzIHRvIGh0dHBzOi8vZ2l0aHViLmNvbS9PSiBodHRwczovL2dpdGh1Yi5jb20vT1dBU1AgaHR0cHM6Ly9naXRodWIuY29tL2hhY2NlcgpodHRwczovL2dpdGh1Yi5jb20vdG9tbm9tbm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9taWNoZW5yaWtzZW4gJiBUaGUgRGFyayBSYXZlciBmb3IgdGhlaXIKd29yayBvbiB0aGUgcHJvZ3JhbXMgdGhhdCB3ZW50IGludG8gdGhlIG1ha2luZyBvZiB0aGVfaHVudGluZy5zaC4="
   echo " "
   print_line
 }
-licensing_info() {
+function licensing_info() {
   base64 -d <<<"dGhlX2h1bnRpbmcgQ29weXJpZ2h0IChDKSAyMDIwICBAaW5jcmVkaW5jb21wClRoaXMgcHJvZ3JhbSBjb21lcyB3aXRoIEFCU09MVVRFTFkgTk8gV0FSUkFOVFk7IGZvciBkZXRhaWxzIGNhbGwgYC4vdGhlX2h1bnRpbmcuc2ggLWxpY2Vuc2VgLgpUaGlzIGlzIGZyZWUgc29mdHdhcmUsIGFuZCB5b3UgYXJlIHdlbGNvbWUgdG8gcmVkaXN0cmlidXRlIGl0IHVuZGVyIGNlcnRhaW4gCmNvbmRpdGlvbnM7IHR5cGUgYC4vdGhlX2h1bnRpbmcuc2ggLWxpY2Vuc2VgIGZvciBkZXRhaWxzLg=="
   echo " "
 }
-print_line() {
+function print_line() {
   printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
   echo " "
 }
-open_program() {
+function open_program() {
   logo
   echo " "
   credits
@@ -439,7 +440,7 @@ open_program() {
   print_line
 }
 
-subdomain_option() {
+function subdomain_option() {
   clear
   open_program
   if [ ! -d ./deepdive ]; then
@@ -460,24 +461,24 @@ subdomain_option() {
   tput sgr0
 }
 
-credits() {
+function credits() {
   print_line
   base64 -d <<<"ICAgQ3JlZGl0czogVGhhbmtzIHRvIGh0dHBzOi8vZ2l0aHViLmNvbS9PSiBodHRwczovL2dpdGh1Yi5jb20vT1dBU1AgaHR0cHM6Ly9naXRodWIuY29tL2hhY2NlcgogICBodHRwczovL2dpdGh1Yi5jb20vdG9tbm9tbm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9taWNoZW5yaWtzZW4gJiBUaGUgRGFyayBSYXZlciBmb3IgdGhlaXIKICAgd29yayBvbiB0aGUgcHJvZ3JhbXMgdGhhdCB3ZW50IGludG8gdGhlIG1ha2luZyBvZiB0aGVfaHVudGluZy5zaC4="
   echo " "
   print_line
 }
 
-licensing_info() {
+function licensing_info() {
   base64 -d <<<"CXRoZV9odW50aW5nIENvcHlyaWdodCAoQykgMjAyMCAgQGluY3JlZGluY29tcAoJVGhpcyBwcm9ncmFtIGNvbWVzIHdpdGggQUJTT0xVVEVMWSBOTyBXQVJSQU5UWTsgZm9yIGRldGFpbHMgY2FsbCBgLi90aGVfaHVudGluZy5zaCAtbGljZW5zZScuCglUaGlzIGlzIGZyZWUgc29mdHdhcmUsIGFuZCB5b3UgYXJlIHdlbGNvbWUgdG8gcmVkaXN0cmlidXRlIGl0LgoJdW5kZXIgY2VydGFpbiBjb25kaXRpb25zOyB0eXBlIGAuL3RoZV9odW50aW5nLnNoIC1saWNlbnNlJyBmb3IgZGV0YWlscy4="
   echo " "
 }
 
-print_line() {
+function print_line() {
   printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
   echo " "
 }
 
-open_program() {
+function open_program() {
   logo
   echo " "
   credits
@@ -567,7 +568,7 @@ function parse_args() {
 }
 
 # main
-main() {
+function main() {
 
   # parse CLI arguments
   parse_args $@
@@ -618,6 +619,7 @@ main() {
     notify_finished
     double_check_excluded
     make_files
+    upload_s3
     echo "${green}Scan for "$target" finished successfully${reset}"
     duration=$SECONDS
     echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."

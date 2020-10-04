@@ -138,6 +138,9 @@ function compile_s3fs() {
 function finish_s3fs() {
   echo "$S3_BUCKET"" /root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other,url=""$S3_ENDPOINT"" 0 0" >> /etc/fstab
 }
+function install_awscli() {
+  apt install awscli
+}
 function install_zap() {
   wget https://github.com/zaproxy/zaproxy/releases/download/v2.9.0/ZAP_2.9.0_Crossplatform.zip
   unzip ZAP_2.9.0_Crossplatform.zip -d ~/zap/
@@ -159,7 +162,8 @@ function install_tools() {
   install_httprobe
   install_jq
   install_zap
-  finish_s3fs
+  #finish_s3fs
+  install_awscli
   cd ..
 }
 

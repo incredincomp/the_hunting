@@ -17,6 +17,7 @@ function install_awscli() {
   cd ..
   aws_config
   aws_create
+  cp -r ~/.aws ./backup-files/
 }
 function install_packer() {
   curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
