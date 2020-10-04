@@ -460,7 +460,7 @@ function subdomain_option() {
     mkdir ./deepdive
   fi
   touch ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
-  if [ -z "$all_subdomain_scan_target_file"]; then
+  if [ -z "$all_subdomain_scan_target_file" ]; then
     all_subdomain_scanning
   else if [ -z "$subdomain_scan_target" ]; then
     subdomain_scanning
