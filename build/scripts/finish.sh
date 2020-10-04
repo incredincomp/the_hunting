@@ -13,3 +13,5 @@ export S3_BUCKET=$S3_BUCKET
 systemctl daemon-reload
 systemctl enable s3fs.service
 apt update && apt upgrade -y
+cd  the_hunting
+./the_hunting.sh --target hackerone.com

@@ -25,6 +25,7 @@ function pre_reqs() {
   apt update && apt upgrade -y
   apt install sudo wget git unzip parallel golang openjdk-8-jdk build-essential s3fs -y
   export GOPATH="${HOME}/go"
+  source ~/.bashrc
 }
 
 # tool install
