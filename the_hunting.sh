@@ -365,7 +365,7 @@ function remove_image() {
 # S3fs-fuse
 function upload_s3() {
   aws cp ./targets/"$target"/"$foldername" s3://$S3_BUCKET
-  aws cp  s3://$S3_BUCKET
+  aws cp ./s3-booty/ s3://$S3_BUCKET
 }
 # children
 function subdomain_enum() {
