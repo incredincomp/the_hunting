@@ -366,8 +366,8 @@ function remove_image() {
 }
 # S3fs-fuse
 function upload_s3() {
-  aws s3 cp --recursive ./targets/"$target"/"$foldername" s3://$S3_BUCKET
-  aws s3 cp --recursive ./s3-booty/ s3://$S3_BUCKET
+  aws s3 cp --recursive ./targets/"$target"/"$foldername" s3://$S3_BUCKET --profile the_hunting
+  aws s3 cp --recursive ./s3-booty/ s3://$S3_BUCKET --profile the_hunting
 }
 # children
 function subdomain_enum() {
