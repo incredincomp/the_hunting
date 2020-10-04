@@ -125,6 +125,7 @@ function install_subfinder() {
 function install_jq() {
   wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
   mv ./jq-linux64 /usr/local/bin/jq
+  chmod a+x /usr/local/bin/jq
 }
 
 function compile_s3fs() {

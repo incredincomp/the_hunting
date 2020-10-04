@@ -369,13 +369,13 @@ function upload_s3() {
 }
 # children
 function subdomain_enum() {
-  echo "${yellow}Running Amass enum...${reset}"
+  echo "${yellow}Running subdomain enum...${reset}"
   #Amass https://github.com/OWASP/Amass
   #run_amass
   #run_json_amass
   run_subfinder_json
   parse_json
-  echo "${green}Amass enum finished.${reset}"
+  echo "${green}subdomain recon finished.${reset}"
   #Gobuster trying to make them run at same time
   #run_gobuster_vhost
   #run_gobuster_dns
