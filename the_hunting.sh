@@ -79,7 +79,7 @@ subdomain_scan_target_file=""
 all_subdomain_scan_target_file=""
 declare -a excluded=()
 function usage() {
-  echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n --scan\t-\tscan a pasted csv list of subdomains\n --file\t-\tpass a newline seperated file of subdomains to scan\n --file-all\t-\tsame as --file, but uses all templates to scan\n --logo\t-\tprints a cool ass logo\n --license\t-\tprints a boring ass license" 1>&2
+  echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n --file\t-\tpass a newline seperated file of subdomains to scan\n --file-all\t-\tsame as --file, but uses all templates to scan\n --logo\t-\tprints a cool ass logo\n --license\t-\tprints a boring ass license" 1>&2
   exit 1
 }
 
@@ -454,7 +454,22 @@ function open_program() {
   licensing_info
   print_line
 }
-
+function get_scan_targets() {
+  #   set -f
+  #   IFS=","
+  #   subdomain_scan_target+=("$2")
+  #   unset IFS
+  #   if [ -s ./deepdive/subdomain.txt ]; then
+  #     mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
+  #   fi
+  #   IFS=$'\n'
+  #   for u in "${subdomain_scan_target[@]}"; do
+  #     printf "%s\n" "$u" >>./deepdive/subdomain.txt
+  #   done
+  #   unset IFS
+  #   subdomain_scan_target_file="./deepdive/subdomain.txt"
+  true
+}
 function subdomain_option() {
   clear
   open_program
@@ -516,23 +531,12 @@ function parse_args() {
       shift
       shift
       ;;
-    --scan)
-      set -f
-      IFS=","
-      subdomain_scan_target+=("$2")
-      unset IFS
-      if [ -s ./deepdive/subdomain.txt ]; then
-        mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
-      fi
-      IFS=$'\n'
-      for u in "${subdomain_scan_target[@]}"; do
-        printf "%s\n" "$u" >>./deepdive/subdomain.txt
-      done
-      unset IFS
-      subdomain_scan_target_file="./deepdive/subdomain.txt"
-      shift
-      shift
-      ;;
+    #maybe this was breaking this from how hacky it is...
+     --scan)
+       subdomain_scan_target=("$2")
+       shift
+       shift
+       ;;
     --file)
       subdomain_scan_target_file="$2"
       shift
