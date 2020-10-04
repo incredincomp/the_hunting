@@ -23,9 +23,9 @@ function update_the_hunting() {
 #prereqs
 function pre_reqs() {
   apt update && apt upgrade -y
-  apt install sudo wget git unzip parallel golang openjdk-8-jdk build-essential s3fs -y
+  apt install sudo wget git unzip parallel openjdk-8-jdk build-essential s3fs -y
   export GOPATH="${HOME}/go"
-  source ~/.bashrc
+  source ~/.profile
 }
 
 # tool install
@@ -147,7 +147,12 @@ function install_zap() {
   wget https://github.com/zaproxy/zaproxy/releases/download/v2.9.0/ZAP_2.9.0_Crossplatform.zip
   unzip ZAP_2.9.0_Crossplatform.zip -d ~/zap/
 }
-
+function install_go() {
+  wget https://golang.org/dl/go1.15.2.linux-amd64.tar.gz
+  tar -C /usr/local -xzf go1.15.2.linux-amd64.tar.gz
+  export PATH=$PATH:/usr/local/go/bin
+  source $HOME/.profile
+}
 function install_tools() {
   cd ./temp
   if [ "$dist" == "Ubuntu" ]; then
@@ -155,6 +160,7 @@ function install_tools() {
   else
     install_chromium
   fi
+  install_go
   install_amass
   install_gobuster
   install_nuclei
