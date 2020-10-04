@@ -507,11 +507,9 @@ function parse_args() {
     --target)
       target="$2"
       shift
-      shift
       ;;
     --exclude)
       excluded="$2"
-      shift
       shift
       ;;
     --scan)
@@ -529,16 +527,13 @@ function parse_args() {
       unset IFS
       subdomain_scan_target_file="./deepdive/subdomain.txt"
       shift
-      shift
       ;;
     --file)
       subdomain_scan_target_file="$2"
       shift
-      shift
       ;;
     --file-all)
       all_subdomain_scan_target_file="$2"
-      shift
       shift
       ;;
     --install-pr)
