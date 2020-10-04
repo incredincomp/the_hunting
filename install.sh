@@ -24,8 +24,8 @@ function update_the_hunting() {
 function pre_reqs() {
   apt update && apt upgrade -y
   apt install sudo wget git unzip parallel openjdk-8-jdk build-essential s3fs -y
-  export GOPATH="${HOME}/go"
-  source ~/.profile
+  echo 'export GOPATH="${HOME}/go"' >> ~/.bashrc
+  source ~/.bashrc
 }
 
 # tool install
