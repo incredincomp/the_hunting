@@ -37,8 +37,8 @@ set -e
 
 export GOPATH="${HOME}/go"
 export PATH="${PATH}:${GOPATH}/bin"
-S3_ENDPOINT="$(cat /root/the_hunting/backup-files/s3-endpoint.txt)"
-S3_BUCKET="$(cat /root/the_hunting/backup-files/s3-bucket.txt)"
+S3_ENDPOINT="$(cat ${PWD}/backup-files/s3-endpoint.txt)"
+S3_BUCKET="$(cat ${PWD}/backup-files/s3-bucket.txt)"
 
 red=$(tput setaf 1)
 green=$(tput setaf 2)
