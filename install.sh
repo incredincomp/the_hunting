@@ -1,7 +1,6 @@
 #!/bin/bash -
 set -e
 #set -xv                       # Uncomment to print script in console for debug
-export GOPATH="${HOME}/go"
 #Shouldnt need to be ran in axiom droplet
 #this is for install and use on ubuntu 20.04 for testing
 usage() {
@@ -25,6 +24,7 @@ function update_the_hunting() {
 function pre_reqs() {
   apt update && apt upgrade -y
   apt install sudo wget git unzip parallel golang openjdk-8-jdk build-essential s3fs -y
+  export GOPATH="${HOME}/go"
 }
 
 # tool install
