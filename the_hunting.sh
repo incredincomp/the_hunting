@@ -519,7 +519,7 @@ function parse_args() {
     --scan)
       set -f
       IFS=","
-      subdomain_scan_target+=($2)
+      subdomain_scan_target+=("$2")
       unset IFS
       if [ -s ./deepdive/subdomain.txt ]; then
         mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
