@@ -372,7 +372,7 @@ function upload_s3_recon() {
     true
   else
     aws s3 cp --recursive ./targets/"$target_dir"/"$foldername" s3://"$S3_BUCKET"/targets/"$target_dir"/"$foldername" --profile the_hunting
-    aws s3 cp --recursive ./s3-booty/ s3://$S3_BUCKET/s3-booty/ --profile the_hunting
+    aws s3 cp --recursive ./s3-booty/ s3://"$S3_BUCKET"/s3-booty/ --profile the_hunting
   fi
 }
 function upload_s3_scan() {
@@ -484,6 +484,7 @@ function subdomain_option() {
   fi
   notify_subdomain_scan
   send_file
+  upload_s3_scan
   undo_subdomain_file
   duration=$SECONDS
   echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
@@ -600,7 +601,6 @@ function main() {
 
   if [[ -z "$target" ]]; then
     subdomain_option
-    upload_s3_scan
   else #scanning only
     target_dir=${target//./-}
     clear
