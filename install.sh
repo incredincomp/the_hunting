@@ -24,8 +24,6 @@ function update_the_hunting() {
 function pre_reqs() {
   apt update && apt upgrade -y
   apt install sudo wget git unzip parallel openjdk-8-jdk build-essential s3fs -y
-  echo 'export GOPATH="${HOME}/go"' >> ~/.bashrc
-  source ~/.bashrc
 }
 
 # tool install
@@ -150,8 +148,11 @@ function install_zap() {
 function install_go() {
   wget https://golang.org/dl/go1.15.2.linux-amd64.tar.gz
   tar -C /usr/local -xzf go1.15.2.linux-amd64.tar.gz
-  export PATH=$PATH:/usr/local/go/bin
-  source $HOME/.profile
+  #export PATH=$PATH:/usr/local/go/bin
+  #source $HOME/.bashrc
+}
+function snap_install_go() {
+  snap install go --classic
 }
 function install_tools() {
   cd ./temp
@@ -160,7 +161,11 @@ function install_tools() {
   else
     install_chromium
   fi
-  install_go
+  if [ "$dist" == "Ubuntu" ]; then
+    snap_install_go
+  else
+    install_go
+  fi
   install_amass
   install_gobuster
   install_nuclei
