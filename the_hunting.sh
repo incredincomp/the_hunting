@@ -75,9 +75,9 @@ fi
 
 target=""
 subdomain_scan_target=""
-subdomain_scan_target_file=""
-all_subdomain_scan_target_file=""
-declare -a excluded=()
+subdomain_scan_target_file=" "
+all_subdomain_scan_target_file=" "
+excluded=""
 function usage() {
   echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n --file\t-\tpass a newline seperated file of subdomains to scan\n --file-all\t-\tsame as --file, but uses all templates to scan\n --logo\t-\tprints a cool ass logo\n --license\t-\tprints a boring ass license" 1>&2
   exit 1
@@ -477,9 +477,9 @@ function subdomain_option() {
 #    mkdir ./deepdive
 #  fi
   touch ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
-  if [[ -n "$all_subdomain_scan_target_file" ]]; then
+  if [[ "$all_subdomain_scan_target_file" != " "]]; then
     all_subdomain_scanning "$all_subdomain_scan_target_file"
-  elif [[ -n "$subdomain_scan_target" ]]; then
+  elif [[ "$subdomain_scan_target" != " " ]]; then
     subdomain_scanning "$subdomain_scan_target_file"
   fi
   notify_subdomain_scan
@@ -531,11 +531,11 @@ function parse_args() {
       shift
       ;;
     #maybe this was breaking this from how hacky it is...
-     --scan)
-       subdomain_scan_target=("$2")
-       shift
-       shift
-       ;;
+    --scan)
+      subdomain_scan_target="$2"
+      shift
+      shift
+      ;;
     --file)
       subdomain_scan_target_file="$2"
       shift
