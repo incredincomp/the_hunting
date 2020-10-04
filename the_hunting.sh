@@ -320,8 +320,9 @@ function undo_subdomain_file() {
 }
 
 function make_files() {
-  paste -s -d ',' ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt >./s3-booty/"$target_dir"-csv.txt
-  cp ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt ./s3-booty/"$target_dir"-newline.txt
+  paste -s -d ',' ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt >./s3-booty/"$target_dir"-csv.txt
+  cp ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt ./s3-booty/"$target_dir"-newline.txt
+  cp ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt ./s3-booty/"$target_dir"-responsive.txt
 }
 function read_direct_wordlist() {
   cat ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
@@ -332,8 +333,7 @@ function uniq_subdomains() {
 function double_check_excluded() {
   if [ -s ./targets/"$target_dir"/"$foldername"/excluded.txt ]; then
     grep -vFf ./targets/"$target_dir"/"$foldername"/excluded.txt ./s3_booty/"$target_dir"-newline.txt
-    rm ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
-    mv ./targets/"$target_dir"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
+    grep -vFf ./targets/"$target_dir"/"$foldername"/excluded.txt ./s3_booty/"$target_dir"-responsive.txt
   fi
 }
 function parse_json() {
