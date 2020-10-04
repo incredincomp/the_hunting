@@ -1,0 +1,29 @@
+{
+    "variables": {
+        "api_token": "{{ env `DIGITALOCEAN_ACCESS_TOKEN` }}"
+    },
+    "builders": [
+        {
+            "type": "digitalocean",
+            "snapshot_name": "the_hunting-fedora-{{ timestamp }}",
+            "api_token": "{{ user `api_token` }}",
+            "image": "fedora-32-x64",
+            "region": "sfo2",
+            "size": "s-1vcpu-1gb",
+            "ssh_username": "root"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "./build/scripts/fedora/build.sh",
+            "environment_vars": [
+                "DEBUG=true"
+            ]
+        },
+        {
+            "type": "shell",
+            "script": "./build/scripts/fedora/test.sh"
+        }
+    ]
+}
