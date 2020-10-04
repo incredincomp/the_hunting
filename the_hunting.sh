@@ -587,7 +587,7 @@ function parse_args() {
 function main() {
 
   # parse CLI arguments
-  parse_args $@
+  parse_args "$@"
 
   # exit if certain variables are not set
   if [[ -z "$target" ]] && [[ -z ${subdomain_scan_target[*]} ]] && [[ -z "$subdomain_scan_target_file" ]] && [[ -z "$all_subdomain_scan_target_file" ]]; then
