@@ -649,4 +649,4 @@ totime=$(date +"%I:%M")
 path=$(pwd)
 foldername=$todate"-"$totime
 
-main $@
+main "$@"
