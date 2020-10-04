@@ -462,11 +462,11 @@ function subdomain_option() {
     mkdir ./deepdive
   fi
   touch ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
-  if [ -z "$all_subdomain_scan_target_file" ]; then
-    all_subdomain_scanning
+  if [[ -z "$all_subdomain_scan_target_file" ]]; then
+    all_subdomain_scanning "$all_subdomain_scan_target_file"
   fi
-  if [ -z "$subdomain_scan_target" ]; then
-    subdomain_scanning
+  if [[ -z "$subdomain_scan_target" ]]; then
+    subdomain_scanning "$subdomain_scan_target_file"
   fi
   notify_subdomain_scan
   send_file
@@ -590,7 +590,7 @@ function main() {
   parse_args $@
 
   # exit if certain variables are not set
-  if [ -z "$target" ] && [[ -z ${subdomain_scan_target[*]} ]] && [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ]; then
+  if [[ -z "$target" ]] && [[ -z ${subdomain_scan_target[*]} ]] && [[ -z "$subdomain_scan_target_file" ]] && [[ -z "$all_subdomain_scan_target_file" ]]; then
     usage
     exit 1
   fi
