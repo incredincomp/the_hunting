@@ -365,12 +365,19 @@ function remove_image() {
   doctl compute droplet delete the-hunting
 }
 # S3fs-fuse
-function upload_s3() {
+function upload_s3_recon() {
   if [[ -z "$S3_BUCKET" ]]; then
     true
   else
-    aws s3 cp --recursive ./targets/"$target"/"$foldername" s3://"$S3_BUCKET"/"$target"/"$foldername" --profile the_hunting
+    aws s3 cp --recursive ./targets/"$target"/"$foldername" s3://"$S3_BUCKET"/targets/"$target"/"$foldername" --profile the_hunting
     aws s3 cp --recursive ./s3-booty/ s3://$S3_BUCKET/s3-booty/ --profile the_hunting
+  fi
+}
+function upload_s3_scan() {
+  if [[ -z "$S3_BUCKET" ]]; then
+    true
+  else
+    aws s3 cp --recursive ./deepdive/ s3://"$S3_BUCKET"/deepdive/"$target"/"$foldername" --profile the_hunting
   fi
 }
 # children
@@ -587,6 +594,7 @@ function main() {
 
   if [[ -z "$target" ]]; then
     subdomain_option
+    upload_s3_scan
   else #scanning only
     clear
     open_program
@@ -625,7 +633,7 @@ function main() {
     notify_finished
     double_check_excluded
     make_files
-    upload_s3
+    upload_s3_recon
     echo "${green}Scan for "$target" finished successfully${reset}"
     duration=$SECONDS
     echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
