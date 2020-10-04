@@ -473,14 +473,13 @@ function get_scan_targets() {
 function subdomain_option() {
   clear
   open_program
-  if [ ! -d ./deepdive ]; then
-    mkdir ./deepdive
-  fi
+#  if [ ! -d ./deepdive ]; then
+#    mkdir ./deepdive
+#  fi
   touch ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
-  if [[ -z "$all_subdomain_scan_target_file" ]]; then
+  if [[ -v "$all_subdomain_scan_target_file" ]]; then
     all_subdomain_scanning "$all_subdomain_scan_target_file"
-  fi
-  if [[ -z "$subdomain_scan_target" ]]; then
+  elif [[ -v "$subdomain_scan_target" ]]; then
     subdomain_scanning "$subdomain_scan_target_file"
   fi
   notify_subdomain_scan
@@ -600,7 +599,7 @@ function main() {
   fi
 
   if [[ -z "$target" ]]; then
-    subdomain_option "$all_subdomain_scan_target_file" "$subdomain_scan_target_file"
+    subdomain_option
     upload_s3_scan
   else #scanning only
     clear
