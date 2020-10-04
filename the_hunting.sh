@@ -75,6 +75,8 @@ fi
 
 target=""
 subdomain_scan_target=""
+subdomain_scan_target_file=""
+all_subdomain_scan_target_file=""
 declare -a excluded=()
 function usage() {
   echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n --scan\t-\tscan a pasted csv list of subdomains\n --file\t-\tpass a newline seperated file of subdomains to scan\n --file-all\t-\tsame as --file, but uses all templates to scan\n --logo\t-\tprints a cool ass logo\n --license\t-\tprints a boring ass license" 1>&2
@@ -507,9 +509,11 @@ function parse_args() {
     --target)
       target="$2"
       shift
+      shift
       ;;
     --exclude)
       excluded="$2"
+      shift
       shift
       ;;
     --scan)
@@ -527,13 +531,16 @@ function parse_args() {
       unset IFS
       subdomain_scan_target_file="./deepdive/subdomain.txt"
       shift
+      shift
       ;;
     --file)
       subdomain_scan_target_file="$2"
       shift
+      shift
       ;;
     --file-all)
       all_subdomain_scan_target_file="$2"
+      shift
       shift
       ;;
     --install-pr)
