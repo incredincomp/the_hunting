@@ -162,7 +162,7 @@ function run_gobuster_dns() {
 }
 function run_subjack() {
   echo "${yellow}Running subjack...${reset}"
-  $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "$HOME/go/src/github.com/haccer/subjack/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
+  $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c ./fingerprints.json  -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
   ret=$?
   if [[ $ret -ne 0 ]]; then
     notify_error
