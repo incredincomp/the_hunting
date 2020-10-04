@@ -596,7 +596,7 @@ function main() {
   fi
 
   if [[ -z "$target" ]]; then
-    subdomain_option
+    subdomain_option "$all_subdomain_scan_target_file" "$subdomain_scan_target_file"
     upload_s3_scan
   else #scanning only
     clear
