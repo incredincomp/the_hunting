@@ -53,9 +53,10 @@ subjackThreads=15
 httprobeThreads=50
 
 ssh_file="~/.ssh/id_rsa"
-# Good call @1efty
-CHROMIUM="${CHROMIUM:-"chromium"}"
-chromiumPath="$(which $CHROMIUM)"
+
+# discover which chromium to use
+# if first guess doesn't exist, try an alternative
+chromiumPath="$(which chromium 2>/dev/null || which chromium-browser)"
 
 if [ -s ./backup-files/slack_url.txt ]; then
   slack_url=$(<./backup-files/slack_url.txt)
@@ -166,7 +167,7 @@ function run_gobuster_dns() {
 }
 function run_subjack() {
   echo "${yellow}Running subjack...${reset}"
-  $HOME/go/bin/subjack -a -w ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c ./files/conf/fingerprints.json  -o ./targets/"$target_dir"/"$foldername"/subdomain-takeover-results.json -v
+  $HOME/go/bin/subjack -a -w ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c ./files/conf/fingerprints.json -o ./targets/"$target_dir"/"$foldername"/subdomain-takeover-results.json -v
   ret=$?
   if [[ $ret -ne 0 ]]; then
     notify_error
@@ -238,7 +239,7 @@ function zap_spider() {
   file="$subdomain_scan_target_file"
   for sf in $file; do
     curl -s "http://localhost:8090/JSON/spider/action/scan/?apikey=12345&zapapiformat=JSON&formMethod=GET&url=""$sf" | jq .
-  # get spider status, check it every 30 seconds until value is 100
+    # get spider status, check it every 30 seconds until value is 100
     while true; do
       value=$(curl -s "http://localhost:8090/JSON/spider/view/status/?apikey=12345" | jq -r ".status")
       if [ value = "100" ]; then
@@ -479,9 +480,9 @@ function subdomain_option() {
   git submodule update --recursive --remote
   clear
   open_program
-#  if [ ! -d ./deepdive ]; then
-#    mkdir ./deepdive
-#  fi
+  #  if [ ! -d ./deepdive ]; then
+  #    mkdir ./deepdive
+  #  fi
   touch ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
   if [[ "$all_subdomain_scan_target_file" != " " ]]; then
     all_subdomain_scanning "$all_subdomain_scan_target_file"
