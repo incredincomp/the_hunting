@@ -637,8 +637,8 @@ function main() {
     recon "$target"
     validation
     notify_finished
-    double_check_excluded
     make_files
+    double_check_excluded
     upload_s3_recon
     echo "${green}Scan for "$target" finished successfully${reset}"
     duration=$SECONDS
