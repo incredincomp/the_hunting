@@ -462,7 +462,7 @@ function subdomain_option() {
   touch ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
   if [ -z "$all_subdomain_scan_target_file" ]; then
     all_subdomain_scanning
-  else if [ -z "$subdomain_scan_target" ]; then
+  elif [ -z "$subdomain_scan_target" ]; then
     subdomain_scanning
   fi
   notify_subdomain_scan
