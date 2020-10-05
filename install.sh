@@ -139,7 +139,9 @@ function finish_s3fs() {
   echo "$S3_BUCKET"" /root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other,url=""$S3_ENDPOINT"" 0 0" >> /etc/fstab
 }
 function install_awscli() {
-  apt install awscli -y
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  unzip awscliv2.zip
+  sudo ./aws/install
 }
 function install_zap() {
   wget https://github.com/zaproxy/zaproxy/releases/download/v2.9.0/ZAP_2.9.0_Crossplatform.zip
