@@ -472,7 +472,7 @@ function get_scan_targets() {
 }
 function subdomain_option() {
   echo "${yellow}Updating Nuclei templates...${reset}"
-  git submodule update --recursive --remote
+  git submodule update --recursive --remote --progress
   clear
   open_program
 #  if [ ! -d ./deepdive ]; then
