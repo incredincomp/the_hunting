@@ -471,6 +471,8 @@ function get_scan_targets() {
   true
 }
 function subdomain_option() {
+  echo "${yellow}Updating Nuclei templates...${reset}"
+  git submodule update --recursive --remote
   clear
   open_program
 #  if [ ! -d ./deepdive ]; then

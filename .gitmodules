@@ -1,3 +1,4 @@
 [submodule "nuclei-templates"]
 	path = nuclei-templates
 	url = https://github.com/projectdiscovery/nuclei-templates.git
+	branch = master
