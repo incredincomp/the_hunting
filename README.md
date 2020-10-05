@@ -112,6 +112,14 @@ This will run all nuclei templates on your list of targets inside of `subdomains
 ./the_hunting.sh --file-all subdomains.txt
 ```
 
+Work in progress to start a scan and then auto kill the box
+```bash
+#connect to your box and set up the kill for after
+./the_hunting.sh --connect && ./the_hunting.sh --remove y
+#once connected, run a scan such as this to both do recon, then scan the found domains, then exit the box
+./the_hunting.sh --target hackerone.com --exclude support.hackerone.com,go.hacker.one,www.hackeronestatus.com,info.hacker.one,ma.hacker.one && ./the_hunting.sh --file ./s3-booty/hackerone-com-newline.txt && exit
+```
+
 ## Configuration
 ### Config Files
 All your config files are to be stored inside of `./backup-files/`. I have placed default configs for subfinder and amass in here for you, as well as the other files needed for a fully configured instance. 
