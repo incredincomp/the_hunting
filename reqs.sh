@@ -36,12 +36,23 @@ function aws_config() {
 function aws_create() {
   echo "Do you need a new bucket to use? this may destroy data, beware! [yn]"
   read answer2
-  if [ "$answer2" == y ]; then
+  if [ "$answer2" == y ] && [ "$s3_endpoint" == " "]; then
     s3_endpoint=$(aws s3api create-bucket --bucket hunting-loot-"$rand" --profile the_hunting | jq -r ".Location" | tr -d /)
     echo "$s3_endpoint" > ./backup-files/s3-bucket.txt
     echo "http://""$s3_endpoint"".s3.us-east-1.amazonaws.com" > ./backup-files/s3-endpoint.txt
   fi
   echo "You are ready to rock and roll. Run 'make build' and wear your mask!"
+}
+function compile_s3fs() {
+  git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+  cd s3fs-fuse
+  ./autogen.sh
+  ./configure
+  make
+  sudo make install
+}
+function finish_s3fs() {
+  echo "$s3_bucket"" /root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other,url=""$s3_endpoint"" 0 0" >> /etc/fstab
 }
 install_make
 install_packer

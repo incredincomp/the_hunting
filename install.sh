@@ -127,17 +127,6 @@ function install_jq() {
   chmod a+x /usr/local/bin/jq
 }
 
-function compile_s3fs() {
-  git clone https://github.com/s3fs-fuse/s3fs-fuse.git
-  cd s3fs-fuse
-  ./autogen.sh
-  ./configure
-  make
-  sudo make install
-}
-function finish_s3fs() {
-  echo "$S3_BUCKET"" /root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other,url=""$S3_ENDPOINT"" 0 0" >> /etc/fstab
-}
 function install_awscli() {
   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
   unzip awscliv2.zip
