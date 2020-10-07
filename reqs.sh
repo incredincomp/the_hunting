@@ -45,7 +45,7 @@ function aws_create() {
     S3_BUCKET=$(aws s3api create-bucket --bucket hunting-loot-"$rand" --profile the_hunting | jq -r ".Location" | tr -d /)
     echo "$S3_BUCKET" > ./backup-files/s3-bucket.txt
     echo "http://""$S3_BUCKET"".s3.us-east-1.amazonaws.com" > ./backup-files/s3-endpoint.txt
-    aws s3api put-public-access-block --region us-east-1 --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true --bucket "$S3_BUCKET"
+    aws s3api put-public-access-block --region us-east-1 --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true --bucket "$S3_BUCKET" > /dev/null
   fi
   echo "You are ready to rock and roll. Run 'make build' and wear your mask!"
 }
