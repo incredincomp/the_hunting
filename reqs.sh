@@ -42,9 +42,10 @@ function aws_create() {
   echo "Do you need a new bucket to use? this may destroy data, beware! [yn]"
   read answer2
   if [ "$answer2" == y ] && [ "$S3_BUCKET" == " "]; then
-    S3_BUCKET=$(aws s3api create-bucket --bucket hunting-loot-"$rand" --profile the_hunting | jq -r ".Location" | tr -d /)
+    $S3_BUCKET=$(aws s3api create-bucket --bucket hunting-loot-"$rand" --profile the_hunting | jq -r ".Location" | tr -d /)
     echo "$S3_BUCKET" > ./backup-files/s3-bucket.txt
     echo "http://""$S3_BUCKET"".s3.us-east-1.amazonaws.com" > ./backup-files/s3-endpoint.txt
+    aws s3api put-public-access-block --region us-east-1 --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true --bucket "$S3_BUCKET"
   fi
   echo "You are ready to rock and roll. Run 'make build' and wear your mask!"
 }
