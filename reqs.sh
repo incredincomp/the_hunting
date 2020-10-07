@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ -s "${PWD}""/backup-files/s3-bucket.txt" ]; then
+  S3_BUCKET=" "
+else
+  S3_BUCKET="$(cat "${PWD}"/backup-files/s3-bucket.txt)"
+fi
 rand=$(openssl rand -hex 16)
 function install_make() {
   sudo apt install make
@@ -36,10 +41,10 @@ function aws_config() {
 function aws_create() {
   echo "Do you need a new bucket to use? this may destroy data, beware! [yn]"
   read answer2
-  if [ "$answer2" == y ] && [ "$s3_endpoint" == " "]; then
-    s3_endpoint=$(aws s3api create-bucket --bucket hunting-loot-"$rand" --profile the_hunting | jq -r ".Location" | tr -d /)
-    echo "$s3_endpoint" > ./backup-files/s3-bucket.txt
-    echo "http://""$s3_endpoint"".s3.us-east-1.amazonaws.com" > ./backup-files/s3-endpoint.txt
+  if [ "$answer2" == y ] && [ "$S3_BUCKET" == " "]; then
+    S3_BUCKET=$(aws s3api create-bucket --bucket hunting-loot-"$rand" --profile the_hunting | jq -r ".Location" | tr -d /)
+    echo "$S3_BUCKET" > ./backup-files/s3-bucket.txt
+    echo "http://""$S3_BUCKET"".s3.us-east-1.amazonaws.com" > ./backup-files/s3-endpoint.txt
   fi
   echo "You are ready to rock and roll. Run 'make build' and wear your mask!"
 }
@@ -52,7 +57,7 @@ function compile_s3fs() {
   sudo make install
 }
 function finish_s3fs() {
-  echo "$s3_bucket"" /root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other,url=""$s3_endpoint"" 0 0" >> /etc/fstab
+  echo "$S3_BUCKET"" /root/the_hunting/s3-booty fuse.s3fs _netdev,allow_other,url=""$S3_BUCKET"" 0 0" >> /etc/fstab
 }
 install_make
 install_packer
