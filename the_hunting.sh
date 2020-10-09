@@ -166,7 +166,7 @@ function run_gobuster_dns() {
 }
 function run_subjack() {
   echo "${yellow}Running subjack...${reset}"
-  $HOME/go/bin/subjack -a -w ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c ./fingerprints.json  -o ./targets/"$target_dir"/"$foldername"/subdomain-takeover-results.json -v
+  $HOME/go/bin/subjack -a -w ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c ./files/conf/fingerprints.json  -o ./targets/"$target_dir"/"$foldername"/subdomain-takeover-results.json -v
   ret=$?
   if [[ $ret -ne 0 ]]; then
     notify_error
@@ -342,7 +342,6 @@ function parse_json() {
   #domain names
   cat ./targets/"$target_dir"/"$foldername"/subfinder.json | jq -r '.host' >./targets/"$target_dir"/"$foldername"/subdomains-jq.txt
 }
-
 # doctl hax
 function create_image() {
   image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
@@ -365,6 +364,11 @@ function connect_image() {
 }
 function remove_image() {
   doctl compute droplet delete the-hunting
+}
+function tmux_image() {
+  #image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
+  image_ip=$(doctl compute image list --format "ID,PublicIPv4" | awk '/the_hunting/ {print $2}' | head -n1)
+  ssh root@"$image_ip" -t tmux attach-session
 }
 # S3fs-fuse
 function upload_s3_recon() {
@@ -566,6 +570,10 @@ function parse_args() {
       ;;
     --connect)
       connect_image
+      exit
+      ;;
+    --tmux)
+      tmux_image
       exit
       ;;
     --remove)
