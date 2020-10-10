@@ -19,7 +19,7 @@
 #                use an axiom droplet
 #
 #          BUGS:
-#         NOTES: v0.3.5
+#         NOTES: v0.4.0
 #        AUTHOR: @incredincomp
 #  ORGANIZATION:
 #       CREATED: 08/27/2020 16:55:54
