@@ -67,6 +67,6 @@
           "type": "file",
           "source": "./files/conf/tmux.conf.local",
           "destination": "/root/.tmux.conf.local"
-        },
+        }
     ]
 }
