@@ -358,6 +358,7 @@ function tmux_image() {
   #image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
   image_ip=$(doctl compute droplet list --format "Name,PublicIPv4" | awk '/the-hunting/ {print $2}' | head -n1)
   ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux new-session -d -t hunting'
+  ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux attach -t hunting -d'
 }
 # S3fs-fuse
 function upload_s3_recon() {
