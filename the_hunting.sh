@@ -362,7 +362,7 @@ function tmux_image() {
   if [ -z "$sessions" ]; then
     ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux new-session -t hunting' && ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t hunting -d'
   else
-    tmux_session=(echo "${sessions/:/}" | awk '/hunting/ {print $1}' | head -n1)
+    tmux_session=$(echo "${sessions/:/}" | awk '/hunting/ {print $1}' | head -n1)
     ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t '"$tmux_session"' -d'
   fi
 }
