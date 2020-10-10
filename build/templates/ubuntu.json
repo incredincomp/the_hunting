@@ -30,8 +30,18 @@
             "script": "./build/scripts/provision.sh"
         },
         {
+            "type": "file",
+            "source": "./files/conf/start_tmux.sh",
+            "destination": "/etc/init.d/start_tmux.sh"
+        },
+        {
             "type": "shell",
             "script": "./build/scripts/finish.sh"
-        }
+        },
+        {
+            "type": "file",
+            "source": "./files/conf/00-motd",
+            "destination": "/etc/update-motd.d/00-motd"
+        },
     ]
 }

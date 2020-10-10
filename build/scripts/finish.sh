@@ -12,4 +12,5 @@ cp ~/backup-files/* ~/the_hunting/backup-files/
 # export S3_BUCKET=$S3_BUCKET
 # systemctl daemon-reload
 # systemctl enable s3fs.service
-apt update && apt upgrade -y
+rm -rf /etc/update-motd.d/*
+chmod +x /etc/init.d/
