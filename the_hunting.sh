@@ -359,8 +359,12 @@ function tmux_image() {
   #image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
   image_ip=$(doctl compute droplet list --format "Name,PublicIPv4" | awk '/the-hunting/ {print $2}' | head -n1)
   sessions=$(ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux list-session')
-  #  echo "${sessions/:/}" | awk '/hunting/ {print $1}' ||
-  ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux new-session -t hunting' && ssh -o StrictHostKeyChecking=no root@"$image_ip" '/bin/bash /root/the_hunting/files/conf/tmux-motd.sh' && ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t hunting -d'
+  if [ -z "$sessions" ]; then
+    ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux new-session -t hunting' && ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t hunting -d'
+  else
+    tmux_session=(echo "${sessions/:/}" | awk '/hunting/ {print $1}' | head -n1)
+    ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t '"$tmux_session"' -d'
+  fi
 }
 # S3fs-fuse
 function upload_s3_recon() {
