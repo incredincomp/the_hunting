@@ -29,7 +29,7 @@ Your data is in slacks hands then though, so if you are working within specific 
 
 install the hunting
 ```bash
-git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git && cd the_hunting/
+git clone https://github.com/incredincomp/the_hunting.git && cd the_hunting/
 ```
 
 install pre-reqs make and packer
@@ -76,6 +76,12 @@ connect to your box
 ./the_hunting.sh --connect
 ```
 
+tmux to your box
+
+```bash
+./the_hunting.sh --tmux
+```
+
 delete your box
 
 ```bash
@@ -92,12 +98,6 @@ Exclude out of scope domains from your recon results before doing recon (leaving
 
 ```bash
 ./the_hunting.sh --target hackerone.com --exclude support.hackerone.com,go.hacker.one,www.hackeronestatus.com,info.hacker.one,ma.hacker.one
-```
-
-Scan a CSV list of subdomains from the cli
-
-```bash
-./the_hunting.sh --scan sub.domain.com,sue.domain.com,paul.domain.com
 ```
 
 Scan a file list of subdomains seperated by new line
@@ -122,16 +122,15 @@ Work in progress to start a scan and then auto kill the box
 
 ## Configuration
 ### Config Files
-All your config files are to be stored inside of `./backup-files/`. I have placed default configs for subfinder and amass in here for you, as well as the other files needed for a fully configured instance. 
+All your user config files are to be stored inside of `./backup-files/`. I have placed default configs for subfinder and amass in here for you, as well as the other files needed for a fully configured instance. 
 *The one really important one right now is the `./backup-files/subfinder.yaml` one, add some keys/delete all the stuff you dont need.*
 
 ### Configure AWS for backups.
 You are going to need to run `sudo ./reqs.sh` and configure AWS cli through that prompt or have it done previously.
-also, make a file named `./backup-files/passwd-s3fs` on your host machine and that will be copied over on provision and moved to where it needs to be.
 
 # To-Do/Upcoming
-1. switching to aws, probably cheaper and easier to manage. Able to store data and probably just send some encrypted emails.. *maybe need a domain for that though* ![#34](https://github.com/incredincomp/the_hunting/issues/34)
-2. fixing directory structure/house cleaning ![#30](https://github.com/incredincomp/the_hunting/issues/30)
+1. ~~switching to aws, probably cheaper and easier to manage. Able to store data and probably just send some encrypted emails.. *maybe need a domain for that though* ![#34](https://github.com/incredincomp/the_hunting/issues/34)~~
+2. ~~fixing directory structure/house cleaning ![#30](https://github.com/incredincomp/the_hunting/issues/30)~~
 
 
 # Methodology
@@ -171,19 +170,17 @@ https://github.com/michenriksen/aquatone
 ## Scanning
 
 ### Fuzzing
-#### Directory and file Fuzzing
-to-do: Dirb
+~~#### Directory and file Fuzzing~~
+~~to-do: Dirb~~
 ~~https://tools.kali.org/web-applications/dirb~~
 
 ~~Gobuster - dir
 https://github.com/OJ/gobuster~~
 
-### Port Scanning
-#### To-do: nmap
+~~### Port Scanning~~
+~~#### To-do: nmap~~
 
-##### usage
-
-##### nse scripts
+~~##### nse scripts~~
 
 ~~https://nmap.org/book/nse.html~~
 
@@ -195,6 +192,8 @@ https://github.com/OJ/gobuster~~
 
 Community templates - https://github.com/projectdiscovery/nuclei-templates
 
-To-Do: User made templates - https://nuclei.projectdiscovery.io/templating-guide/
+~~To-Do: User made templates - https://nuclei.projectdiscovery.io/templating-guide/~~
 
-##### usage
+#### Owasp ZAProxy
+
+https://github.com/zaproxy/zaproxy
