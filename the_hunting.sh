@@ -357,7 +357,7 @@ function remove_image() {
 function tmux_image() {
   #image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
   image_ip=$(doctl compute droplet list --format "Name,PublicIPv4" | awk '/the-hunting/ {print $2}' | head -n1)
-  ssh root@"$image_ip" -t tmux attach-session the_hunting
+  ssh root@"$image_ip" -t tmux attach-session hunting
 }
 # S3fs-fuse
 function upload_s3_recon() {

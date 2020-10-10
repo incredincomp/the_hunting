@@ -14,3 +14,4 @@ cp ~/backup-files/* ~/the_hunting/backup-files/
 # systemctl enable s3fs.service
 rm -rf /etc/update-motd.d/*
 chmod +x /etc/init.d/
+systemctl enable rc-local
