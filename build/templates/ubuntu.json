@@ -42,6 +42,6 @@
             "type": "file",
             "source": "./files/conf/00-motd",
             "destination": "/etc/update-motd.d/00-motd"
-        },
+        }
     ]
 }
