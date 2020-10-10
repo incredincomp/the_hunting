@@ -358,9 +358,9 @@ function remove_image() {
 function tmux_image() {
   #image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
   image_ip=$(doctl compute droplet list --format "Name,PublicIPv4" | awk '/the-hunting/ {print $2}' | head -n1)
-
-  ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux new-session -t hunting -c ./root/the_hunting/files/conf/tmux-motd.sh;'
-  #ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux attach -t hunting -d'
+  sessions=$(ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux list-session')
+  #  echo "${sessions/:/}" | awk '/hunting/ {print $1}' ||
+  ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux new-session -t hunting' && ssh -o StrictHostKeyChecking=no root@"$image_ip" '/bin/bash /root/the_hunting/files/conf/tmux-motd.sh' && ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t hunting -d'
 }
 # S3fs-fuse
 function upload_s3_recon() {
