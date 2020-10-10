@@ -1,6 +1,5 @@
 #!/bin/bash -e
-git clone --recurse-submodules https://github.com/incredincomp/the_hunting.git
+git clone https://github.com/incredincomp/the_hunting.git
 cd ./the_hunting
-git pull --recurse-submodules
-git submodule update --remote --recursive
+git clone https://github.com/projectdiscovery/nuclei-templates.git
 ./files/conf/install.sh --install

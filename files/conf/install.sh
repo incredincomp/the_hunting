@@ -169,6 +169,13 @@ function install_tools() {
   #finish_s3fs
   install_awscli
   cd ..
+  if [ -d "./nuclei-templates" ]; then
+    cd ./nuclei-templates
+    git pull
+    cd ..
+  else
+    git clone https://github.com/projectdiscovery/nuclei-templates.git
+  fi
 }
 
 function install_all() {
