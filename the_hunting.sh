@@ -50,17 +50,11 @@ subdomainThreads=15
 subjackThreads=15
 httprobeThreads=50
 
-<<<<<<< HEAD
 ssh_file="~/.ssh/id_rsa"
 
 # discover which chromium to use
 # if first guess doesn't exist, try an alternative
 chromiumPath="$(which chromium 2>/dev/null || which chromium-browser)"
-=======
-# Good call @1efty
-CHROMIUM="${CHROMIUM:-"chromium"}"
-chromiumPath="$(which $CHROMIUM)"
->>>>>>> main
 
 if [ -s ./backup-files/slack_url.txt ]; then
   slack_url=$(<./backup-files/slack_url.txt)
@@ -158,11 +152,7 @@ function run_gobuster_dns() {
 }
 function run_subjack() {
   echo "${yellow}Running subjack...${reset}"
-<<<<<<< HEAD
-  $HOME/go/bin/subjack -a -w ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c ./files/conf/fingerprints.json -o ./targets/"$target_dir"/"$foldername"/subdomain-takeover-results.json -v
-=======
   $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "$HOME/go/src/github.com/haccer/subjack/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
->>>>>>> main
   ret=$?
   if [[ $ret -ne 0 ]]; then
     notify_error
@@ -467,15 +457,9 @@ function open_program() {
 function subdomain_option() {
   clear
   open_program
-<<<<<<< HEAD
   #  if [ ! -d ./deepdive ]; then
   #    mkdir ./deepdive
   #  fi
-=======
-  if [ ! -d ./deepdive ]; then
-    mkdir ./deepdive
-  fi
->>>>>>> main
   touch ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
   if [ -z "$subdomain_scan_target"]; then
     all_subdomain_scanning
@@ -574,6 +558,10 @@ function parse_args() {
       ;;
     --connect)
       connect_image
+      exit
+      ;;
+    --tmux)
+      tmux_image
       exit
       ;;
     --remove)
