@@ -342,10 +342,11 @@ function create_image() {
     region="sfo2"
     if [ -z $set_domain ]; then
       domain=$set_domain
+      doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain $hunting_fingerprint
     else
-      domain=""
+      doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $hunting_fingerprint
     fi
-    doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $domain
+
   fi
 }
 function connect_image() {
