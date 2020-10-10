@@ -50,8 +50,23 @@
         },
         {
             "type": "file",
+            "source": "./files/conf/tmux-motd.sh",
+            "destination": "/root/bin/tmux-motd.sh"
+        },
+        {
+            "type": "file",
             "source": "./files/conf/.bash_profile",
             "destination": "/root/.bash_profile"
-        }
+        },
+        {
+          "type": "file",
+          "source": "./files/conf/tmux.conf",
+          "destination": "/root/.tmux.conf"
+        },
+        {
+          "type": "file",
+          "source": "./files/conf/tmux.conf.local",
+          "destination": "/root/.tmux.conf.local"
+        },
     ]
 }
