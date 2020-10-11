@@ -98,23 +98,23 @@ function excludedomains() {
 }
 # parents
 function run_amass() {
-  if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
-    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
+  if [ -s ./targets/"$target_dir"/"$foldername"/excluded.txt ]; then
+    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -blf ./targets/"$target_dir"/"$foldername"/excluded.txt -dir ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   else
-    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -dir ./targets/"$target"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
+    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -dir ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/ -oA ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/amass-"$todate" -d "$target"
   fi
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
   #notify_error
   #fi
-  cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >>./targets/"$target"/"$foldername"/alldomains.txt
+  cat ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >>./targets/"$target_dir"/"$foldername"/alldomains.txt
 }
 #new amass
 function run_json_amass() {
-  if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
-    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -blf ./targets/"$target"/"$foldername"/excluded.txt -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+  if [ -s ./targets/"$target_dir"/"$foldername"/excluded.txt ]; then
+    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -blf ./targets/"$target_dir"/"$foldername"/excluded.txt -json ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   else
-    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -json ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
+    amass enum -norecursive -passive -config ./backup-files/amass_config.ini -json ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/amass-"$todate".json -d "$target"
   fi
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
@@ -123,7 +123,7 @@ function run_json_amass() {
   #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
 }
 function run_subfinder_json() {
-  subfinder -config ./backup-files/subfinder.yaml -d "$target" -o ./targets/"$target"/"$foldername"/subfinder.json -oJ -nW -all
+  subfinder -config ./backup-files/subfinder.yaml -d "$target" -o ./targets/"$target_dir"/"$foldername"/subfinder.json -oJ -nW -all
   #ret=$?
   #if [[ $ret -ne 0 ]] ; then
   #notify_error
@@ -132,27 +132,27 @@ function run_subfinder_json() {
 #gobuster vhost broken
 function run_gobuster_vhost() {
   echo "${yellow}Running Gobuster vhost...${reset}"
-  gobuster vhost -u "$target" -w ./wordlists/subdomains-top-110000.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
+  gobuster vhost -u "$target" -w ./wordlists/subdomains-top-110000.txt -a "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0" -k -o ./targets/"$target_dir"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt
   ret=$?
   if [[ $ret -ne 0 ]]; then
     notify_error
   fi
-  cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt >>./targets/"$target"/"$foldername"/alldomains.txt
+  cat ./targets/"$target_dir"/"$foldername"/subdomain_enum/gobuster/gobuster_vhost-"$todate".txt >>./targets/"$target_dir"/"$foldername"/alldomains.txt
   echo "${green}Gobuster vhost finished.${reset}"
 }
 function run_gobuster_dns() {
   echo "${yellow}Running Gobuster dns...${reset}"
-  gobuster dns -d "$target" -w ./wordlists/subdomains-top-110000.txt -z -q -t "$subdomainThreads" -o ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
+  gobuster dns -d "$target_dir" -w ./wordlists/subdomains-top-110000.txt -z -q -t "$subdomainThreads" -o ./targets/"$target_dir"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt
   ret=$?
   if [[ $ret -ne 0 ]]; then
     notify_error
   fi
-  cat ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt | awk -F ' ' '{print $2}' >>./targets/"$target"/"$foldername"/alldomains.txt
+  cat ./targets/"$target_dir"/"$foldername"/subdomain_enum/gobuster/gobuster_dns-"$todate".txt | awk -F ' ' '{print $2}' >>./targets/"$target_dir"/"$foldername"/alldomains.txt
   echo "${green}Gobuster dns finished.${reset}"
 }
 function run_subjack() {
   echo "${yellow}Running subjack...${reset}"
-  $HOME/go/bin/subjack -a -w ./targets/"$target"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "./files/conf/fingerprints.json" -o ./targets/"$target"/"$foldername"/subdomain-takeover-results.json -v
+  $HOME/go/bin/subjack -a -w ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt -ssl -t "$subjackThreads" -m -timeout 15 -c "./files/conf/fingerprints.json" -o ./targets/"$target_dir"/"$foldername"/subdomain-takeover-results.json -v
   ret=$?
   if [[ $ret -ne 0 ]]; then
     notify_error
@@ -161,7 +161,7 @@ function run_subjack() {
 }
 function run_httprobe() {
   echo "${yellow}Running httprobe...${reset}"
-  cat ./targets/"$target"/"$foldername"/subdomains-jq.txt | httprobe -c "$httprobeThreads" >>./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+  cat ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt | httprobe -c "$httprobeThreads" >>./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
   ret=$?
   if [[ $ret -ne 0 ]]; then
     notify_error
@@ -170,24 +170,24 @@ function run_httprobe() {
 }
 function run_aqua() {
   echo "${yellow}Running Aquatone...${reset}"
-  cat ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt | aquatone -threads $auquatoneThreads -chrome-path $chromiumPath -out ./targets/"$target"/"$foldername"/aqua/aqua_out
+  cat ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt | aquatone -threads $auquatoneThreads -chrome-path $chromiumPath -out ./targets/"$target_dir"/"$foldername"/aqua/aqua_out
   ret=$?
   if [[ $ret -ne 0 ]]; then
     notify_error
   fi
-  cp ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_report.html ./targets/"$target"/"$foldername"/aquatone_report.html
-  cp ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt ./targets/"$target"/"$foldername"/aquatone_urls.txt
+  cp ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_report.html ./targets/"$target_dir"/"$foldername"/aquatone_report.html
+  cp ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt
   echo "${green}Aquatone finished...${reset}"
 }
 function run_gobuster_dir() {
   #crazy headed and dangerous, untested really.. dont know what happens with output
   echo "${yellow}Running Gobuster dir...${reset}"
-  read_direct_wordlist | parallel --results ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/ gobuster dir -z -q -u {} -w ./wordlists/directory-list.txt -f -k -e -r -a "Mozilla/5.0 \(X11\; Ubuntu\; Linux x86_64\; rv\:80.0\) Gecko/20100101 Firefox/80.0"
+  read_direct_wordlist | parallel --results ./targets/"$target_dir"/"$foldername"/directory_fuzzing/gobuster/ gobuster dir -z -q -u {} -w ./wordlists/directory-list.txt -f -k -e -r -a "Mozilla/5.0 \(X11\; Ubuntu\; Linux x86_64\; rv\:80.0\) Gecko/20100101 Firefox/80.0"
   ret=$?
   if [[ $ret -ne 0 ]]; then
     notify_error
   fi
-  cat ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/1/"$target"/stdout | awk -F ' ' '{print $1}' >>./targets/"$target"/"$foldername"/live_paths.txt
+  cat ./targets/"$target_dir"/"$foldername"/directory_fuzzing/gobuster/1/"$target_dir"/stdout | awk -F ' ' '{print $1}' >>./targets/"$target"/"$foldername"/live_paths.txt
   echo "${green}Gobuster dir finished...${reset}"
 }
 function run_dirb() {
@@ -195,7 +195,7 @@ function run_dirb() {
 }
 function run_nuclei() {
   echo "${yellow}Running Nuclei templates scan...${reset}"
-  nuclei -v -json -l ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-results.json
+  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-results.json
   #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
   #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
@@ -240,7 +240,7 @@ function notify_finished() {
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
     echo "${yellow}Notification being generated and sent...${reset}"
-    num_of_subd=$(wc <./targets/"$target"/"$foldername"/subdomains-jq.txt -l)
+    num_of_subd=$(wc <./targets/"$target_dir"/"$foldername"/subdomains-jq.txt -l)
     data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
     curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     echo "${green}Notification sent!${reset}"
@@ -256,7 +256,7 @@ function notify_subdomain_scan() {
       data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     else
-      num_of_vuln=$(wc <./deepdive/"$todate"-"$totime"-nuclei-vulns.json -l)
+      num_of_vuln=$(wc <./deepdive/"$target_dir"-"$todate"-"$totime"-nuclei-vulns.json -l)
       data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     fi
@@ -268,7 +268,7 @@ function notify_error() {
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
     echo "${yellow}Error notification being generated and sent...${reset}"
-    num_of_subd=$(wc <./targets/"$target"/"$foldername"/responsive-domains-80-443.txt -l)
+    num_of_subd=$(wc <./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt -l)
     data1=''{\"text\":\"There\ was\ an\ error\ on\ your\ scan\ of\ "'"$target"'"!\ Check\ your\ instance\ of\ \`the\_hunting.sh\`\.\ \`the\_hunting.sh\`\ still\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
     curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
     echo "${green}Notification sent!${reset}"
@@ -279,7 +279,7 @@ function send_file() {
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
-    if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./deepdive/"$todate"-"$totime"-nuclei-vulns.json ]; then
+    if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./deepdive/"$target_dir"-"$todate"-"$totime"-nuclei-vulns.json ]; then
       echo "${red}Notifications not set up."
       echo "${red}Add your slack channel to ./slack_channel.txt"
       echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
@@ -305,30 +305,30 @@ function undo_subdomain_file() {
   fi
 }
 function make_files() {
-  touch ./csvs/"$target"-csv.txt
-  paste -s -d ',' ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./csvs/"$target"-csv.txt
-  cp ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt ./files/newline/"$target"-newline.txt
+  touch ./csvs/"$target_dir"-csv.txt
+  paste -s -d ',' ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt >./csvs/"$target_dir"-csv.txt
+  cp ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt ./files/newline/"$target_dir"-newline.txt
 }
 # >>
 
 function read_direct_wordlist() {
-  cat ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
+  cat ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
 function uniq_subdomains() {
-  uniq -i ./targets/"$target"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >>./targets/"$target"/"$foldername"/uniqdomains1.txt
+  uniq -i ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >>./targets/"$target"/"$foldername"/uniqdomains1.txt
 }
 function double_check_excluded() {
-  if [ -s ./targets/"$target"/"$foldername"/excluded.txt ]; then
-    grep -vFf ./targets/"$target"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
-    rm ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
-    mv ./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+  if [ -s ./targets/"$target_dir"/"$foldername"/excluded.txt ]; then
+    grep -vFf ./targets/"$target_dir"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
+    rm ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
+    mv ./targets/"$target_dir"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
   fi
 }
 function parse_json() {
   # ips
-  cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.ip' >./targets/"$target"/"$foldername"/"$target"-ips.txt
+  cat ./targets/"$target_dir"/"$foldername"/subfinder.json | jq -r '.ip' >./targets/"$target"/"$foldername"/"$target"-ips.txt
   #domain names
-  cat ./targets/"$target"/"$foldername"/subfinder.json | jq -r '.host' >./targets/"$target"/"$foldername"/subdomains-jq.txt
+  cat ./targets/"$target_dir"/"$foldername"/subfinder.json | jq -r '.host' >./targets/"$target"/"$foldername"/subdomains-jq.txt
 }
 
 # doctl hax
