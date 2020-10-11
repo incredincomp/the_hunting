@@ -572,7 +572,7 @@ function parse_args() {
       tmux_image
       exit
       ;;
-    --reconnect_tmux)
+    --reconnect-tmux)
       reconnect_tmux
       exit
       ;;
