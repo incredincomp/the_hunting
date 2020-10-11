@@ -359,7 +359,10 @@ function tmux_image() {
   #image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
   image_ip=$(doctl compute droplet list --format "Name,PublicIPv4" | awk '/the-hunting/ {print $2}' | head -n1)
   #response=$(ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux list-session' 2>&1)
-  ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux new-session -t hunting'
+  ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux new-session -t hunting'
+}
+function reconnect_tmux() {
+  image_ip=$(doctl compute droplet list --format "Name,PublicIPv4" | awk '/the-hunting/ {print $2}' | head -n1)
       #  ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t hunting-0 -d'
       #tmux_session=$(echo "${response/:/}" | awk '/hunting/ {print $1}' | head -n1)
   ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t hunting-0 -d'
@@ -567,6 +570,10 @@ function parse_args() {
       ;;
     --tmux)
       tmux_image
+      exit
+      ;;
+    --reconnect_tmux
+      reconnect_tmux
       exit
       ;;
     --remove)
