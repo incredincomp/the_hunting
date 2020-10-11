@@ -81,7 +81,7 @@ target=""
 subdomain_scan_target=""
 declare -a excluded=()
 function usage() {
-  echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n --scan\t-\tscan a pasted csv list of subdomains\n --file\t-\tpass a newline seperated file of subdomains to scan\n --file-all\t-\tsame as --file, but uses all templates to scan\n --logo\t-\tprints a cool ass logo\n --license\t-\tprints a boring ass license" 1>&2
+  echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n  --file\t-\tpass a newline seperated file of subdomains to scan\n  --file-all\t-\tsame as --file, but uses all templates to scan\n  --create\t-\tcreate a droplet with your snapshot from make build\n  --connect\t-\tbasic ssh tunnel\n  --tmux\t-\tcreate a tmux session (recommended)\n  --reconnect-tmux\t-\treconnect to main tmux session\n  --remove\t-\tdelete your hunting droplet\n  --logo\t-\tprints a cool ass logo\n  --license\t-\tprints a boring ass license\n" 1>&2
   exit 1
 }
 
@@ -175,8 +175,8 @@ function run_aqua() {
   if [[ $ret -ne 0 ]]; then
     notify_error
   fi
-  cp ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_report.html ./targets/"$target_dir"/"$foldername"/aquatone_report.html
-  cp ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt
+#  cp ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_report.html ./targets/"$target_dir"/"$foldername"/aquatone_report.html
+#  cp ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt
   echo "${green}Aquatone finished...${reset}"
 }
 function run_gobuster_dir() {
@@ -522,23 +522,6 @@ function parse_args() {
       shift
       shift
       ;;
-    --scan)
-      set -f
-      IFS=","
-      subdomain_scan_target+=($2)
-      unset IFS
-      if [ -s ./deepdive/subdomain.txt ]; then
-        mv ./deepdive/subdomain.txt ./deepdive/lastscan.txt
-      fi
-      IFS=$'\n'
-      for u in "${subdomain_scan_target[@]}"; do
-        printf "%s\n" "$u" >>./deepdive/subdomain.txt
-      done
-      unset IFS
-      subdomain_scan_target_file="./deepdive/subdomain.txt"
-      shift
-      shift
-      ;;
     --file)
       subdomain_scan_target_file="$2"
       shift
@@ -612,6 +595,7 @@ main() {
   if [[ -z "$target" ]]; then
     subdomain_option
   else #scanning only
+    target_dir=${target//./-}
     clear
     open_program
     if [ -d "./targets/"$target_dir"" ]; then
