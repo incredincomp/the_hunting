@@ -71,7 +71,7 @@ if [ -s ./backup-files/slack_channel.txt ]; then
 else
   slack_channel=""
 fi
-if [ -s ./backup-files/slack_channel.txt ]; then
+if [ -s ./backup-files/s3-bucket.txt ]; then
   S3_BUCKET=$(<./backup-files/s3-bucket.txt)
 else
   S3_BUCKET=""
