@@ -120,7 +120,7 @@ function run_json_amass() {
   #if [[ $ret -ne 0 ]] ; then
   #notify_error
   #fi
-  #cat ./targets/"$target"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target"/"$foldername"/alldomains.txt
+  #cat ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt >> ./targets/"$target_dir"/"$foldername"/alldomains.txt
 }
 function run_subfinder_json() {
   subfinder -config ./backup-files/subfinder.yaml -d "$target" -o ./targets/"$target_dir"/"$foldername"/subfinder.json -oJ -nW -all
@@ -187,7 +187,7 @@ function run_gobuster_dir() {
   if [[ $ret -ne 0 ]]; then
     notify_error
   fi
-  cat ./targets/"$target_dir"/"$foldername"/directory_fuzzing/gobuster/1/"$target_dir"/stdout | awk -F ' ' '{print $1}' >>./targets/"$target"/"$foldername"/live_paths.txt
+  cat ./targets/"$target_dir"/"$foldername"/directory_fuzzing/gobuster/1/"$target_dir"/stdout | awk -F ' ' '{print $1}' >>./targets/"$target_dir"/"$foldername"/live_paths.txt
   echo "${green}Gobuster dir finished...${reset}"
 }
 function run_dirb() {
@@ -195,9 +195,9 @@ function run_dirb() {
 }
 function run_nuclei() {
   echo "${yellow}Running Nuclei templates scan...${reset}"
-  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-results.json
-  #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
-  #  nuclei -v -json -l ./targets/"$target"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
+  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-results.json
+  #  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
+  #  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 function subdomain_scanning() {
@@ -315,20 +315,20 @@ function read_direct_wordlist() {
   cat ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
 function uniq_subdomains() {
-  uniq -i ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >>./targets/"$target"/"$foldername"/uniqdomains1.txt
+  uniq -i ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt >>./targets/"$target_dir"/"$foldername"/uniqdomains1.txt
 }
 function double_check_excluded() {
   if [ -s ./targets/"$target_dir"/"$foldername"/excluded.txt ]; then
-    grep -vFf ./targets/"$target_dir"/"$foldername"/excluded.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt >./targets/"$target"/"$foldername"/2responsive-domains-80-443.txt
+    grep -vFf ./targets/"$target_dir"/"$foldername"/excluded.txt ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt >./targets/"$target_dir"/"$foldername"/2responsive-domains-80-443.txt
     rm ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
-    mv ./targets/"$target_dir"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
+    mv ./targets/"$target_dir"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
   fi
 }
 function parse_json() {
   # ips
-  cat ./targets/"$target_dir"/"$foldername"/subfinder.json | jq -r '.ip' >./targets/"$target"/"$foldername"/"$target"-ips.txt
+  cat ./targets/"$target_dir"/"$foldername"/subfinder.json | jq -r '.ip' >./targets/"$target_dir"/"$foldername"/"$target_dir"-ips.txt
   #domain names
-  cat ./targets/"$target_dir"/"$foldername"/subfinder.json | jq -r '.host' >./targets/"$target"/"$foldername"/subdomains-jq.txt
+  cat ./targets/"$target_dir"/"$foldername"/subfinder.json | jq -r '.host' >./targets/"$target_dir"/"$foldername"/subdomains-jq.txt
 }
 
 # doctl hax
@@ -614,34 +614,34 @@ main() {
   else #scanning only
     clear
     open_program
-    if [ -d "./targets/"$target"" ]; then
+    if [ -d "./targets/"$target_dir"" ]; then
       echo "$target is a known target."
     else
-      mkdir ./targets/"$target"/
+      mkdir ./targets/"$target_dir"/
     fi
     if [ -z "$slack_url" ]; then
       echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
     fi
 
-    mkdir ./targets/"$target"/"$foldername"
-    mkdir ./targets/"$target"/"$foldername"/aqua/
-    mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/
-    mkdir ./targets/"$target"/"$foldername"/aqua/aqua_out/parsedjson/
-    mkdir ./targets/"$target"/"$foldername"/subdomain_enum/
-    #mkdir ./targets/"$target"/"$foldername"/subdomain_enum/amass/
-    #mkdir ./targets/"$target"/"$foldername"/subdomain_enum/gobuster/
-    mkdir ./targets/"$target"/"$foldername"/screenshots/
-    #mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/
-    #mkdir ./targets/"$target"/"$foldername"/directory_fuzzing/gobuster/
-    mkdir ./targets/"$target"/"$foldername"/scanning/
-    #mkdir ./targets/"$target"/"$foldername"/scanning/nmap/
-    mkdir ./targets/"$target"/"$foldername"/scanning/nuclei/
-    touch ./targets/"$target"/"$foldername"/responsive-domains-80-443.txt
-    touch ./targets/"$target"/"$foldername"/subdomain-takeover-results.json
-    touch ./targets/"$target"/"$foldername"/alldomains.txt
-    touch ./targets/"$target"/"$foldername"/temp-clean.txt
-    touch ./targets/"$target"/"$foldername"/subdomains-jq.txt
-    touch ./targets/"$target"/"$foldername"/"$target"-ips.txt
+    mkdir ./targets/"$target_dir"/"$foldername"
+    mkdir ./targets/"$target_dir"/"$foldername"/aqua/
+    mkdir ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/
+    mkdir ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/parsedjson/
+    mkdir ./targets/"$target_dir"/"$foldername"/subdomain_enum/
+    #mkdir ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/
+    #mkdir ./targets/"$target_dir"/"$foldername"/subdomain_enum/gobuster/
+    mkdir ./targets/"$target_dir"/"$foldername"/screenshots/
+    #mkdir ./targets/"$target_dir"/"$foldername"/directory_fuzzing/
+    #mkdir ./targets/"$target_dir"/"$foldername"/directory_fuzzing/gobuster/
+    mkdir ./targets/"$target_dir"/"$foldername"/scanning/
+    #mkdir ./targets/"$target_dir"/"$foldername"/scanning/nmap/
+    mkdir ./targets/"$target_dir"/"$foldername"/scanning/nuclei/
+    touch ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
+    touch ./targets/"$target_dir"/"$foldername"/subdomain-takeover-results.json
+    touch ./targets/"$target_dir"/"$foldername"/alldomains.txt
+    touch ./targets/"$target_dir"/"$foldername"/temp-clean.txt
+    touch ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt
+    touch ./targets/"$target_dir"/"$foldername"/"$target_dir"-ips.txt
 
     excludedomains
     recon "$target"
