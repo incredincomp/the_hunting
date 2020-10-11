@@ -359,13 +359,16 @@ function tmux_image() {
   #image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
   image_ip=$(doctl compute droplet list --format "Name,PublicIPv4" | awk '/the-hunting/ {print $2}' | head -n1)
   response=$(ssh -o StrictHostKeyChecking=no root@"$image_ip" 'tmux list-session' 2>&1)
-  if [[ "$response" =~ *error* ]]; then
-    ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux new-session -t hunting'
-#    ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t hunting-0 -d'
-  else
-    #tmux_session=$(echo "${sessions/:/}" | awk '/hunting/ {print $1}' | head -n1)
-    ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t hunting-0 -d'
-  fi
+  case $response in
+  *error*)
+      ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux new-session -t hunting'
+      #  ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t hunting-0 -d'
+      ;;
+  *)
+      tmux_session=$(echo "${response/:/}" | awk '/hunting/ {print $1}' | head -n1)
+      ssh -o StrictHostKeyChecking=no -t root@"$image_ip" 'tmux attach -t hunting-0 -d'
+      ;;
+  esac
 }
 # S3fs-fuse
 function upload_s3_recon() {
