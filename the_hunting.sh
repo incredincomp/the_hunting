@@ -195,7 +195,7 @@ function run_dirb() {
 }
 function run_nuclei() {
   echo "${yellow}Running Nuclei templates scan...${reset}"
-  nuclei -json -l ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./deepdive/nuclei-templates/generic-detections/ -t ./deepdive/nuclei-templates/files/ -t ./deepdive/nuclei-templates/workflows/ -t ./deepdive/nuclei-templates/tokens/ -t ./deepdive/nuclei-templates/dns/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-results.json
+  nuclei -json -l ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-results.json
   #  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
   #  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
@@ -251,12 +251,12 @@ function notify_subdomain_scan() {
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
     echo "${yellow}Notification being generated and sent...${reset}"
-#    if [ -s ./deepdive/nuclei-vulns.json ]; then
+#    if [ -s ./s3-booty/nuclei-vulns.json ]; then
       num_of_vuln=$(wc <./s3-booty/"$todate"-"$totime"-nuclei-vulns.json -l)
       data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
 #    else
-#      num_of_vuln=$(wc <./deepdive/"$target_dir"-"$todate"-"$totime"-nuclei-vulns.json -l)
+#      num_of_vuln=$(wc <./s3-booty/"$target_dir"-"$todate"-"$totime"-nuclei-vulns.json -l)
 #      data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
 #      curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
 #    fi
@@ -279,7 +279,7 @@ function send_file() {
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
-    if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./deepdive/"$target_dir"-"$todate"-"$totime"-nuclei-vulns.json ]; then
+    if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./s3-booty/"$target_dir"-"$todate"-"$totime"-nuclei-vulns.json ]; then
       echo "${red}Notifications not set up."
       echo "${red}Add your slack channel to ./slack_channel.txt"
       echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
@@ -297,17 +297,9 @@ function undo_amass_config() {
     #rm ./amass_config.bak
   fi
 }
-
-function undo_subdomain_file() {
-  if [ -s ./deepdive/subdomain.txt ]; then
-    rm ./deepdive/subdomain.txt
-    touch ./deepdive/subdomain.txt
-  fi
-}
 function make_files() {
   touch ./csvs/"$target_dir"-csv.txt
-  paste -s -d ',' ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt >./csvs/"$target_dir"-csv.txt
-  cp ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt ./files/newline/"$target_dir"-newline.txt
+  cp ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt ./s3-booty/"$target_dir"-newline.txt
 }
 # >>
 
@@ -330,7 +322,6 @@ function parse_json() {
   #domain names
   cat ./targets/"$target_dir"/"$foldername"/subfinder.json | jq -r '.host' >./targets/"$target_dir"/"$foldername"/subdomains-jq.txt
 }
-
 # doctl hax
 function create_image() {
   image_id=$(doctl compute image list | awk '/the_hunting/ {print $1}' | head -n1)
@@ -465,10 +456,7 @@ function open_program() {
 function subdomain_option() {
   clear
   open_program
-  #  if [ ! -d ./deepdive ]; then
-  #    mkdir ./deepdive
-  #  fi
-  touch ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
+  touch ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
   if [ -z "$all_subdomain_scan_target_file"]; then
     subdomain_scanning
   else
