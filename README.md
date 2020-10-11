@@ -15,7 +15,7 @@ Already changing the world around us to fit our needs :muscle:
 * a healthy dose of tenacity
 * DigitalOcean Account
 * doctl installed and configured
-* Some API keys if you want good results for subdomain enum
+* Some API keys if you want good results for subdomain enumeration 
 * Works on Ubuntu 20.04 + ask @1efty
 * if you want to backup your box super easy without scp, configure aws like below
 
@@ -64,6 +64,8 @@ sudo ./install.sh --install
 
 ## Usage
 
+### To build a remote box on DO
+
 Pass this command your sshkey fingerprint from Digital that you would like to use for this box.
 
 ```bash
@@ -76,10 +78,15 @@ connect to your box
 ./the_hunting.sh --connect
 ```
 
-tmux to your box
+start first tmux session on your box and connect, to leave the_hunting running while you leave.. press `ctrl + b` then `d`
 
 ```bash
 ./the_hunting.sh --tmux
+```
+
+reconnect to your last tmux session
+```bash
+./the_hunting.sh --reconnect-tmux
 ```
 
 delete your box
@@ -87,7 +94,7 @@ delete your box
 ```bash
 ./the_hunting.sh --remove
 ```
-
+### Script usage anywhere
 Recon a root domain name for responsive subdomains
 
 ```bash
@@ -100,7 +107,7 @@ Exclude out of scope domains from your recon results before doing recon (leaving
 ./the_hunting.sh --target hackerone.com --exclude support.hackerone.com,go.hacker.one,www.hackeronestatus.com,info.hacker.one,ma.hacker.one
 ```
 
-Scan a file list of subdomains seperated by new line
+Scan a file list of subdomains separated by new line
 
 ```bash
 ./the_hunting.sh --file subdomains.txt
@@ -122,8 +129,8 @@ Work in progress to start a scan and then auto kill the box
 
 ## Configuration
 ### Config Files
-All your user config files are to be stored inside of `./backup-files/`. I have placed default configs for subfinder and amass in here for you, as well as the other files needed for a fully configured instance. 
-*The one really important one right now is the `./backup-files/subfinder.yaml` one, add some keys/delete all the stuff you dont need.*
+All your user config files are to be stored inside of `./backup-files/`. I have placed default configs for subfinder and amass in here for you, as well as the other files needed for a fully configured instance.
+*The one really important one right now is the `./backup-files/subfinder.yaml` one, add some keys/delete all the stuff you don't need.*
 
 ### Configure AWS for backups.
 You are going to need to run `sudo ./reqs.sh` and configure AWS cli through that prompt or have it done previously.
