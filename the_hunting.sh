@@ -201,10 +201,10 @@ function run_nuclei() {
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 function subdomain_scanning() {
-  nuclei -v -json -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
+  nuclei -v -json -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
 }
 function all_subdomain_scanning() {
-  nuclei -v -json -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./deepdive/"$todate"-"$totime"-nuclei-vulns.json
+  nuclei -v -json -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
 }
 function run_nmap() {
   true
@@ -251,15 +251,15 @@ function notify_subdomain_scan() {
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
     echo "${yellow}Notification being generated and sent...${reset}"
-    if [ -s ./deepdive/nuclei-vulns.json ]; then
-      num_of_vuln=$(wc <./deepdive/nuclei-vulns.json -l)
+#    if [ -s ./deepdive/nuclei-vulns.json ]; then
+      num_of_vuln=$(wc <./deepdive/"$todate"-"$totime"-nuclei-vulns.json -l)
       data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
-    else
-      num_of_vuln=$(wc <./deepdive/"$target_dir"-"$todate"-"$totime"-nuclei-vulns.json -l)
-      data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
-      curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
-    fi
+#    else
+#      num_of_vuln=$(wc <./deepdive/"$target_dir"-"$todate"-"$totime"-nuclei-vulns.json -l)
+#      data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
+#      curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+#    fi
   fi
   echo "${green}Notification sent!${reset}"
 }
@@ -380,7 +380,7 @@ function upload_s3_scan() {
   if [[ -z "$S3_BUCKET" ]]; then
     true
   else
-    aws s3 cp --recursive ./deepdive/ s3://"$S3_BUCKET"/deepdive/"$target_dir"/"$foldername" --profile the_hunting
+    aws s3 cp --recursive ./s3-booty/ s3://"$S3_BUCKET"/s3-booty/ --profile the_hunting
   fi
 }
 # children
