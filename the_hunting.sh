@@ -462,6 +462,7 @@ function subdomain_option() {
   else
     all_subdomain_scanning
   fi
+  upload_s3_scan
   notify_subdomain_scan
   send_file
   undo_subdomain_file
