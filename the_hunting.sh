@@ -252,7 +252,7 @@ function notify_subdomain_scan() {
   else
     echo "${yellow}Notification being generated and sent...${reset}"
 #    if [ -s ./deepdive/nuclei-vulns.json ]; then
-      num_of_vuln=$(wc <./deepdive/"$todate"-"$totime"-nuclei-vulns.json -l)
+      num_of_vuln=$(wc <./s3-booty/"$todate"-"$totime"-nuclei-vulns.json -l)
       data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
 #    else
@@ -285,7 +285,7 @@ function send_file() {
       echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
     else
       echo "${yellow}File being sent...${reset}"
-      curl -F file=@deepdive/"$todate"-"$totime"-nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels="$slack_channel" -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
+      curl -F file=@./s3-booty/"$todate"-"$totime"-nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels="$slack_channel" -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
       echo "${green}File sent!${reset}"
     fi
   fi
