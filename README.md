@@ -13,7 +13,7 @@ Already changing the world around us to fit our needs :muscle:
 # Requirements
 
 * a healthy dose of tenacity
-* DigitalOcean Account
+* DigitalOcean Account - [use this link to get $100 in free credit.. plus get me $25! :)](https://m.do.co/c/84db7470d259)
 * doctl installed and configured
 * Some API keys if you want good results for subdomain enumeration 
 * Works on Ubuntu 20.04 + ask @1efty
