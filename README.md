@@ -89,10 +89,10 @@ delete your box
 
 ### To install and run locally (not needed with a droplet)
 
-install script prereqs needed for running, from inside `./the_hunting/`
+install script prereqs needed for running, from inside `./the_hunting/` call
 
 ```bash
-./files/conf/install.sh --install
+./the_hunting.sh --install-all
 ```
 
 ### Script's usage anywhere
