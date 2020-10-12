@@ -622,6 +622,7 @@ main() {
     notify_finished
     double_check_excluded
     make_files
+    upload_s3_recon
     echo "${green}Scan for "$target" finished successfully${reset}"
     duration=$SECONDS
     echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
