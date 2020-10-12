@@ -69,7 +69,7 @@ sudo ./install.sh --install
 Pass this command your sshkey fingerprint from Digital that you would like to use for this box.
 
 ```bash
-./the_hunting.sh --create $hunting_fingerprint
+./the_hunting.sh --create
 ```
 
 connect to your box
@@ -101,7 +101,7 @@ Recon a root domain name for responsive subdomains
 ./the_hunting.sh --target hackerone.com
 ```
 
-Exclude out of scope domains from your recon results before doing recon (leaving you with a clean scope subdomain list)
+Exclude out of scope domains from your recon results before doing recon (leaving you with a clean scope subdomain list in responsive-domains...txt)
 
 ```bash
 ./the_hunting.sh --target hackerone.com --exclude support.hackerone.com,go.hacker.one,www.hackeronestatus.com,info.hacker.one,ma.hacker.one
