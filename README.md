@@ -17,7 +17,7 @@ Already changing the world around us to fit our needs :muscle:
 * doctl installed and configured
 * Some API keys if you want good results for subdomain enumeration 
 * Works on Ubuntu 20.04 + ask @1efty
-* if you want to backup your box super easy without scp, configure aws like below
+* if you want to backup your box super easy without scp, configure aws (need your iam account Access key ID and the Secret access key)
 
 # Warning
 Slack integration is included.. you need to add some data to aptly named files and you should be off to the races. Mind you, if you set up file upload by filling in the proper data in `./bot_user_oauth_at.txt` and `./slack_channel.txt`, you also need to have the a bot setup with the proper permissions to post files to whatever channel, then invite the bot to that channel.
@@ -27,46 +27,38 @@ Your data is in slacks hands then though, so if you are working within specific 
 # Commands
 ## Set up `the_hunting.sh` on
 
-install the hunting
+download the hunting
 ```bash
 git clone https://github.com/incredincomp/the_hunting.git && cd the_hunting/
 ```
 
-install pre-reqs make and packer
+install pre-reqs make and packer and congifure aws for secure cold storage
 ```bash
-chmod +x reqs.sh
-./reqs.sh
+sudo ./reqs.sh
 ```
 
 export your digital ocean api key to env
 ```bash
-export DIGITALOCEAN_ACCESS_TOKEN=1234546789abcdefghijkl
+export DIGITALOCEAN_ACCESS_TOKEN="1234546789abcdefghijkl"
 ```
 
 export your digital ocean ssh key fingerprint to env
 ```bash
-export hunting_fingerprint=11:22:33:44:55:66:77:88:99:AA
+export hunting_fingerprint="11:22:33:44:55:66:77:88:99:AA"
 ```
 
-## Building box
+## Building box snapshot for use with `--create`
 From inside /the_hunting.. run
 ```bash
 make build
 ```
-Should complete after about 10 minutes.
-
-### *THE INSTALL.SH SCRIPT IS SOMEWHAT TESTED, NOW BETTER FORMATTED, AND STILL MAYBE DANGEROUS.. GOOD LUCK*
-need sudo for program installs with packaging program
-
-```bash
-sudo ./install.sh --install
-```
+Should complete after <=> 10 minutes.
 
 ## Usage
 
 ### To build a remote box on DO
 
-Pass this command your sshkey fingerprint from Digital that you would like to use for this box.
+Use this command to generate a new droplet based off your make build snapshot
 
 ```bash
 ./the_hunting.sh --create
@@ -78,7 +70,7 @@ connect to your box
 ./the_hunting.sh --connect
 ```
 
-start first tmux session on your box and connect, to leave the_hunting running while you leave.. press `ctrl + b` then `d`
+start first tmux session on your box and connect, to leave the_hunting running when you leave.. press `ctrl + b` then `d`
 
 ```bash
 ./the_hunting.sh --tmux
@@ -94,7 +86,16 @@ delete your box
 ```bash
 ./the_hunting.sh --remove
 ```
-### Script usage anywhere
+
+### To install and run locally (not needed with a droplet)
+
+install script prereqs needed for running, from inside `./the_hunting/`
+
+```bash
+./files/conf/install.sh --install
+```
+
+### Script's usage anywhere
 Recon a root domain name for responsive subdomains
 
 ```bash
@@ -119,14 +120,6 @@ This will run all nuclei templates on your list of targets inside of `subdomains
 ./the_hunting.sh --file-all subdomains.txt
 ```
 
-Work in progress to start a scan and then auto kill the box
-```bash
-#connect to your box and set up the kill for after
-./the_hunting.sh --connect && ./the_hunting.sh --remove y
-#once connected, run a scan such as this to both do recon, then scan the found domains, then exit the box
-./the_hunting.sh --target hackerone.com --exclude support.hackerone.com,go.hacker.one,www.hackeronestatus.com,info.hacker.one,ma.hacker.one && ./the_hunting.sh --file ./s3-booty/hackerone-com-newline.txt && exit
-```
-
 ## Configuration
 ### Config Files
 All your user config files are to be stored inside of `./backup-files/`. I have placed default configs for subfinder and amass in here for you, as well as the other files needed for a fully configured instance.
@@ -144,7 +137,7 @@ You are going to need to run `sudo ./reqs.sh` and configure AWS cli through that
 
 ![](https://github.com/incredincomp/usage-videos/blob/master/the_hunting1.PNG)
 
-_Anything crossed out currently is implemented to a point, but turned off in the production version. Manually uncomment them in the script if you want to use them_
+_Anything crossed out currently is implemented to a point, but turned off in the production version. Manually uncomment them in the script if you want to use them, do it on lines 377-414_
 
 ## Recon
 
@@ -203,4 +196,4 @@ Community templates - https://github.com/projectdiscovery/nuclei-templates
 
 #### Owasp ZAProxy
 
-https://github.com/zaproxy/zaproxy
+~~https://github.com/zaproxy/zaproxy~~
