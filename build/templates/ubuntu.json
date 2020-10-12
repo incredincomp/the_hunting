@@ -18,7 +18,7 @@
     "provisioners": [
         {
             "type": "shell",
-            "script": "./build/scripts/start.sh"
+            "script": "./build/scripts/ubuntu/start.sh"
         },
         {
             "type": "file",
@@ -27,7 +27,7 @@
         },
         {
             "type": "shell",
-            "script": "./build/scripts/provision.sh"
+            "script": "./build/scripts/ubuntu/provision.sh"
         },
         {
             "type": "file",
@@ -41,7 +41,7 @@
         },
         {
             "type": "shell",
-            "script": "./build/scripts/finish.sh"
+            "script": "./build/scripts/ubuntu/finish.sh"
         },
         {
             "type": "file",
