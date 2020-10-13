@@ -522,12 +522,12 @@ function parse_args() {
       shift
       ;;
     --install-pr)
-      ./install.sh --pre_reqs
+      ./files/conf/install.sh --pre_reqs
       echo "Pre-requirements installed"
       exit
       ;;
     --install-all)
-      ./install.sh --install
+      ./files/conf/install.sh --install
       echo "Everything installed"
       exit
       ;;
