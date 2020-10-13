@@ -45,7 +45,7 @@ reset=$(tput sgr0)
 
 # borrowed some stuff and general idea of automated platform from lazyrecon
 # https://github.com/nahamsec/lazyrecon
-auquatoneThreads=8
+auquatoneThreads=4
 subdomainThreads=15
 subjackThreads=15
 httprobeThreads=50
@@ -201,7 +201,7 @@ function run_nuclei() {
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 function subdomain_scanning() {
-  nuclei -json -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
+  nuclei -json -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$todate"-"$totime"-nuclei-vulns.json
 }
 function all_subdomain_scanning() {
   nuclei -json -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
@@ -297,12 +297,11 @@ function undo_amass_config() {
     #rm ./amass_config.bak
   fi
 }
+# >>
 function make_files() {
   touch ./csvs/"$target_dir"-csv.txt
   cp ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt ./s3-booty/"$target_dir"-newline.txt
 }
-# >>
-
 function read_direct_wordlist() {
   cat ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
@@ -364,7 +363,7 @@ function upload_s3_recon() {
     true
   else
     aws s3 cp --recursive ./targets/"$target_dir"/"$foldername" s3://"$S3_BUCKET"/targets/"$target_dir"/"$foldername" --profile the_hunting
-    aws s3 cp --recursive ./s3-booty/ s3://"$S3_BUCKET"/s3-booty/"$target_dir"/"$foldername" --profile the_hunting
+    aws s3 cp --recursive ./s3-booty/"$target_dir"-newline.txt s3://"$S3_BUCKET"/s3-booty/newline/"$target_dir"-newline.txt --profile the_hunting
   fi
 }
 function upload_s3_scan() {

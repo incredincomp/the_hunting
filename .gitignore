@@ -1,7 +1,4 @@
-files/csvs
-files/newline
 targets/*
 deepdive/*
 temp/*
-s3-booty/*
 backup-files/*
