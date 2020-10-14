@@ -123,7 +123,7 @@ This will run all nuclei templates on your list of targets inside of `subdomains
 ## Configuration
 ### Config Files
 All your user config files are to be stored inside of `./backup-files/`. I have placed default configs for subfinder and amass in here for you, as well as the other files needed for a fully configured instance.
-*The one really important one right now is the `./backup-files/subfinder.yaml` one, add some keys/delete all the stuff you don't need.*
+`custom-header.txt` can be used to set your header for scans.. otherwise you can just run the scan option and it will ask you everytime now as it starts
 
 ### Configure AWS for backups.
 You are going to need to run `sudo ./reqs.sh` and configure AWS cli through that prompt or have it done previously.
