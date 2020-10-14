@@ -49,7 +49,7 @@ auquatoneThreads=4
 subdomainThreads=15
 subjackThreads=15
 httprobeThreads=50
-
+ssh_file="~/.ssh/id_rsa"
 # discover which chromium to use
 # if first guess doesn't exist, try an alternative
 chromiumPath="$(which chromium 2>/dev/null || which chromium-browser)"
@@ -504,9 +504,10 @@ function recon_option() {
   stty sane
   tput sgr0
 }
-function subdomain_option() {
+function scan_option() {
   clear
   open_program
+  set_header
   touch ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
   if [ -z "$all_subdomain_scan_target_file"]; then
     subdomain_scanning
@@ -619,13 +620,12 @@ main() {
   # parse CLI arguments
   parse_args $@
   # exit if certain variables are not set
-  if [ -z "$target" ] && [[ -z ${subdomain_scan_target[*]} ]] && [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ]; then
+  if [ -z "$target" ] &&  [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ]; then
     usage
     exit 1
   fi
   if [[ -z "$target" ]]; then
-    set_header
-    subdomain_option
+    scan_option
   else #recon only
     recon_option
   fi
