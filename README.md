@@ -147,11 +147,11 @@ _Anything crossed out currently is implemented to a point, but turned off in the
 ~~gobuster - vhost & dns
 https://github.com/OJ/gobuster~~
 
-~~Amass~~
-~~https://github.com/OWASP/Amass~~
+Amass
+https://github.com/OWASP/Amass
 
-Subfinder
-https://github.com/projectdiscovery/subfinder
+~~Subfinder
+https://github.com/projectdiscovery/subfinder~~
 
 #### Subdomain TakeOver
 Subjack
