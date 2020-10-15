@@ -1,3 +1,4 @@
+
 #!/bin/bash
 #===============================================================================
 #
@@ -43,8 +44,6 @@ green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 reset=$(tput sgr0)
 
-# borrowed some stuff and general idea of automated platform from lazyrecon
-# https://github.com/nahamsec/lazyrecon
 auquatoneThreads=4
 subdomainThreads=15
 subjackThreads=15
@@ -295,14 +294,6 @@ function send_file() {
     fi
   fi
 }
-# << remove
-function undo_amass_config() {
-  if [ -s ./amass_config.bak ]; then
-    mv ./amass_config.bak ./amass_config.ini
-    #rm ./amass_config.bak
-  fi
-}
-# >>
 function make_files() {
   touch ./csvs/"$target_dir"-csv.txt
   cp ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt ./s3-booty/"$target_dir"-newline.txt
@@ -437,14 +428,26 @@ function scanning() {
 function logo() {
   base64 -d <<<"4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWXICDilojilojilZfilojilojilojilojilojilojilojilZcgICAgICAgIOKWiOKWiOKVlyAg4paI4paI4pWX4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4pWX4paI4paI4paI4pWXICAg4paI4paI4pWXIOKWiOKWiOKWiOKWiOKWiOKWiOKVlyAgICDilojilojilojilojilojilojilojilZfilojilojilZcgIOKWiOKWiOKVlwrilZrilZDilZDilojilojilZTilZDilZDilZ3ilojilojilZEgIOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVkOKVkOKVnSAgICAgICAg4paI4paI4pWRICDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilojilojilZcgIOKWiOKWiOKVkeKVmuKVkOKVkOKWiOKWiOKVlOKVkOKVkOKVneKWiOKWiOKVkeKWiOKWiOKWiOKWiOKVlyAg4paI4paI4pWR4paI4paI4pWU4pWQ4pWQ4pWQ4pWQ4pWdICAgIOKWiOKWiOKVlOKVkOKVkOKVkOKVkOKVneKWiOKWiOKVkSAg4paI4paI4pWRCiAgIOKWiOKWiOKVkSAgIOKWiOKWiOKWiOKWiOKWiOKWiOKWiOKVkeKWiOKWiOKWiOKWiOKWiOKVlyAgICAgICAgICDilojilojilojilojilojilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZTilojilojilZcg4paI4paI4pWRICAg4paI4paI4pWRICAg4paI4paI4pWR4paI4paI4pWU4paI4paI4pWXIOKWiOKWiOKVkeKWiOKWiOKVkSAg4paI4paI4paI4pWXICAg4paI4paI4paI4paI4paI4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4pWRCiAgIOKWiOKWiOKVkSAgIOKWiOKWiOKVlOKVkOKVkOKWiOKWiOKVkeKWiOKWiOKVlOKVkOKVkOKVnSAgICAgICAgICDilojilojilZTilZDilZDilojilojilZHilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZHilZrilojilojilZfilojilojilZHilojilojilZEgICDilojilojilZEgICDilZrilZDilZDilZDilZDilojilojilZHilojilojilZTilZDilZDilojilojilZEKICAg4paI4paI4pWRICAg4paI4paI4pWRICDilojilojilZHilojilojilojilojilojilojilojilZfilojilojilojilojilojilojilojilZfilojilojilZEgIOKWiOKWiOKVkeKVmuKWiOKWiOKWiOKWiOKWiOKWiOKVlOKVneKWiOKWiOKVkSDilZrilojilojilojilojilZEgICDilojilojilZEgICDilojilojilZHilojilojilZEg4pWa4paI4paI4paI4paI4pWR4pWa4paI4paI4paI4paI4paI4paI4pWU4pWd4paI4paI4pWX4paI4paI4paI4paI4paI4paI4paI4pWR4paI4paI4pWRICDilojilojilZEKICAg4pWa4pWQ4pWdICAg4pWa4pWQ4pWdICDilZrilZDilZ3ilZrilZDilZDilZDilZDilZDilZDilZ3ilZrilZDilZDilZDilZDilZDilZDilZ3ilZrilZDilZ0gIOKVmuKVkOKVnSDilZrilZDilZDilZDilZDilZDilZ0g4pWa4pWQ4pWdICDilZrilZDilZDilZDilZ0gICDilZrilZDilZ0gICDilZrilZDilZ3ilZrilZDilZ0gIOKVmuKVkOKVkOKVkOKVnSDilZrilZDilZDilZDilZDilZDilZ0g4pWa4pWQ4pWd4pWa4pWQ4pWQ4pWQ4pWQ4pWQ4pWQ4pWd4pWa4pWQ4pWdICDilZrilZDilZ0="
 }
-function credits() {
+function print_line() {
+  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+  echo " "
+}
+function open_program() {
+  echo " "
+  echo " "
+  logo
+  echo " "
+  credits
+  licensing_info
   print_line
+  wait 2
+}
+function credits() {
   base64 -d <<<"Q3JlZGl0czogVGhhbmtzIHRvIGh0dHBzOi8vZ2l0aHViLmNvbS9PSiBodHRwczovL2dpdGh1Yi5jb20vT1dBU1AgaHR0cHM6Ly9naXRodWIuY29tL2hhY2NlcgpodHRwczovL2dpdGh1Yi5jb20vdG9tbm9tbm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9taWNoZW5yaWtzZW4gJiBUaGUgRGFyayBSYXZlciBmb3IgdGhlaXIKd29yayBvbiB0aGUgcHJvZ3JhbXMgdGhhdCB3ZW50IGludG8gdGhlIG1ha2luZyBvZiB0aGVfaHVudGluZy5zaC4="
   echo " "
-  print_line
 }
 function licensing_info() {
-  base64 -d <<<"dGhlX2h1bnRpbmcgQ29weXJpZ2h0IChDKSAyMDIwICBAaW5jcmVkaW5jb21wClRoaXMgcHJvZ3JhbSBjb21lcyB3aXRoIEFCU09MVVRFTFkgTk8gV0FSUkFOVFk7IGZvciBkZXRhaWxzIGNhbGwgYC4vdGhlX2h1bnRpbmcuc2ggLWxpY2Vuc2VgLgpUaGlzIGlzIGZyZWUgc29mdHdhcmUsIGFuZCB5b3UgYXJlIHdlbGNvbWUgdG8gcmVkaXN0cmlidXRlIGl0IHVuZGVyIGNlcnRhaW4gCmNvbmRpdGlvbnM7IHR5cGUgYC4vdGhlX2h1bnRpbmcuc2ggLWxpY2Vuc2VgIGZvciBkZXRhaWxzLg=="
+  base64 -d <<<"dGhlX2h1bnRpbmcgQ29weXJpZ2h0IChDKSAyMDIwICBAaW5jcmVkaW5jb21wClRoaXMgcHJvZ3JhbSBjb21lcyB3aXRoIEFCU09MVVRFTFkgTk8gV0FSUkFOVFk7IGZvciBkZXRhaWxzIGNhbGwgYC4vdGhlX2h1bnRpbmcuc2ggLWxpY2Vuc2UnLgpUaGlzIGlzIGZyZWUgc29mdHdhcmUsIGFuZCB5b3UgYXJlIHdlbGNvbWUgdG8gcmVkaXN0cmlidXRlIGl0Lgp1bmRlciBjZXJ0YWluIGNvbmRpdGlvbnM7IHR5cGUgYC4vdGhlX2h1bnRpbmcuc2ggLWxpY2Vuc2UnIGZvciBkZXRhaWxzLg=="
   echo " "
 }
 function print_line() {
@@ -477,12 +480,8 @@ function recon_option() {
   mkdir ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/parsedjson/
   mkdir ./targets/"$target_dir"/"$foldername"/subdomain_enum/
   mkdir ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/
-  #mkdir ./targets/"$target_dir"/"$foldername"/subdomain_enum/gobuster/
   mkdir ./targets/"$target_dir"/"$foldername"/screenshots/
-  #mkdir ./targets/"$target_dir"/"$foldername"/directory_fuzzing/
-  #mkdir ./targets/"$target_dir"/"$foldername"/directory_fuzzing/gobuster/
   mkdir ./targets/"$target_dir"/"$foldername"/scanning/
-  #mkdir ./targets/"$target_dir"/"$foldername"/scanning/nmap/
   mkdir ./targets/"$target_dir"/"$foldername"/scanning/nuclei/
   touch ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
   touch ./targets/"$target_dir"/"$foldername"/subdomain-takeover-results.json
@@ -523,27 +522,7 @@ function scan_option() {
   stty sane
   tput sgr0
 }
-function credits() {
-  print_line
-  base64 -d <<<"ICAgQ3JlZGl0czogVGhhbmtzIHRvIGh0dHBzOi8vZ2l0aHViLmNvbS9PSiBodHRwczovL2dpdGh1Yi5jb20vT1dBU1AgaHR0cHM6Ly9naXRodWIuY29tL2hhY2NlcgogICBodHRwczovL2dpdGh1Yi5jb20vdG9tbm9tbm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9taWNoZW5yaWtzZW4gJiBUaGUgRGFyayBSYXZlciBmb3IgdGhlaXIKICAgd29yayBvbiB0aGUgcHJvZ3JhbXMgdGhhdCB3ZW50IGludG8gdGhlIG1ha2luZyBvZiB0aGVfaHVudGluZy5zaC4="
-  echo " "
-  print_line
-}
-function licensing_info() {
-  base64 -d <<<"CXRoZV9odW50aW5nIENvcHlyaWdodCAoQykgMjAyMCAgQGluY3JlZGluY29tcAoJVGhpcyBwcm9ncmFtIGNvbWVzIHdpdGggQUJTT0xVVEVMWSBOTyBXQVJSQU5UWTsgZm9yIGRldGFpbHMgY2FsbCBgLi90aGVfaHVudGluZy5zaCAtbGljZW5zZScuCglUaGlzIGlzIGZyZWUgc29mdHdhcmUsIGFuZCB5b3UgYXJlIHdlbGNvbWUgdG8gcmVkaXN0cmlidXRlIGl0LgoJdW5kZXIgY2VydGFpbiBjb25kaXRpb25zOyB0eXBlIGAuL3RoZV9odW50aW5nLnNoIC1saWNlbnNlJyBmb3IgZGV0YWlscy4="
-  echo " "
-}
-function print_line() {
-  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
-  echo " "
-}
-function open_program() {
-  logo
-  echo " "
-  credits
-  licensing_info
-  print_line
-}
+
 function parse_args() {
   while [[ $1 ]]; do
     echo "Handling [$1]..."
