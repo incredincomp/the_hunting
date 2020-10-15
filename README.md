@@ -122,7 +122,9 @@ This will run all nuclei templates on your list of targets inside of `subdomains
 
 ## Configuration
 ### Config Files
-All your user config files are to be stored inside of `./backup-files/`. I have placed default configs for subfinder and amass in here for you, as well as the other files needed for a fully configured instance.
+![](https://github.com/incredincomp/usage-videos/blob/master/important_files.jpg)
+
+All your user config files are to be stored inside of `./backup-files/`. I have placed default configs for subfinder and amass in here for you, as well as the other files needed for a fully configured instance. The tokens are pretty aptly named, but these are all optional and are meant to enhance the script to some degree.
 `custom-header.txt` can be used to set your header for scans.. otherwise you can just run the scan option and it will ask you everytime now as it starts
 
 ### Configure AWS for backups.
