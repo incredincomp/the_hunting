@@ -522,7 +522,6 @@ function scan_option() {
   stty sane
   tput sgr0
 }
-
 function parse_args() {
   while [[ $1 ]]; do
     echo "Handling [$1]..."
@@ -613,5 +612,4 @@ todate=$(date +"%Y-%m-%d")
 totime=$(date +"%I:%M")
 path=$(pwd)
 foldername=$todate"-"$totime
-
 main $@
