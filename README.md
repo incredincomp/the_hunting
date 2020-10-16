@@ -15,7 +15,7 @@ Already changing the world around us to fit our needs :muscle:
 * a healthy dose of tenacity
 * DigitalOcean Account - [use this link to get $100 in free credit.. plus get me $25! :)](https://m.do.co/c/84db7470d259)
 * doctl installed and configured
-* Some API keys if you want good results for subdomain enumeration 
+* Some API keys if you want good results for subdomain enumeration
 * Works on Ubuntu 20.04 + ask @1efty
 * if you want to backup your box super easy without scp, configure aws (need your iam account Access key ID and the Secret access key)
 
@@ -118,6 +118,12 @@ This will run all nuclei templates on your list of targets inside of `subdomains
 
 ```bash
 ./the_hunting.sh --file-all subdomains.txt
+```
+
+Spider a list of urls with owaspzap
+
+```bash
+./the_hunting.sh --spider important-subdomains.txt
 ```
 
 ## Configuration

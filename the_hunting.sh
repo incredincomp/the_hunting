@@ -49,6 +49,7 @@ subdomainThreads=15
 subjackThreads=15
 httprobeThreads=50
 ssh_file="~/.ssh/id_rsa"
+random_api=$(openssl rand -hex 8)
 # discover which chromium to use
 # if first guess doesn't exist, try an alternative
 chromiumPath="$(which chromium 2>/dev/null || which chromium-browser)"
@@ -83,7 +84,7 @@ target=""
 subdomain_scan_target=""
 declare -a excluded=()
 function usage() {
-  echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n  --file\t-\tpass a newline seperated file of subdomains to scan\n  --file-all\t-\tsame as --file, but uses all templates to scan\n  --create\t-\tcreate a droplet with your snapshot from make build\n  --connect\t-\tbasic ssh tunnel\n  --tmux\t-\tcreate a tmux session (recommended)\n  --reconnect-tmux\t-\treconnect to main tmux session\n  --remove\t-\tdelete your hunting droplet\n  --logo\t-\tprints a cool ass logo\n  --license\t-\tprints a boring ass license\n" 1>&2
+  echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n  --file\t-\tpass a newline seperated file of subdomains to scan\n  --file-all\t-\tsame as --file, but uses all templates to scan\n  --spider\t-\tspider a list of urls with owaspzap\n  --create\t-\tcreate a droplet with your snapshot from make build\n  --connect\t-\tbasic ssh tunnel\n  --tmux\t-\tcreate a tmux session (recommended)\n  --reconnect-tmux\t-\treconnect to main tmux session\n  --remove\t-\tdelete your hunting droplet\n  --logo\t-\tprints a cool ass logo\n  --license\t-\tprints a boring ass license\n" 1>&2
   exit 1
 }
 function set_header() {
@@ -219,19 +220,19 @@ function start_zap() {
   file="$subdomain_scan_target_file"
   echo "${yellow}Starting zap instance...${reset}"
   echo "${red} Just kidding! Working on it though.${reset}"
-  ./home/root/zap/zap.sh -daemon -port 8090 -config api.key=12345 &>/dev/null &
+  ./home/"$USER"/zap/zap.sh -daemon -port 8090 -config api.key="$random_api" &>/dev/null &
   echo "${green}zap started!${reset}"
 }
 function stop_zap() {
-  curl -s "http://localhost:8090/JSON/core/action/shutdown/?apikey=12345"
+  curl -s "http://localhost:8090/JSON/core/action/shutdown/?apikey=""$random_api"
 }
 function zap_spider() {
-  file="$subdomain_scan_target_file"
+  file="$zap_spider_target_file"
   for sf in $file; do
-    curl -s "http://localhost:8090/JSON/spider/action/scan/?apikey=12345&zapapiformat=JSON&formMethod=GET&url=""$sf" | jq .
+    curl -s "http://localhost:8090/JSON/spider/action/scan/?apikey=""$random_api""&zapapiformat=JSON&formMethod=GET&url=""$sf" | jq .
     # get spider status, check it every 30 seconds until value is 100
     while true; do
-      value=$(curl -s "http://localhost:8090/JSON/spider/view/status/?apikey=12345" | jq -r ".status")
+      value=$(curl -s "http://localhost:8090/JSON/spider/view/status/?apikey=""$random_api" | jq -r ".status")
       if [ value = "100" ]; then
         break
       fi
@@ -385,6 +386,7 @@ function subdomain_enum() {
   #run_gobuster_dns
 }
 function zap_whole() {
+  open_program
   start_zap
   zap_spider
   stop_zap
@@ -432,16 +434,6 @@ function print_line() {
   printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
   echo " "
 }
-function open_program() {
-  echo " "
-  echo " "
-  logo
-  echo " "
-  credits
-  licensing_info
-  print_line
-  wait 2
-}
 function credits() {
   base64 -d <<<"Q3JlZGl0czogVGhhbmtzIHRvIGh0dHBzOi8vZ2l0aHViLmNvbS9PSiBodHRwczovL2dpdGh1Yi5jb20vT1dBU1AgaHR0cHM6Ly9naXRodWIuY29tL2hhY2NlcgpodHRwczovL2dpdGh1Yi5jb20vdG9tbm9tbm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9taWNoZW5yaWtzZW4gJiBUaGUgRGFyayBSYXZlciBmb3IgdGhlaXIKd29yayBvbiB0aGUgcHJvZ3JhbXMgdGhhdCB3ZW50IGludG8gdGhlIG1ha2luZyBvZiB0aGVfaHVudGluZy5zaC4="
   echo " "
@@ -455,12 +447,16 @@ function print_line() {
   echo " "
 }
 function open_program() {
+  echo " "
+  echo " "
   logo
   echo " "
   credits
   licensing_info
   print_line
+  wait 2
 }
+# main
 function recon_option() {
   target_dir=${target//./-}
   clear
@@ -546,6 +542,11 @@ function parse_args() {
       shift
       shift
       ;;
+    --spider)
+      zap_spider_target_file="$2"
+      shift
+      shift
+      ;;
     --install-pr)
       ./files/conf/install.sh --pre_reqs
       echo "Pre-requirements installed"
@@ -593,19 +594,20 @@ function parse_args() {
     esac
   done
 }
-# main
 main() {
   # parse CLI arguments
   parse_args $@
   # exit if certain variables are not set
-  if [ -z "$target" ] &&  [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ]; then
+  if [ -z "$target" ] && [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ] && [ -z "$zap_spider_target_file" ]; then
     usage
     exit 1
   fi
   if [[ -z "$target" ]]; then
     scan_option
-  else #recon only
+  elif [[ -z "$subdomain_scan_target_file" ]] || [[ -z "$all_subdomain_scan_target_file" ]]; then#recon only
     recon_option
+  elif [[ -z "$zap_spider_target_file"]]; then
+    zap_whole
   fi
 }
 todate=$(date +"%Y-%m-%d")
