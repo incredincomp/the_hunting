@@ -329,9 +329,9 @@ function create_image() {
     region="sfo2"
     if [ -z "$set_domain" ]; then
       domain="$set_domain"
-      doctl compute droplet create the-hunting --image "$image_id" --size "$size" --region "$region" --ssh-keys "$ssh_key" "$hunting_fingerprint" "$domain"
+      doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $hunting_fingerprint $domain
     else
-      doctl compute droplet create the-hunting --image "$image_id" --size "$size" --region "$region" --ssh-keys "$ssh_key" "$hunting_fingerprint"
+      doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $hunting_fingerprint
     fi
 
   fi
