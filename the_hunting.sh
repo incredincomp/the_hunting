@@ -605,7 +605,7 @@ main() {
     scan_option
   elif [[ -z "$subdomain_scan_target_file" ]] || [[ -z "$all_subdomain_scan_target_file" ]]; then#recon only
     recon_option
-  elif [[ -z "$zap_spider_target_file"]]; then
+  else
     zap_whole
   fi
 }
