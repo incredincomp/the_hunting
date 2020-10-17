@@ -1,8 +1,0 @@
-[Unit]
-After=network.service
-
-[Service]
-{TEXT_TO_BE_REPLACED}
-
-[Install]
-WantedBy=default.target
