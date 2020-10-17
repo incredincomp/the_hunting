@@ -47,7 +47,9 @@ auquatoneThreads=4
 subdomainThreads=15
 subjackThreads=15
 httprobeThreads=50
-ssh_file="~/.ssh/id_rsa"
+droplet_size="s-1vcpu-1gb"
+droplet_region="sfo2"
+
 random_api=$(openssl rand -hex 8)
 # discover which chromium to use
 # if first guess doesn't exist, try an alternative
@@ -325,13 +327,11 @@ function create_image() {
     echo "No snapshots have been created. Have you run make lately?"
     exit
   else
-    size="s-1vcpu-1gb"
-    region="sfo2"
     if [ -z "$set_domain" ]; then
       domain="$set_domain"
-      doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $hunting_fingerprint $domain
+      doctl compute droplet create the-hunting --image $image_id --size $droplet_size --region $droplet_region --ssh-keys $ssh_key $hunting_fingerprint $domain
     else
-      doctl compute droplet create the-hunting --image $image_id --size $size --region $region --ssh-keys $ssh_key $hunting_fingerprint
+      doctl compute droplet create the-hunting --image $image_id --size $droplet_size --region $droplet_region --ssh-keys $ssh_key $hunting_fingerprint
     fi
 
   fi
@@ -594,7 +594,7 @@ function parse_args() {
 }
 main() {
   # parse CLI arguments
-  parse_args $@
+  parse_args "$@"
   # exit if certain variables are not set
   if [ -z "$target" ] && [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ] && [ -z "$zap_spider_target_file" ]; then
     usage
