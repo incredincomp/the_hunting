@@ -503,7 +503,7 @@ function scan_option() {
   open_program
   set_header
   touch ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
-  if [ -z "$all_subdomain_scan_target_file"]; then
+  if [ -z "$all_subdomain_scan_target_file" ]; then
     subdomain_scanning
   else
     all_subdomain_scanning
