@@ -603,7 +603,7 @@ main() {
   fi
   if [[ -z "$target" ]]; then
     scan_option
-  elif [[ -z "$subdomain_scan_target_file" ]] || [[ -z "$all_subdomain_scan_target_file" ]]; then#recon only
+  elif [[ -z "$subdomain_scan_target_file" ]] || [[ -z "$all_subdomain_scan_target_file" ]]; then #recon only
     recon_option
   else
     zap_whole
@@ -613,4 +613,4 @@ todate=$(date +"%Y-%m-%d")
 totime=$(date +"%I:%M")
 path=$(pwd)
 foldername=$todate"-"$totime
-main $@
+main "$@"
