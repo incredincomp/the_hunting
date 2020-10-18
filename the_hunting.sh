@@ -309,10 +309,6 @@ function send_file() {
     fi
   fi
 }
-function make_files() {
-  touch ./csvs/"$target_dir"-csv.txt
-  cp ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt ./s3-booty/"$target_dir"-newline.txt
-}
 function read_direct_wordlist() {
   cat ./targets/"$target_dir"/"$foldername"/aqua/aqua_out/aquatone_urls.txt
 }
@@ -503,7 +499,6 @@ function recon_option() {
   validation
   notify_finished
   double_check_excluded
-  make_files
   upload_s3_recon
   echo "${green}Scan for "$target" finished successfully${reset}"
   duration=$SECONDS
