@@ -371,7 +371,7 @@ function upload_s3_recon() {
     true
   else
     aws s3 cp --recursive ./targets/"$target_dir"/"$foldername" s3://"$S3_BUCKET"/targets/"$target_dir"/"$foldername" --profile the_hunting
-    aws s3 cp --recursive ./s3-booty/"$target_dir"-newline.txt s3://"$S3_BUCKET"/s3-booty/newline/"$target_dir"-newline.txt --profile the_hunting
+    aws s3 cp ./s3-booty/"$target_dir"-newline.txt s3://"$S3_BUCKET"/s3-booty/newline/"$target_dir"-newline.txt --profile the_hunting
   fi
 }
 function upload_s3_scan() {
