@@ -516,7 +516,6 @@ function scan_option() {
   clear
   open_program
   set_header
-  touch ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
   if [ -z "$all_subdomain_scan_target_file" ]; then
     all_subdomain_scanning "$all_subdomain_scan_target_file"
   else
@@ -615,10 +614,11 @@ main() {
     usage
     exit 1
   fi
-  if [[ -z "$target" ]]; then
-    scan_option
-  else
+  if [ -n "$target" ]; then
     recon_option
+  fi
+  if [ -n "$subdomain_scan_target_file" ] || [ -n "$all_subdomain_scan_target_file" ]; then
+    scan_option
   fi
 }
 todate=$(date +"%Y-%m-%d")
