@@ -556,6 +556,7 @@ function parse_args() {
       ;;
     --spider)
       zap_spider_target_file="$2"
+      zap_whole
       shift
       shift
       ;;
@@ -616,10 +617,8 @@ main() {
   fi
   if [[ -z "$target" ]]; then
     scan_option
-  elif [[ -z "$subdomain_scan_target_file" ]] || [[ -z "$all_subdomain_scan_target_file" ]]; then #recon only
-    recon_option
   else
-    zap_whole
+    recon_option
   fi
 }
 todate=$(date +"%Y-%m-%d")
