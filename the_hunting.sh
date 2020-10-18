@@ -92,21 +92,23 @@ function set_header() {
     echo "No custom header has been set"
     echo -n "would you like to set a custom header for active scans? [yYnN]"
     read ans
-    case $ans in
-    yY)
-      echo -n "What would you like your custom header to say?"
-      read custom_header
-      echo "$custom_header" > ./backup-files/custom_header.txt
-      return
-      ;;
-    nN)
-      echo "No custom header has been set"
-      return
-      ;;
-    *)
-      set_header
-      ;;
-    esac
+    case "$ans" in
+      [yY])
+        echo -n "What would you like your custom header to say?"
+        read custom_header
+        echo "$custom_header" > ./backup-files/custom_header.txt
+        return
+        ;;
+      [nN])
+        echo "No custom header has been set"
+        return
+        ;;
+      *)
+        echo "No comprendo mi amigo! Volver a intentar."
+        ;;
+      esac
+  else
+    true
   fi
 }
 function excludedomains() {
