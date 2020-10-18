@@ -10,7 +10,7 @@ function install_make() {
 }
 function install_awscli() {
   cd ./temp
-  if [ -d "./aws" ]; then
+  if [ -d "/usr/local/aws-cli" ]; then
     true
   else
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
