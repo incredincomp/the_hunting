@@ -516,7 +516,7 @@ function scan_option() {
   clear
   open_program
   set_header
-  if [ -z "$all_subdomain_scan_target_file" ]; then
+  if [ -n "$all_subdomain_scan_target_file" ]; then
     all_subdomain_scanning "$all_subdomain_scan_target_file"
   else
     subdomain_scanning "$subdomain_scan_target_file"
