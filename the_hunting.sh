@@ -463,7 +463,6 @@ function open_program() {
   credits
   licensing_info
   print_line
-  wait 2
 }
 # main
 function recon_option() {
