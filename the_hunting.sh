@@ -642,7 +642,7 @@ main() {
   fi
 }
 todate=$(date +"%Y-%m-%d")
-totime=$(date +"%I:%M")
+totime=$(date +"%I_%M")
 path=$(pwd)
 foldername=$todate"-"$totime
 main $@
