@@ -617,8 +617,8 @@ main() {
   fi
   if [ -n "$target" ]; then
     recon_option
-  fi
-  if [ -n "$subdomain_scan_target_file" ] || [ -n "$all_subdomain_scan_target_file" ]; then
+  else
+  #if [ -n "$subdomain_scan_target_file" ] || [ -n "$all_subdomain_scan_target_file" ]; then
     scan_option
   fi
 }
