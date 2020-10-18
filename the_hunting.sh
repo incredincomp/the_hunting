@@ -97,9 +97,11 @@ function set_header() {
       echo -n "What would you like your custom header to say?"
       read custom_header
       echo "$custom_header" > ./backup-files/custom_header.txt
+      return
       ;;
     nN)
       echo "No custom header has been set"
+      return
       ;;
     *)
       set_header
