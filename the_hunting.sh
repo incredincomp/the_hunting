@@ -233,7 +233,7 @@ function zap_spider() {
     # get spider status, check it every 30 seconds until value is 100
     while true; do
       value=$(curl -s "http://localhost:8090/JSON/spider/view/status/?apikey=""$random_api" | jq -r ".status")
-      if [ value = "100" ]; then
+      if [ "$value" = "100" ]; then
         break
       fi
       sleep 15
