@@ -329,9 +329,13 @@ function uniq_subdomains() {
 }
 function double_check_excluded() {
   if [ -s ./targets/"$target_dir"/"$foldername"/excluded.txt ]; then
-    grep -vFf ./targets/"$target_dir"/"$foldername"/excluded.txt ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt >./targets/"$target_dir"/"$foldername"/2responsive-domains-80-443.txt
-    rm ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
-    mv ./targets/"$target_dir"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
+    if [ -s ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt ]; then
+      grep -vFf ./targets/"$target_dir"/"$foldername"/excluded.txt ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt >./targets/"$target_dir"/"$foldername"/2responsive-domains-80-443.txt
+      mv ./targets/"$target_dir"/"$foldername"/2responsive-domains-80-443.txt ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
+    else
+      grep -vFf ./targets/"$target_dir"/"$foldername"/excluded.txt ./targets/"$target_dir"/"$foldername"/alldomains.txt >./targets/"$target_dir"/"$foldername"/2alldomains.txt
+      mv ./targets/"$target_dir"/"$foldername"/2alldomains.txt ./targets/"$target_dir"/"$foldername"/alldomains.txt
+    fi
   fi
 }
 function parse_json() {
@@ -439,6 +443,7 @@ function port_scan() {
 # main func's
 function recon() {
   subdomain_enum
+  double_check_excluded
   sub_takeover
 }
 function validation() {

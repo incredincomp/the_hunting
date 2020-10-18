@@ -65,24 +65,24 @@ Use this command to generate a new droplet based off your make build snapshot
 ./the_hunting.sh --create
 ```
 
-connect to your box
+Connect to your box via ssh. Nice for checking on your output files mid HUGE scope recon.
 
 ```bash
 ./the_hunting.sh --connect
 ```
 
-start first tmux session on your box and connect, to leave the_hunting running when you leave.. press `ctrl + b` then `d`
+Start first tmux session on your box and connect, to leave the_hunting running when you leave.. press `ctrl + b` then `d`
 
 ```bash
 ./the_hunting.sh --tmux
 ```
 
-reconnect to your last tmux session
+Reconnect to your last tmux session
 ```bash
 ./the_hunting.sh --rmux
 ```
 
-delete your box
+Delete your box
 
 ```bash
 ./the_hunting.sh --remove
@@ -90,7 +90,7 @@ delete your box
 
 ### To install and run locally (not needed with a droplet)
 
-install script prereqs needed for running, from inside `./the_hunting/` call
+Install script prereqs needed for running, from inside `./the_hunting/` call
 
 ```bash
 ./the_hunting.sh --install-all
