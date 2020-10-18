@@ -1,5 +1,6 @@
-# the_hunting
-a *cheap* vuln finding robot. Currently in heavy Dev. So please, be careful with it.. Its a violent script if I've ever written one. Nothing is rate limited so you'll probably get IP blocked over it, specifically during gobuster dir if youre not already banned before getting there.
+![](https://github.com/incredincomp/usage-videos/blob/master/hunting_logo.jpg)
+
+Just a *cheap* vuln finding robot. Currently in heavy Dev. So please, be careful with it.. Its a violent script if I've ever written one. Nothing is rate limited so you'll probably get IP blocked over it, specifically during aquatone if youre not already banned before getting there.
 Cheers!
 
 < Huge shoutout to my dude ![@1efty](https://twitter.com/ONEefty) for his help bringing this script into the 21st century! && ![@1efty](https://github.com/1efty)'s github  />
@@ -19,10 +20,10 @@ Already changing the world around us to fit our needs :muscle:
 * Works on Ubuntu 20.04 + ask @1efty
 * if you want to backup your box super easy without scp, configure aws (need your iam account Access key ID and the Secret access key)
 
-# Warning
-Slack integration is included.. you need to add some data to aptly named files and you should be off to the races. Mind you, if you set up file upload by filling in the proper data in `./bot_user_oauth_at.txt` and `./slack_channel.txt`, you also need to have the a bot setup with the proper permissions to post files to whatever channel, then invite the bot to that channel.
+# Caution
+**Slack integration is included.. you need to add some data to aptly named files and you should be off to the races. Mind you, if you set up file upload by filling in the proper data in `./bot_user_oauth_at.txt` and `./slack_channel.txt`, you also need to have the a bot setup with the proper permissions to post files to whatever channel, then invite the bot to that channel.**
 
-Your data is in slacks hands then though, so if you are working within specific privacy and private program scopes, you may need to adjust course accordingly and do some research before you start dumping possibly important data on your targets into slacks servers and therefore the world. Be smart about it.
+**_Your data is in slacks hands then though_, so if you are working within specific privacy and private program scopes, _you may need to adjust course accordingly_ and do some research before you start dumping possibly important data on your targets into slacks servers and therefore the world. Be smart about it.**
 
 # Commands
 ## Set up `the_hunting.sh` on
