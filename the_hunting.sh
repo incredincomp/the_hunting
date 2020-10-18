@@ -209,17 +209,17 @@ function run_nuclei() {
 }
 function subdomain_scanning() {
   if [ -n "$custom_header" ]; then
-    nuclei -json -json-requests -H "$custom_header" -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$todate"-"$totime"-nuclei-vulns.json
+    nuclei -json -json-requests -H "$custom_header" -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   else
-    nuclei -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$todate"-"$totime"-nuclei-vulns.json
+    nuclei -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   fi
 }
 function all_subdomain_scanning() {
   if [ -z "$custom_header" ]; then
-    nuclei -json -json-requests -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
+    nuclei -json -json-requests -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   else
     #custom header
-    nuclei -json -json-requests -H "$custom_header" -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
+    nuclei -json -json-requests -H "$custom_header" -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   fi
 }
 function run_nmap() {
@@ -274,7 +274,7 @@ function notify_subdomain_scan() {
   else
     echo "${yellow}Notification being generated and sent...${reset}"
 #    if [ -s ./s3-booty/nuclei-vulns.json ]; then
-      num_of_vuln=$(wc <./s3-booty/nuclei/"$todate"-"$totime"-nuclei-vulns.json -l)
+      num_of_vuln=$(wc <./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json -l)
       data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
 #    else
@@ -310,13 +310,13 @@ function send_file() {
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
-    if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./s3-booty/"$target_dir"-"$todate"-"$totime"-nuclei-vulns.json ]; then
+    if [ -z "$slack_channel" ] && [ -z "$bot_token" ] && [ -z "$bot_user_oauth_at" ] && [ -s ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json ]; then
       echo "${red}Notifications not set up."
       echo "${red}Add your slack channel to ./slack_channel.txt"
       echo "${red}Add your slack bot user oauth token to ./bot_user_oauth_at.txt${reset}"
     else
       echo "${yellow}File being sent...${reset}"
-      curl -F file=@./s3-booty/"$todate"-"$totime"-nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels="$slack_channel" -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
+      curl -F file=@./s3-booty/"$target_dir"-nuclei-vulns.json -F "initial_comment=Vulns from your most recent scan." -F channels="$slack_channel" -H "Authorization: Bearer ${bot_token}" https://slack.com/api/files.upload
       echo "${green}File sent!${reset}"
     fi
   fi
