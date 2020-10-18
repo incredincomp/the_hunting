@@ -268,7 +268,7 @@ function notify_subdomain_scan() {
   else
     echo "${yellow}Notification being generated and sent...${reset}"
 #    if [ -s ./s3-booty/nuclei-vulns.json ]; then
-      num_of_vuln=$(wc <./s3-booty/"$todate"-"$totime"-nuclei-vulns.json -l)
+      num_of_vuln=$(wc <./s3-booty/nuclei/"$todate"-"$totime"-nuclei-vulns.json -l)
       data1=''{\"text\":\"Your\ subdomain\ scan\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_vuln"'"\ vulnerabilities.\"}''
       curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
 #    else
@@ -518,7 +518,8 @@ function scan_option() {
   set_header
   if [ -n "$all_subdomain_scan_target_file" ]; then
     all_subdomain_scanning "$all_subdomain_scan_target_file"
-  else
+  fi
+  if [ -n "$subdomain_scan_target_file" ]; then
     subdomain_scanning "$subdomain_scan_target_file"
   fi
   upload_s3_scan
