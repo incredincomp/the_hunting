@@ -269,6 +269,16 @@ function notify_subdomain_scan() {
   fi
   echo "${green}Notification sent!${reset}"
 }
+function notify_spider_finished() {
+  if [ -z "$slack_url" ]; then
+    echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
+  else
+    echo "${yellow}Notification being generated and sent...${reset}"
+    data1=''{\"text\":\"Your\ spider\ of\ "'"$zap_spider_target_file"'"\ is\ complete!\"}''
+    curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    echo "${green}Notification sent!${reset}"
+  fi
+}
 function notify_error() {
   if [ -z "$slack_url" ]; then
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
@@ -388,6 +398,7 @@ function zap_whole() {
   start_zap
   zap_spider
   stop_zap
+  notify_spider_finished
 }
 function sub_takeover() {
   run_subjack
