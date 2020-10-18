@@ -208,19 +208,18 @@ function run_nuclei() {
   echo "${green}Nuclei stock cve templates scan finished...${reset}"
 }
 function subdomain_scanning() {
-  if [ -z "$custom_header" ]; then
-    nuclei -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$todate"-"$totime"-nuclei-vulns.json
-  else
-    #custom header
+  if [ -n "$custom_header" ]; then
     nuclei -json -json-requests -H "$custom_header" -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$todate"-"$totime"-nuclei-vulns.json
+  else
+    nuclei -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$todate"-"$totime"-nuclei-vulns.json
   fi
 }
 function all_subdomain_scanning() {
   if [ -z "$custom_header" ]; then
-    nuclei -json -json-requests -pbar -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
+    nuclei -json -json-requests -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
   else
     #custom header
-    nuclei -json -json-requests -pbar -H "$custom_header" -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
+    nuclei -json -json-requests -H "$custom_header" -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
   fi
 }
 function run_nmap() {
