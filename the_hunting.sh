@@ -86,7 +86,7 @@ excluded=""
 subdomain_scan_target_file=""
 all_subdomain_scan_target_file=""
 function usage() {
-  echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n  --file\t-\tpass a newline seperated file of subdomains to scan\n  --file-all\t-\tsame as --file, but uses all templates to scan\n  --spider\t-\tspider a list of urls with owaspzap\n  --create\t-\tcreate a droplet with your snapshot from make build\n  --connect\t-\tbasic ssh tunnel\n  --tmux\t-\tcreate a tmux session (recommended)\n  --reconnect-tmux\t-\treconnect to main tmux session\n  --remove\t-\tdelete your hunting droplet\n  --logo\t-\tprints a cool ass logo\n  --license\t-\tprints a boring ass license\n" 1>&2
+  echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n  --file\t-\tpass a newline seperated file of subdomains to scan\n  --file-all\t-\tsame as --file, but uses all templates to scan\n  --spider\t-\tspider a list of urls with owaspzap\n  --create\t-\tcreate a droplet with your snapshot from make build\n  --connect\t-\tbasic ssh tunnel\n  --tmux\t-\tcreate a tmux session (recommended)\n  --rmux\t-\treconnect to main tmux session\n  --remove\t-\tdelete your hunting droplet\n  --logo\t-\tprints a cool ass logo\n  --license\t-\tprints a boring ass license\n  --help\t-\tprints this help\n" 1>&2
   exit 1
 }
 function set_header() {
@@ -587,7 +587,7 @@ function parse_args() {
       tmux_image
       exit
       ;;
-    --reconnect-tmux)
+    --rmux)
       reconnect_tmux
       exit
       ;;
@@ -601,6 +601,10 @@ function parse_args() {
       ;;
     --license)
       less ./LICENSE
+      exit
+      ;;
+    --help)
+      usage
       exit
       ;;
     *)
