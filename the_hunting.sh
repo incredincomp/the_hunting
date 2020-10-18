@@ -405,6 +405,10 @@ function zap_whole() {
   zap_spider
   stop_zap
   notify_spider_finished
+  duration=$SECONDS
+  echo "Completed in : $((duration / 60)) minutes and $((duration % 60)) seconds."
+  stty sane
+  tput sgr0
 }
 function sub_takeover() {
   run_subjack
@@ -609,7 +613,7 @@ function parse_args() {
 }
 main() {
   # parse CLI arguments
-  parse_args "$@"
+  parse_args $@
   # exit if certain variables are not set
   if [ -z "$target" ] && [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ] && [ -z "$zap_spider_target_file" ]; then
     usage
