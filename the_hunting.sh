@@ -630,4 +630,4 @@ todate=$(date +"%Y-%m-%d")
 totime=$(date +"%I:%M")
 path=$(pwd)
 foldername=$todate"-"$totime
-main "$@"
+main $@
