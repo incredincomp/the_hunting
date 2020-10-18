@@ -79,7 +79,7 @@ start first tmux session on your box and connect, to leave the_hunting running w
 
 reconnect to your last tmux session
 ```bash
-./the_hunting.sh --reconnect-tmux
+./the_hunting.sh --rmux
 ```
 
 delete your box
