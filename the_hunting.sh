@@ -171,6 +171,7 @@ function run_httprobe() {
     cat ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt | httprobe -c "$httprobeThreads" >>./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
   else
     cat ./targets/"$target_dir"/"$foldername"/subdomain_enum/amass/amass-"$todate".txt | httprobe -c "$httprobeThreads" >>./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt
+  fi
   echo "${green}httprobe finished.${reset}"
 }
 function run_aqua() {
