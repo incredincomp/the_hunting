@@ -518,9 +518,9 @@ function scan_option() {
   set_header
   touch ./s3-booty/"$todate"-"$totime"-nuclei-vulns.json
   if [ -z "$all_subdomain_scan_target_file" ]; then
-    subdomain_scanning "$subdomain_scan_target_file"
-  else
     all_subdomain_scanning "$all_subdomain_scan_target_file"
+  else
+    subdomain_scanning "$subdomain_scan_target_file"
   fi
   upload_s3_scan
   notify_subdomain_scan
