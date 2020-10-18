@@ -256,9 +256,15 @@ function notify_finished() {
     echo "${red}Notifications not set up. Add your slack url to ./slack_url.txt${reset}"
   else
     echo "${yellow}Notification being generated and sent...${reset}"
-    num_of_subd=$(wc <./targets/"$target_dir"/"$foldername"/subdomains-jq.txt -l)
-    data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
-    curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    if [ -s ./targets/"$target_dir"/"$foldername"/subdomains-jq.txt ]; then
+      num_of_subd=$(wc <./targets/"$target_dir"/"$foldername"/subdomains-jq.txt -l)
+      data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
+      curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    else
+      num_of_subd=$(wc <./targets/"$target_dir"/"$foldername"/alldomains.txt -l)
+      data1=''{\"text\":\"Your\ scan\ of\ "'"$target"'"\ is\ complete!\ \`the\_hunting.sh\`\ found\ "'"$num_of_subd"'"\ responsive\ subdomains\ to\ scan.\"}''
+      curl -X POST -H 'Content-type: application/json' --data "$data1" https://hooks.slack.com/services/"$slack_url"
+    fi
     echo "${green}Notification sent!${reset}"
   fi
 }
