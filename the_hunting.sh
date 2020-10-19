@@ -98,8 +98,6 @@ function set_header() {
       [yY])
         echo -n "What would you like your custom header to say?"
         read custom_header
-        echo "$custom_header" > ./backup-files/custom_header.txt
-        custom_header=$(<./backup-files/custom-header.txt)
         ;;
       [nN])
         echo "No custom header has been set"
