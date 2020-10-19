@@ -97,7 +97,9 @@ function set_header() {
     case "$ans" in
       [yY])
         echo -n "What would you like your custom header to say?"
-        read custom_header
+        read 1set_header
+        echo "'$1set_header'" > ./backup-files/custom-header.txt
+        custom_header=$(<./backup-files/custom-header.txt)
         ;;
       [nN])
         echo "No custom header has been set"
@@ -527,7 +529,7 @@ function recon_option() {
 function scan_option() {
   clear
   open_program
-  #set_header #  only can be set via custom_header.txt
+  set_header #  only can be set via custom_header.txt
   if [ -n "$all_subdomain_scan_target_file" ]; then
     all_subdomain_scanning "$all_subdomain_scan_target_file"
   fi
