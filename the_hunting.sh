@@ -209,7 +209,7 @@ function run_nuclei() {
 }
 function subdomain_scanning() {
   if [ -n "$custom_header" ]; then
-    nuclei -H "$custom_header" -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    nuclei -H $custom_header -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   else
     nuclei -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   fi
@@ -219,7 +219,7 @@ function all_subdomain_scanning() {
     nuclei -json -json-requests -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   else
     #custom header
-    nuclei -H "$custom_header" -json -json-requests -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    nuclei -H $custom_header -json -json-requests -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   fi
 }
 function run_nmap() {
