@@ -98,8 +98,8 @@ function set_header() {
       [yY])
         echo -n "What would you like your custom header to say?"
         read cus_header
-        echo "'$cus_header'" > ./backup-files/custom-header.txt
-        awk '{print "PREFIX"$0"SUFFIX"}' ./backup-files/custom-header.txt
+        echo "$cus_header" > ./backup-files/custom-header.txt
+        awk '{print "'"$0"'"}' ./backup-files/custom-header.txt
         custom_header=$(<./backup-files/custom-header.txt)
         ;;
       [nN])
