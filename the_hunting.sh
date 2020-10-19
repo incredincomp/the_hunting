@@ -206,7 +206,7 @@ function run_nuclei() {
 }
 function subdomain_scanning() {
   if [ -n "$custom_header" ]; then
-    nuclei -json -json-requests -H "$custom_header" -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    nuclei -H "$custom_header" -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   else
     nuclei -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   fi
@@ -216,7 +216,7 @@ function all_subdomain_scanning() {
     nuclei -json -json-requests -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   else
     #custom header
-    nuclei -json -json-requests -H "$custom_header" -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    nuclei -H "$custom_header" -json -json-requests -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   fi
 }
 function run_nmap() {
@@ -527,7 +527,7 @@ function recon_option() {
 function scan_option() {
   clear
   open_program
-  set_header
+  #set_header #  only can be set via custom_header.txt
   if [ -n "$all_subdomain_scan_target_file" ]; then
     all_subdomain_scanning "$all_subdomain_scan_target_file"
   fi
