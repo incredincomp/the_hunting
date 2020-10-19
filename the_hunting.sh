@@ -97,8 +97,8 @@ function set_header() {
     case "$ans" in
       [yY])
         echo -n "What would you like your custom header to say?"
-        read 1set_header
-        echo "'$1set_header'" > ./backup-files/custom-header.txt
+        read cus_header
+        echo "'$cus_header'" > ./backup-files/custom-header.txt
         awk '{print "PREFIX"$0"SUFFIX"}' ./backup-files/custom-header.txt
         custom_header=$(<./backup-files/custom-header.txt)
         ;;
