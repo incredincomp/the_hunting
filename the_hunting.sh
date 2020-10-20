@@ -96,10 +96,9 @@ function set_header() {
     read ans
     case "$ans" in
       [yY])
-        echo -n "What would you like your custom header to say?"
-        read cus_header
-        echo "$cus_header" > ./backup-files/custom-header.txt
-        awk '{print "/'"$0"/'"}' ./backup-files/custom-header.txt
+        read custom_header -p "What would you like your custom header to say?"
+       # echo "$custom_header" > ./backup-files/custom-header.txt
+        awk '{print "'"$custom_header"'"}' ./backup-files/custom-header.txt
         custom_header=$(<./backup-files/custom-header.txt)
         ;;
       [nN])
@@ -122,6 +121,7 @@ function excludedomains() {
     echo $excluded | tr -s ',' '\n' >>./targets/"$target_dir"/"$foldername"/excluded.txt
     echo "${green}Subdomains that have been excluded from discovery:${reset}"
     cat ./targets/"$target_dir"/"$foldername"/excluded.txt
+    print_line
   fi
 }
 # parents
