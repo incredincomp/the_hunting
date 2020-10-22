@@ -34,6 +34,8 @@
 #set -o nounset                 # Treat unset variables as an error
 set -e
 #set -xv                       # Uncomment to print script in console for debug
+hunter_dir=$(pwd)
+source "$hunter_dir/files/conf/hunter.conf"
 
 export GOPATH="${HOME}/go"
 export PATH="${PATH}:${GOPATH}/bin"
@@ -42,13 +44,6 @@ red=$(tput setaf 1)
 green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 reset=$(tput sgr0)
-
-auquatoneThreads=4
-subdomainThreads=15
-subjackThreads=15
-httprobeThreads=50
-droplet_size="s-1vcpu-1gb"
-droplet_region="sfo2"
 
 random_api=$(openssl rand -hex 8)
 # discover which chromium to use
@@ -209,17 +204,17 @@ function run_nuclei() {
 }
 function subdomain_scanning() {
   if [ -n "$custom_header" ]; then
-    nuclei -H $custom_header -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    cat "$subdomain_scan_target_file" | nuclei -H "$custom_header" -json -json-requests -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   else
-    nuclei -json -json-requests -l "$subdomain_scan_target_file" -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    cat "$subdomain_scan_target_file" | nuclei -json -json-requests -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   fi
 }
 function all_subdomain_scanning() {
   if [ -z "$custom_header" ]; then
-    nuclei -json -json-requests -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    cat "$all_subdomain_scan_target_file" | nuclei -json -json-requests -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   else
     #custom header
-    nuclei -H $custom_header -json -json-requests -l "$all_subdomain_scan_target_file" -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    cat "$all_subdomain_scan_target_file" | nuclei -H "$custom_header" -json -json-requests -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   fi
 }
 function run_nmap() {
