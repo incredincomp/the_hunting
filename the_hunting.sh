@@ -36,50 +36,16 @@ set -e
 #set -xv                       # Uncomment to print script in console for debug
 hunter_dir=$(pwd)
 source "$hunter_dir/files/conf/hunter.conf"
+source "$hunter_dir/files/conf/default.conf"
 
 export GOPATH="${HOME}/go"
 export PATH="${PATH}:${GOPATH}/bin"
-
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-yellow=$(tput setaf 3)
-reset=$(tput sgr0)
 
 random_api=$(openssl rand -hex 8)
 # discover which chromium to use
 # if first guess doesn't exist, try an alternative
 chromiumPath="$(which chromium 2>/dev/null || which chromium-browser)"
 
-if [ -s ./backup-files/slack_url.txt ]; then
-  slack_url=$(<./backup-files/slack_url.txt)
-else
-  slack_url=""
-fi
-if [ -s ./backup-files/bot_user_oauth_at.txt ]; then
-  bot_token=$(<./backup-files/bot_user_oauth_at.txt)
-else
-  bot_token=""
-fi
-if [ -s ./backup-files/slack_channel.txt ]; then
-  slack_channel=$(<./backup-files/slack_channel.txt)
-else
-  slack_channel=""
-fi
-if [ -s ./backup-files/s3-bucket.txt ]; then
-  S3_BUCKET=$(<./backup-files/s3-bucket.txt)
-else
-  S3_BUCKET=""
-fi
-if [ -s ./backup-files/custom-header.txt ]; then
-  custom_header=$(<./backup-files/custom-header.txt)
-else
-  custom_header=""
-fi
-
-target=""
-excluded=""
-subdomain_scan_target_file=""
-all_subdomain_scan_target_file=""
 function usage() {
   echo -e "Usage: ./the_hunting.sh --target <target domain> [--exclude] [excluded.domain.com,other.domain.com]\nOptions:\n  --exclude\t-\tspecify excluded subdomains\n  --file\t-\tpass a newline seperated file of subdomains to scan\n  --file-all\t-\tsame as --file, but uses all templates to scan\n  --spider\t-\tspider a list of urls with owaspzap\n  --create\t-\tcreate a droplet with your snapshot from make build\n  --connect\t-\tbasic ssh tunnel\n  --tmux\t-\tcreate a tmux session (recommended)\n  --rmux\t-\treconnect to main tmux session\n  --remove\t-\tdelete your hunting droplet\n  --logo\t-\tprints a cool ass logo\n  --license\t-\tprints a boring ass license\n  --help\t-\tprints this help\n" 1>&2
   exit 1
