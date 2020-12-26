@@ -26,7 +26,7 @@ Already changing the world around us to fit our needs :muscle:
 **_Your data is in slacks hands then though_, so if you are working within specific privacy and private program scopes, _you may need to adjust course accordingly_ and do some research before you start dumping possibly important data on your targets into slacks servers and therefore the world. Be smart about it.**
 
 # Commands
-## Set up `the_hunting.sh` on
+## Set up `the_hunting.sh`
 
 download the hunting
 ```bash
