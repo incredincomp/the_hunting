@@ -91,7 +91,7 @@ function install_gobuster() {
 }
 
 function install_feroxbuster() {
-  wget -sLO https://github.com/epi052/feroxbuster/releases/latest/download/feroxbuster_amd64.deb.zip
+  wget https://github.com/epi052/feroxbuster/releases/latest/download/feroxbuster_amd64.deb.zip
   unzip feroxbuster_amd64.deb.zip
   sudo apt install ./feroxbuster_amd64.deb
 }
