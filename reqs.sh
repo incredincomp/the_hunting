@@ -4,7 +4,9 @@ if [ -s "${PWD}""/backup-files/s3-bucket.txt" ]; then
 else
   S3_BUCKET="$(cat "${PWD}"/backup-files/s3-bucket.txt)"
 fi
+
 rand=$(openssl rand -hex 16)
+
 function install_make() {
   sudo apt install make
 }
@@ -27,13 +29,13 @@ function install_awscli() {
 function install_packer() {
   curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
   sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-  sudo apt-get update && sudo apt-get install packer
+  sudo apt-get install packer
 }
 function aws_config() {
   echo "Set your aws configuration here, would you like to do this? [yn]"
   read answer
-  echo "You need to use us-east-1 for now.. sorry."
   if [ "$answer" == y ]; then
+    echo "You need to use us-east-1 for now.. sorry."
     aws configure --profile the_hunting
     export AWS_PROFILE=the_hunting
   fi
@@ -45,6 +47,7 @@ function aws_create() {
     S3_BUCKET=$(aws s3api create-bucket --bucket hunting-loot-"$rand" --profile the_hunting | jq -r ".Location" | tr -d /)
     echo "$S3_BUCKET" > ./backup-files/s3-bucket.txt
     echo "http://""$S3_BUCKET"".s3.us-east-1.amazonaws.com" > ./backup-files/s3-endpoint.txt
+    sleep 10
     aws s3api put-public-access-block --region us-east-1 --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true --bucket "$S3_BUCKET" > /dev/null
   fi
   echo "You are ready to rock and roll. Run 'make build' and wear your mask!"
