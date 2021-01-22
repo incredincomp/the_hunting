@@ -76,7 +76,7 @@ function snap_install_chrome() {
 snap install chromium
 }
 function install_amass() {
-  curl -sSL https://github.com/OWASP/Amass/releases/download/v3.10.4/amass_linux_amd64.zip -o amass.zip
+  curl -sSL https://github.com/OWASP/Amass/releases/download/v3.11.1/amass_linux_amd64.zip -o amass.zip
   unzip amass.zip
   mv amass_linux_amd64/amass /usr/local/bin/amass
 }
@@ -88,6 +88,12 @@ function install_gobuster() {
   make linux
   cd ./build/gobuster-linux-amd64
   sudo cp gobuster /usr/bin/gobuster
+}
+
+function install_feroxbuster() {
+  wget -sLO https://github.com/epi052/feroxbuster/releases/latest/download/feroxbuster_amd64.deb.zip
+  unzip feroxbuster_amd64.deb.zip
+  sudo apt install ./feroxbuster_amd64.deb
 }
 
 function install_subjack() {
@@ -107,7 +113,7 @@ function install_aquatone() {
 }
 
 function install_nuclei() {
-  curl -sSL https://github.com/projectdiscovery/nuclei/releases/download/v2.1.1/nuclei_2.1.1_linux_amd64.tar.gz -o nuclei.tar.gz
+  curl -sSL https://github.com/projectdiscovery/nuclei/releases/download/v2.2.0/nuclei_2.2.0_linux_amd64.tar.gz -o nuclei.tar.gz
   tar -xzvf nuclei.tar.gz
   mv nuclei /usr/local/bin
   rm -rf nuclei.tar.gz
@@ -133,12 +139,12 @@ function install_awscli() {
   sudo ./aws/install
 }
 function install_zap() {
-  wget https://github.com/zaproxy/zaproxy/releases/download/v2.9.0/ZAP_2.9.0_Crossplatform.zip
-  unzip ZAP_2.9.0_Crossplatform.zip -d ~/zap/
+  wget https://github.com/zaproxy/zaproxy/releases/download/v2.10.0/ZAP_2.10.0_Crossplatform.zip
+  unzip ZAP_2.10.0_Crossplatform.zip -d ~/zap/
 }
 function install_go() {
-  wget https://golang.org/dl/go1.15.2.linux-amd64.tar.gz
-  tar -C /usr/local -xzf go1.15.2.linux-amd64.tar.gz
+  wget https://golang.org/dl/go1.15.7.linux-amd64.tar.gz
+  tar -C /usr/local -xzf go1.15.7.linux-amd64.tar.gz
   #export PATH=$PATH:/usr/local/go/bin
   #source $HOME/.bashrc
 }
@@ -166,6 +172,7 @@ function install_tools() {
   install_httprobe
   install_jq
   install_zap
+  install_feroxbuster
   #finish_s3fs
   install_awscli
   cd ..
