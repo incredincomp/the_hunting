@@ -65,7 +65,7 @@ Use this command to generate a new droplet based off your make build snapshot
 ./the_hunting.sh --create
 ```
 
-Connect to your box via ssh. Nice for checking on your output files mid HUGE scope recon.
+Connect to your box via ssh. Nice for almost nothing... I would recommend using the `--tmux` option
 
 ```bash
 ./the_hunting.sh --connect
