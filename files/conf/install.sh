@@ -91,9 +91,11 @@ function install_gobuster() {
 }
 
 function install_feroxbuster() {
-  curl https://sh.rustup.rs -sSf | sh -s -- -y
-  source $HOME/.cargo/env
-  cargo install feroxbuster
+  #curl https://sh.rustup.rs -sSf | sh -s -- -y
+  #source $HOME/.cargo/env
+  #cargo install feroxbuster
+  curl -sL https://raw.githubusercontent.com/epi052/feroxbuster/master/install-nix.sh | bash
+  mv feroxbuster /usr/local/bin/
 }
 
 function install_subjack() {

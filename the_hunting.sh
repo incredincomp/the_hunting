@@ -161,12 +161,21 @@ function run_gobuster_dir() {
 function run_dirb() {
   true
 }
+function run_feroxbuster() {
+  echo "${yellow}Running feroxbuster...${reset}"
+  if [ -z "$custom_header" ]; then
+    cat "$dir_scan_file" | feroxbuster --stdin --json --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0" -H "$custom_header" -o ./targets/"$target_dir"/"$foldername"/feroxbuster.json
+  else
+    cat "$dir_scan_file" | feroxbuster --stdin --json --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0" -o ./targets/"$target_dir"/"$foldername"/feroxbuster.json
+  fi
+  echo "${green}feroxbuster finished...${reset}"
+}
 function run_nuclei() {
   echo "${yellow}Running Nuclei templates scan...${reset}"
   nuclei -json -json-requests -pbar -l ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-results.json
   #  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
   #  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
-  echo "${green}Nuclei stock cve templates scan finished...${reset}"
+  echo "${green}Nuclei templates scan finished...${reset}"
 }
 function subdomain_scanning() {
   if [ -n "$custom_header" ]; then
@@ -498,6 +507,9 @@ function scan_option() {
   if [ -n "$subdomain_scan_target_file" ]; then
     subdomain_scanning "$subdomain_scan_target_file"
   fi
+  if []; then
+    run_feroxbuster "$dir_scan_file"
+  fi
   upload_s3_scan
   notify_subdomain_scan
   send_file
@@ -527,6 +539,11 @@ function parse_args() {
       ;;
     --file-all)
       all_subdomain_scan_target_file="$2"
+      shift
+      shift
+      ;;
+    --dir-scan)
+      dir_scan_file="$2"
       shift
       shift
       ;;
