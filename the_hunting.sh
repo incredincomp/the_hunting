@@ -172,24 +172,24 @@ function run_feroxbuster() {
 }
 function run_nuclei() {
   echo "${yellow}Running Nuclei templates scan...${reset}"
-  nuclei -json -json-requests -pbar -l ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-results.json
+  nuclei -json -include-rr -stats -l ./targets/"$target_dir"/"$foldername"/responsive-domains-80-443.txt -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-results.json
   #  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/vulnerabilities/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-vulnerabilties-results.json
   #  nuclei -v -json -l ./targets/"$target_dir"/"$foldername"/aquatone_urls.txt -t ./nuclei-templates/security-misconfiguration/ -o ./targets/"$target_dir"/"$foldername"/scanning/nuclei/nuclei-security-misconfigurations-results.json
   echo "${green}Nuclei templates scan finished...${reset}"
 }
 function subdomain_scanning() {
   if [ -n "$custom_header" ]; then
-    cat "$subdomain_scan_target_file" | nuclei -H "$custom_header" -json -json-requests -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    cat "$subdomain_scan_target_file" | nuclei -H "$custom_header" -json -include-rr -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   else
-    cat "$subdomain_scan_target_file" | nuclei -json -json-requests -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    cat "$subdomain_scan_target_file" | nuclei -json -include-rr -t ./nuclei-templates/cves/ -t ./nuclei-templates/vulnerabilities/ -t ./nuclei-templates/security-misconfiguration/ -t ./nuclei-templates/generic-detections/ -t ./nuclei-templates/files/ -t ./nuclei-templates/workflows/ -t ./nuclei-templates/tokens/ -t ./nuclei-templates/dns/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   fi
 }
 function all_subdomain_scanning() {
   if [ -z "$custom_header" ]; then
-    cat "$all_subdomain_scan_target_file" | nuclei -json -json-requests -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    cat "$all_subdomain_scan_target_file" | nuclei -json -include-rr -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   else
     #custom header
-    cat "$all_subdomain_scan_target_file" | nuclei -H "$custom_header" -json -json-requests -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
+    cat "$all_subdomain_scan_target_file" | nuclei -H "$custom_header" -json -include-rr -t ./nuclei-templates/ -o ./s3-booty/nuclei/"$target_dir"-"$foldername"-nuclei-vulns.json
   fi
 }
 function run_nmap() {
@@ -507,7 +507,7 @@ function scan_option() {
   if [ -n "$subdomain_scan_target_file" ]; then
     subdomain_scanning "$subdomain_scan_target_file"
   fi
-  if []; then
+  if [ -n "$dir_scan_file" ]; then
     run_feroxbuster "$dir_scan_file"
   fi
   upload_s3_scan
@@ -608,7 +608,7 @@ main() {
   # parse CLI arguments
   parse_args $@
   # exit if certain variables are not set
-  if [ -z "$target" ] && [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ] && [ -z "$zap_spider_target_file" ]; then
+  if [ -z "$target" ] && [ -z "$subdomain_scan_target_file" ] && [ -z "$all_subdomain_scan_target_file" ] && [ -z "$zap_spider_target_file" ]  && [ -z "$dir_scan_file" ]; then
     usage
     exit 1
   fi
